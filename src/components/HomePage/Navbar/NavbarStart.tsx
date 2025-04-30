@@ -1,5 +1,6 @@
 import { FC } from "react";
 
+
 /* Buttons für Home, Karte und Locations */
 const NavbarStart: FC = () => {
   return (
