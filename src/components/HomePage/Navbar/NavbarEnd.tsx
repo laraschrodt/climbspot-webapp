@@ -1,4 +1,6 @@
 import { FC } from "react";
+import { Link } from "react-router-dom";
+
 
 /* Profilanzeige mit Dropdown Menü */
 const NavbarEnd: FC = () => {
@@ -23,13 +25,16 @@ const NavbarEnd: FC = () => {
           className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
         >
           <li>
-            <a>Profil</a>
+          <Link to="/login">Login</Link>
+          </li>
+          <li>
+          <a>Profil</a>
           </li>
           <li>
             <a>Einstellungen</a>
           </li>
           <li>
-            <a>Logout</a>
+          <Link to="/">Logout</Link>
           </li>
         </ul>
       </div>
