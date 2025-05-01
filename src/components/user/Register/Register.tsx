@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
  * Register-Komponente
  * Zweispaltiges Layout: links das Formular, rechts ein Bild
  */
+
 const Register: React.FC = () => {
   const [formData, setFormData] = useState({
     username: "",
@@ -35,7 +36,10 @@ const Register: React.FC = () => {
           <form className="flex flex-col space-y-5" onSubmit={handleSubmit}>
             {/* Username */}
             <div className="flex flex-col">
-              <label htmlFor="username" className="mb-1 text-sm font-medium text-gray-700">
+              <label
+                htmlFor="username"
+                className="mb-1 text-sm font-medium text-gray-700"
+              >
                 Benutzername
               </label>
               <input
@@ -51,8 +55,11 @@ const Register: React.FC = () => {
 
             {/* E-Mail */}
             <div className="flex flex-col">
-              <label htmlFor="email" className="mb-1 text-sm font-medium text-gray-700">
-                Email-Adresse
+              <label
+                htmlFor="email"
+                className="mb-1 text-sm font-medium text-gray-700"
+              >
+                E-Mail Adresse
               </label>
               <input
                 id="email"
@@ -60,14 +67,17 @@ const Register: React.FC = () => {
                 type="email"
                 value={formData.email}
                 onChange={handleChange}
-                placeholder="Email eingeben"
+                placeholder="E-Mail eingeben"
                 className="p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-600"
               />
             </div>
 
             {/* Passwort */}
             <div className="flex flex-col">
-              <label htmlFor="password" className="mb-1 text-sm font-medium text-gray-700">
+              <label
+                htmlFor="password"
+                className="mb-1 text-sm font-medium text-gray-700"
+              >
                 Passwort
               </label>
               <input
@@ -94,18 +104,6 @@ const Register: React.FC = () => {
               <hr className="w-full border-gray-200" />
               <span className="px-3">oder</span>
               <hr className="w-full border-gray-200" />
-            </div>
-
-            {/* Optional: Social Buttons */}
-            <div className="flex justify-center space-x-4">
-              <button className="border px-4 py-2 rounded flex items-center space-x-2">
-                <img src="/src/assets/images/google.svg" className="w-5 h-5" alt="Google" />
-                <span className="text-sm">Sign up with Google</span>
-              </button>
-              <button className="border px-4 py-2 rounded flex items-center space-x-2">
-                <img src="/src/assets/images/apple.svg" className="w-5 h-5" alt="Apple" />
-                <span className="text-sm">Sign up with Apple</span>
-              </button>
             </div>
 
             {/* Footer-Link */}
