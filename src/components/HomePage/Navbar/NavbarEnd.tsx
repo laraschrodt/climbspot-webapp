@@ -23,17 +23,14 @@ const NavbarEnd: FC = () => {
           tabIndex={0}
           className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
         >
-         <li>
-          <Link to="/login">Login</Link>
+          <li>
+            <Link to="/login">Login</Link>
           </li>
           <li>
-          <a>Profil</a>
+            <a>Profil</a>
           </li>
           <li>
-            <a>Einstellungen</a>
-          </li>
-          <li>
-          <Link to="/">Logout</Link>
+            <Link to="/">Logout</Link>
           </li>
         </ul>
       </div>
