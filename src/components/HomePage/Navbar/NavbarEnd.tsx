@@ -11,7 +11,7 @@ const NavbarEnd: FC = () => {
         placeholder="Suche"
         className="input input-bordered input-sm w-36 md:w-60"
       />
-
+      // komentar
       {/* TODO: Gastmode implementieren (d.h. bei Klick auf Profil wird man
       aufgefordert sich einzuloggen) */}
       {/* Profilanzeige mit Dropdown Menü*/}
@@ -21,7 +21,7 @@ const NavbarEnd: FC = () => {
         </label>
         <ul
           tabIndex={0}
-          className="           mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
+          className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
         >
           <li>
             <Link to="/login">Login</Link>
