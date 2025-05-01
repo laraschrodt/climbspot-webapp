@@ -48,9 +48,6 @@ const Login: React.FC = () => {
                 >
                   Passwort
                 </label>
-                <span className="text-sm text-blue-600 cursor-pointer hover:underline">
-                  Passwort vergessen?
-                </span>
               </div>
               <input
                 id="password"
