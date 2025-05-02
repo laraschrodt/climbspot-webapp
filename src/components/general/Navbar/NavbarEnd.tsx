@@ -11,7 +11,6 @@ const NavbarEnd: FC = () => {
         placeholder="Suche"
         className="input input-bordered input-sm w-36 md:w-60"
       />
-      // komentar
       {/* TODO: Gastmode implementieren (d.h. bei Klick auf Profil wird man
       aufgefordert sich einzuloggen) */}
       {/* Profilanzeige mit Dropdown Menü*/}
