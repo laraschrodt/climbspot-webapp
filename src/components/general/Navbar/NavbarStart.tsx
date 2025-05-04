@@ -1,19 +1,21 @@
 import { FC } from "react";
-
+import { Link } from "react-router-dom";
 
 /* Buttons für Home, Karte und Locations */
 const NavbarStart: FC = () => {
   return (
     <div className="navbar-start flex justify-center gap-6">
-      <a className="btn btn-ghost normal-case text-md" href="#tab1">
+      <Link to="/" className="btn btn-ghost normal-case text-md">
         Home
-      </a>
-      <a className="btn btn-ghost normal-case text-md" href="#tab2">
+      </Link>
+
+      <Link to="/locations" className="btn btn-ghost normal-case text-md">
         Locations
-      </a>
-      <a className="btn btn-ghost normal-case text-md" href="#tab3">
+      </Link>
+
+      <Link to="/map" className="btn btn-ghost normal-case text-md">
         Karte
-      </a>
+      </Link>
     </div>
   );
 };
