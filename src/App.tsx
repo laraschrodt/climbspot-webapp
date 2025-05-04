@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import Login from "./pages/LoginPage";
 import Register from "./pages/RegisterPage";
+import LocationList from "./pages/LocationList";
+import LocationMap from "./pages/LocationMap";
 
 function App() {
   return (
@@ -11,6 +13,8 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/locations" element={<LocationList />} />
+        <Route path="/map" element={<LocationMap />} />
       </Routes>
     </Router>
   );
