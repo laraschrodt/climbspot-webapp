@@ -6,8 +6,6 @@ import { Link } from "react-router-dom";
  * Zweispaltiges Layout: links das Formular, rechts ein Bild
  */
 
-/* TODO: Eindeutschen, damit Sprache konstant ist */
-/* TODO: Prüfen ob man sign in with apple/google überhapt einbauen kann (ohne zu bezahlen) */
 const Login: React.FC = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 min-h-screen">
