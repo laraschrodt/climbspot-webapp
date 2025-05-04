@@ -1,22 +1,24 @@
+/* LocationMap.tsx */
 import { Navbar } from "../components/general/Navbar";
 import FilterSidebar from "../components/locationSearch/FilterSidebar";
-import Map from "../components/locationSearch/map";
+import Map from "../components/locationSearch/Map";
+import Footer from "../components/general/Footer/Footer";
 
-function LocationList() {
+function LocationMap() {
   return (
-    <div>
+    /* jetzt korrekt mit className */
+    <div className="flex flex-col min-h-screen">
       <Navbar />
-      <div className="flex flex-1">
-        {/* links: Filter – nimmt per md:w-1/3 ein Drittel, sonst 100% */}
-        <FilterSidebar />
 
-        {/* rechts: Map – füllt den restlichen Platz */}
-        <div className="flex-1">
-          <Map />
-        </div>
-      </div>
+      {/* Filter liegt IMMER über der Karte */}
+      <FilterSidebar />
+
+      {/* Map füllt den verbleibenden Platz */}
+      <Map />
+
+      <Footer />
     </div>
   );
 }
 
-export default LocationList;
+export default LocationMap;

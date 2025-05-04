@@ -1,93 +1,115 @@
-import React, { FC } from "react";
+import React, { useState } from "react";
 
-const FilterSidebar: FC = () => {
+const FilterSidebar: React.FC = () => {
+  const [open, setOpen] = useState(true); // Filter standardmäßig sichtbar
+
   return (
-    <aside className="w-full md:w-1/3 p-4 overflow-auto h-full color-base-100">
-      <h2 className="text-2xl font-bold mb-4">Filter</h2>
-
-      {/* Indoor / Outdoor */}
-      <div className="mb-4">
-        <label className="font-semibold block mb-2">Ort</label>
-        <div className="flex gap-4">
-          <label className="label cursor-pointer">
-            <input type="checkbox" className="checkbox checkbox-primary" />
-            <span className="ml-2">Indoor</span>
-          </label>
-          <label className="label cursor-pointer">
-            <input type="checkbox" className="checkbox checkbox-primary" />
-            <span className="ml-2">Outdoor</span>
-          </label>
-        </div>
+    <aside className="w-full bg-base-100 text-base-content shadow-md">
+      {/* Header mit Toggle */}
+      <div
+        className="flex items-center justify-between p-4 cursor-pointer select-none"
+        onClick={() => setOpen(!open)}
+      >
+        <h2 className="text-2xl font-bold mx-auto">Filter</h2>
+        <span className="text-xl">{open ? "▲" : "▼"}</span>
       </div>
 
-      {/* Kletterart */}
-      <div className="mb-4">
-        <label className="font-semibold block mb-2">Kletterart</label>
-        <select className="select select-bordered w-full">
-          <option>Klettern</option>
-          <option>Klettersteig</option>
-          <option>Klettergarten</option>
-        </select>
-      </div>
+      {/* Inhalt ein-/ausblendbar */}
+      {open && (
+        <form className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+          {/* ------- Ort ------- */}
+          <div>
+            <label className="font-semibold block mb-2">Ort</label>
+            <div className="flex gap-4">
+              <label className="label cursor-pointer">
+                <input type="checkbox" className="checkbox checkbox-primary" />
+                <span className="ml-2">Indoor</span>
+              </label>
+              <label className="label cursor-pointer">
+                <input type="checkbox" className="checkbox checkbox-primary" />
+                <span className="ml-2">Outdoor</span>
+              </label>
+            </div>
+          </div>
 
-      {/* Schwierigkeit */}
-      <div className="mb-4">
-        <label className="font-semibold block mb-2">Schwierigkeit (1–10)</label>
-        <input type="range" min="1" max="10" className="range range-primary" />
-      </div>
+          <div>
+            <label className="font-semibold block mb-2">Kletterart</label>
+            <select className="select select-bordered w-full">
+              <option>Klettern</option>
+              <option>Klettersteig</option>
+              <option>Klettergarten</option>
+            </select>
+          </div>
 
-      {/* Standort */}
-      <div className="mb-4">
-        <label className="font-semibold block mb-2">Standort</label>
-        <input
-          type="text"
-          placeholder="Land, Region, Gebirge, Berg …"
-          className="input input-bordered w-full"
-        />
-      </div>
+          <div>
+            <label className="font-semibold block mb-2">
+              Schwierigkeit (1–10)
+            </label>
+            <input
+              type="range"
+              min="1"
+              max="10"
+              className="range range-primary"
+            />
+          </div>
 
-      {/* Kletterzeit (nur Stunden) */}
-      <div className="mb-4">
-        <label className="font-semibold block mb-2">
-          Kletterzeit (Stunden)
-        </label>
-        <div className="flex items-center gap-2">
-          <input
-            type="number"
-            min="0"
-            className="input input-bordered w-24 text-center"
-            placeholder="z. B. 2"
-          />
-          <span>Std.</span>
-        </div>
-      </div>
+          <div>
+            <label className="font-semibold block mb-2">Standort</label>
+            <input
+              type="text"
+              placeholder="Land, Region …"
+              className="input input-bordered w-full"
+            />
+          </div>
 
-      {/* Kletterlänge */}
-      <div className="mb-4">
-        <label className="font-semibold block mb-2">Kletterlänge (Meter)</label>
-        <input
-          type="number"
-          className="input input-bordered w-full"
-          placeholder="z.B. 30"
-        />
-      </div>
+          <div>
+            <label className="font-semibold block mb-2">
+              Kletterzeit (Std.)
+            </label>
+            <input
+              type="number"
+              min="0"
+              className="input input-bordered w-full"
+              placeholder="z. B. 2"
+            />
+          </div>
 
-      {/* Kinderfreundlich */}
-      <div className="mb-4">
-        <label className="font-semibold block mb-2">Kinderfreundlich</label>
-        <div className="flex gap-4">
-          <label className="label cursor-pointer">
-            <input type="radio" name="kinder" className="radio radio-primary" />
-            <span className="ml-2">Ja</span>
-          </label>
-          <label className="label cursor-pointer">
-            <input type="radio" name="kinder" className="radio radio-primary" />
-            <span className="ml-2">Nein</span>
-          </label>
-        </div>
-      </div>
+          <div>
+            <label className="font-semibold block mb-2">Kletterlänge (m)</label>
+            <input
+              type="number"
+              className="input input-bordered w-full"
+              placeholder="z. B. 30"
+            />
+          </div>
 
-      <button className="btn btn-primary w-full mt-4">Filter anwenden</button>
+          <div>
+            <label className="font-semibold block mb-2">Kinderfreundlich</label>
+            <div className="flex gap-4">
+              <label className="label cursor-pointer">
+                <input
+                  type="radio"
+                  name="kinder"
+                  className="radio radio-primary"
+                />
+                <span className="ml-2">Ja</span>
+              </label>
+              <label className="label cursor-pointer">
+                <input
+                  type="radio"
+                  name="kinder"
+                  className="radio radio-primary"
+                />
+                <span className="ml-2">Nein</span>
+              </label>
+            </div>
+          </div>
+          {/* ------- Button ------- */}
+          <div className="col-span-full flex justify-end">
+            <button className="btn btn-primary px-8">Filter anwenden</button>
+          </div>
+        </form>
+      )}
     </aside>
   );
 };
