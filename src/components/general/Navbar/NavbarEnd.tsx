@@ -54,7 +54,7 @@ const NavbarEnd: FC = () => {
             <Link to="/login">Login</Link>
           </li>
           <li>
-            <a>Profil</a>
+          <Link to="/profil">Profil</Link>
           </li>
           <li>
             <Link to="/">Logout</Link>
