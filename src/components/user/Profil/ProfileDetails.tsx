@@ -1,5 +1,5 @@
 import React from "react";
-import { Edit2, Eye, EyeOff } from "react-feather";
+import { Edit2, Eye, EyeOff } from 'react-feather';
 
 // ---------- Props-Definition für die Komponente ----------
 interface Props {

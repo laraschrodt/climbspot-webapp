@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import ProfilSidebar from "./ProfileSidebar";
 import ProfilDetails from "./ProfileDetails";
 import ProfilNotification from "./ProfilNotification";
-import backgroundImage from "../../../assets/images/seymur-rahimov-BlWbGfx7aEI-unsplash.jpg";
+import backgroundImage from "../../../assets/images/profilBackground.jpg";
 
 const Profil: React.FC = () => {
   // Beispielhafte Benachrichtigungen für das Profil
@@ -16,7 +16,7 @@ const Profil: React.FC = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showPassword, setShowPassword] = useState(false);
-  const [profileImage, setProfileImage] = useState("src/assets/images/icons8-profilbild-100.png");
+  const [profileImage, setProfileImage] = useState("src/assets/images/profilbildPlaceholder.png");
 
   // Öffnet oder schließt das Benachrichtigungs-Popup
   const togglePopup = () => setShowPopup(!showPopup);

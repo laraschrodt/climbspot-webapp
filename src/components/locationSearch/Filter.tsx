@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const FilterSidebar: React.FC = () => {
+const Filter: React.FC = () => {
   const [open, setOpen] = useState(true); // Filter standardmäßig sichtbar
 
   return (
@@ -114,4 +114,4 @@ const FilterSidebar: React.FC = () => {
   );
 };
 
-export default FilterSidebar;
+export default Filter;

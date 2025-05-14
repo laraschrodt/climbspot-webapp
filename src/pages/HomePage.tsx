@@ -1,6 +1,6 @@
 import { Navbar } from "../components/general/Navbar";
-import { Hero } from "../components/homepage/Hero";
-import { PopularLocations } from "../components/homepage/PopularLocations";
+import { Hero } from "../components/homePage/Hero";
+import { PopularLocations } from "../components/homePage/PopularLocations";
 import Footer from "../components/general/Footer/Footer";
 
 function HomePage() {

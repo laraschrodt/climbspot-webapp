@@ -1,7 +1,7 @@
 /* LocationMap.tsx */
 import { Navbar } from "../components/general/Navbar";
-import FilterSidebar from "../components/locationSearch/FilterSidebar";
-import Map from "../components/locationSearch/map";
+import Filter from "../components/locationSearch/Filter";
+import Map from "../components/locationSearch/Map";
 import Footer from "../components/general/Footer/Footer";
 
 function LocationMap() {
@@ -11,7 +11,7 @@ function LocationMap() {
       <Navbar />
 
       {/* Filter liegt IMMER über der Karte */}
-      <FilterSidebar />
+      <Filter />
 
       {/* Map füllt den verbleibenden Platz */}
       <Map />
