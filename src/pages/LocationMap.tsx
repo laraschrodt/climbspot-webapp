@@ -1,7 +1,7 @@
 /* LocationMap.tsx */
 import { Navbar } from "../components/general/Navbar";
 import Filter from "../components/locationSearch/Filter";
-import Map from "../components/locationSearch/Map";
+import Map from "../components/locationSearch/map";
 import Footer from "../components/general/Footer/Footer";
 
 function LocationMap() {
