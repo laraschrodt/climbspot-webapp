@@ -1,15 +1,16 @@
 {
   "compilerOptions": {
-    "target": "es5", // Ziel-JavaScript-Version
-    "lib": ["dom", "esnext"], // Definiert die verwendeten Bibliotheken
-    "jsx": "react-jsx", // Ermöglicht die Verwendung von JSX in TypeScript
-    "module": "esnext", // Modultyp
-    "moduleResolution": "node", // Modulauflösung nach Node.js-Standard
-    "strict": true, // Aktiviert strikte Prüfungen
-    "esModuleInterop": true, // Erlaubt die Interoperabilität zwischen ES6- und CommonJS-Modulen
-    "skipLibCheck": true, // Überspringt die Überprüfung von Definitionen in `node_modules`
-    "forceConsistentCasingInFileNames": true // Erzwingt konsistente Groß-/Kleinschreibung bei Dateinamen
+    "target": "ES2020",
+    "lib": ["dom", "esnext"],
+    "jsx": "react-jsx",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "dist"
   },
-  "include": ["src/**/*"], // Gibt an, welche Dateien TypeScript verarbeiten soll
-  "exclude": ["node_modules", "dist"] // Ausschluss von `node_modules` und `dist`
+  "include": ["frontend/src/**/*"],
+  "exclude": ["node_modules", "dist"]
 }
