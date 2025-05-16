@@ -1,4 +1,3 @@
-/*  frontend/src/components/user/Login/Login.tsx  */
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../../auth/AuthContext";
@@ -10,7 +9,7 @@ const Login: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   const navigate = useNavigate();
-  const { login } = useAuth();          // ← Auth-Context
+  const { login } = useAuth();
 
   /* ------------ Submit ------------ */
   const handleSubmit = async (e: React.FormEvent) => {
