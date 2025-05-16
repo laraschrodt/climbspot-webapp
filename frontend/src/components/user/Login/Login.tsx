@@ -39,10 +39,10 @@ const Login: React.FC = () => {
       localStorage.setItem("token", data.token);
 
       /* ---------- Weiterleitung ---------- */
-      navigate("/dashboard");
-    } catch (err) {                       // <- kein : any
+      navigate("/");
+    } catch (err) {
     if (err instanceof Error) {
-      setError(err.message);            // jetzt typesicher
+      setError(err.message);
     } else {
       setError("Unbekannter Fehler");
     }
