@@ -7,6 +7,10 @@ import {
   ERROR_EMAIL_EXISTS
 } from "../utils/errorMessages";
 
+/**
+ * Alle Methoden in dieser Datei werden in der Regestrierung und Authentifizierung verwendet.
+**/
+
 export const authenticateUserCredentials = async (email: string, password: string) => {
   const { data, error } = await supabase
     .from("benutzer")

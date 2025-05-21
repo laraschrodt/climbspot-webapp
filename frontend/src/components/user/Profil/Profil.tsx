@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import ProfilSidebar from "./ProfileSidebar";
+import ProfilSidebar from "./Sidebar/ProfileSidebar";
 //import ProfilDetails from "./ProfileDetails";
 // import ProfilNotification from "./ProfilNotification";
 import backgroundImage from "../../../assets/images/profilBackground.jpg";

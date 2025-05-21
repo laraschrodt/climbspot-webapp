@@ -1,6 +1,11 @@
 import { supabase } from "../lib/supabase";
 import { randomUUID } from "crypto";
 
+/**
+ * Alle Methoden in dieser Datei werden in der /profil Route verwendet.
+ * Sie sind für das laden und aktualisieren der Profildaten zuständig.
+**/
+
 export const getProfileDataFromDatabase = async (userId: string) => {
   console.log("Suche Profildaten für userId:", userId);
 

@@ -3,6 +3,10 @@ import { authenticateUserCredentials, createUserAccount, changePasswordInDatabas
 import { ERROR_UNKNOWN } from "../utils/errorMessages";
 import { AuthedRequest } from "../middlewares/auth.middleware";
 
+/**
+ * Alle Methoden in dieser Datei werden in der Regestrierung und Authentifizierung verwendet.
+**/
+
 export const loginUser = async (req: Request, res: Response): Promise<void> => {
   const { email, password } = req.body;
 

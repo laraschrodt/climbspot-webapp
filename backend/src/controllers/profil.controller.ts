@@ -3,10 +3,14 @@ import { AuthedRequest } from "../middlewares/auth.middleware";
 import { getProfileDataFromDatabase as getProfileDataByUserId } from "../services/profil.service";
 import { updateProfileInDatabase, uploadProfileImageToSupabase } from "../services/profil.service";
 
+/**
+ * Alle Methoden in dieser Datei werden in der /profil Route verwendet.
+ * Sie sind für das laden und aktualisieren der Profildaten zuständig.
+**/
+
 export const getProfileData = async (req: AuthedRequest, res: Response): Promise<void> => {
   try {
     const userId = (req.user as { userId: string })?.userId;
-    console.log("🔍 userId aus JWT:", userId);
 
     if (!userId) {
       console.warn("Kein userId im Token gefunden.");
@@ -15,7 +19,6 @@ export const getProfileData = async (req: AuthedRequest, res: Response): Promise
     }
 
     const profil = await getProfileDataByUserId(userId);
-    console.log("Profil erfolgreich geladen:", profil);
 
     res.json(profil);
   } catch (err) {
