@@ -1,9 +1,9 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
 
-// Lokale Erweiterung des Request-Typs
 export interface AuthedRequest extends Request {
   user?: string | JwtPayload;
+  file?: Express.Multer.File;
 }
 
 export const verifyToken = (

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Edit2 } from "react-feather";
+import { Edit2, Camera } from "react-feather";
 import axios from "axios";
 
 interface Props {
@@ -10,6 +10,7 @@ interface Props {
     password: string;
     location: string;
     username: string;
+    profilbild_url: string;
   };
   setFormData: React.Dispatch<
     React.SetStateAction<{
@@ -19,13 +20,13 @@ interface Props {
       password: string;
       location: string;
       username: string;
+      profilbild_url: string;
     }>
   >;
 }
 
 const ProfilSidebar: React.FC<Props> = ({ formData, setFormData }) => {
   const [editMode, setEditMode] = useState(false);
-
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
 
@@ -33,10 +34,35 @@ const ProfilSidebar: React.FC<Props> = ({ formData, setFormData }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const formDataImg = new FormData();
+    formDataImg.append("file", file);
+
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.post("/api/profil/upload-image", formDataImg, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      setFormData((prev) => ({
+        ...prev,
+        profilbild_url: res.data.url,
+      }));
+    } catch (error) {
+      console.error("Fehler beim Hochladen des Bildes:", error);
+      alert("Bild konnte nicht hochgeladen werden");
+    }
+  };
+
   const saveChanges = async () => {
     try {
       const token = localStorage.getItem("token");
-
       await axios.put(
         "/api/profil",
         {
@@ -45,6 +71,7 @@ const ProfilSidebar: React.FC<Props> = ({ formData, setFormData }) => {
           email: formData.email,
           username: formData.username,
           location: formData.location,
+          profilbild_url: formData.profilbild_url,
         },
         {
           headers: {
@@ -69,13 +96,9 @@ const ProfilSidebar: React.FC<Props> = ({ formData, setFormData }) => {
 
     try {
       const token = localStorage.getItem("token");
-
       await axios.put(
         "/api/user/password",
-        {
-          oldPassword,
-          newPassword,
-        },
+        { oldPassword, newPassword },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -87,17 +110,33 @@ const ProfilSidebar: React.FC<Props> = ({ formData, setFormData }) => {
       setOldPassword("");
       setNewPassword("");
     } catch {
-      console.error("Fehler beim Passwort-Ändern:"
-      );
+      console.error("Fehler beim Passwort-Ändern:");
     }
   };
 
-  const enterEditMode = () => {
-    setEditMode(true);
-  };
+  const enterEditMode = () => setEditMode(true);
 
   return (
     <div className="flex flex-col items-center md:items-start gap-6">
+      {/* ---------- Profilbild ---------- */}
+      <div className="relative w-32 h-32">
+        <img
+          src={formData.profilbild_url || "/placeholder.jpg"}
+          alt="Profilbild"
+          className="w-32 h-32 rounded-full border-2 border-black object-cover"
+        />
+        <label className="absolute bottom-0 right-0 bg-white p-1 rounded-full border cursor-pointer">
+          <Camera size={16} />
+          <input
+            type="file"
+            className="hidden"
+            accept="image/*"
+            onChange={handleImageChange}
+          />
+        </label>
+      </div>
+
+      {/* ---------- Persönliche Informationen ---------- */}
       <section className="bg-white p-6 rounded-xl shadow w-full">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold">Persönliche Informationen</h2>
@@ -111,7 +150,6 @@ const ProfilSidebar: React.FC<Props> = ({ formData, setFormData }) => {
         </div>
 
         {editMode ? (
-
           <div className="space-y-4 text-sm text-gray-700">
             <div>
               <label className="block font-medium">Vorname</label>
@@ -189,7 +227,6 @@ const ProfilSidebar: React.FC<Props> = ({ formData, setFormData }) => {
       {/* ---------- Passwort ändern ---------- */}
       <section className="bg-white p-6 rounded-xl shadow w-full mt-6">
         <h2 className="text-xl font-semibold mb-4">Passwort ändern</h2>
-
         <div className="space-y-4 text-sm text-gray-700">
           <div>
             <label className="block font-medium">Altes Passwort</label>
@@ -200,7 +237,6 @@ const ProfilSidebar: React.FC<Props> = ({ formData, setFormData }) => {
               className="w-full mt-1 p-2 border rounded"
             />
           </div>
-
           <div>
             <label className="block font-medium">Neues Passwort</label>
             <input
@@ -210,7 +246,6 @@ const ProfilSidebar: React.FC<Props> = ({ formData, setFormData }) => {
               className="w-full mt-1 p-2 border rounded"
             />
           </div>
-
           <button
             onClick={changePassword}
             className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"

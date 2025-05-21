@@ -35,6 +35,7 @@ const Profil: React.FC = () => {
     password: "",
     location: "",
     username: "",
+    profilbild_url: "",
   });
 
   // Lade Profildaten vom Backend
@@ -54,6 +55,7 @@ const Profil: React.FC = () => {
           password: res.data.password,
           location: res.data.location,
           username: res.data.username,
+          profilbild_url: res.data.profilbild_url,
         });
       } catch (err) {
         console.error("Fehler beim Laden des Profils:", err);

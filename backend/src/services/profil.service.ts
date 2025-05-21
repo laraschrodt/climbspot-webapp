@@ -1,11 +1,12 @@
 import { supabase } from "../lib/supabase";
+import { randomUUID } from "crypto";
 
 export const getProfileDataFromDatabase = async (userId: string) => {
   console.log("Suche Profildaten für userId:", userId);
 
   const { data, error } = await supabase
     .from("benutzer")
-    .select("vorname, nachname, email, benutzername, stadt, passwort_hash")
+    .select("vorname, nachname, email, benutzername, stadt, passwort_hash, profilbild_url")
     .eq("benutzer_id", userId)
     .single();
 
@@ -17,12 +18,13 @@ export const getProfileDataFromDatabase = async (userId: string) => {
   console.log("Profildaten gefunden:", data);
 
   return {
-    vorname: data.vorname,
-    nachname: data.nachname,
+    vorname: data.vorname || "",
+    nachname: data.nachname || "",
     email: data.email,
     username: data.benutzername,
-    location: data.stadt,
+    location: data.stadt || "",
     password: data.passwort_hash,
+    profilbild_url: data.profilbild_url || "",
   };
 };
 
@@ -60,4 +62,30 @@ export const updateProfileInDatabase = async (
   }
 
   return { success: true };
+};
+
+export const uploadProfileImageToSupabase = async (userId: string, file: Express.Multer.File) => {
+  const fileName = `profile-pictures/${userId}-${randomUUID()}.jpg`;
+
+  const { error } = await supabase.storage
+    .from("profile-pictures")
+    .upload(fileName, file.buffer, {
+      contentType: file.mimetype,
+      upsert: true,
+    });
+
+  if (error) throw new Error("Supabase-Upload fehlgeschlagen: " + error.message);
+
+  const { data: urlData } = supabase.storage
+    .from("profile-pictures")
+    .getPublicUrl(fileName);
+
+  const imageUrl = urlData.publicUrl;
+
+  await supabase
+    .from("benutzer")
+    .update({ profilbild_url: imageUrl })
+    .eq("benutzer_id", userId);
+
+  return imageUrl;
 };

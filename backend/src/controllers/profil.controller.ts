@@ -1,8 +1,7 @@
 import { Response } from "express";
 import { AuthedRequest } from "../middlewares/auth.middleware";
 import { getProfileDataFromDatabase as getProfileDataByUserId } from "../services/profil.service";
-import { updateProfileInDatabase } from "../services/profil.service";
-
+import { updateProfileInDatabase, uploadProfileImageToSupabase } from "../services/profil.service";
 
 export const getProfileData = async (req: AuthedRequest, res: Response): Promise<void> => {
   try {
@@ -10,17 +9,17 @@ export const getProfileData = async (req: AuthedRequest, res: Response): Promise
     console.log("🔍 userId aus JWT:", userId);
 
     if (!userId) {
-      console.warn("⚠️ Kein userId im Token gefunden.");
+      console.warn("Kein userId im Token gefunden.");
       res.status(400).json({ error: "Ungültiger Token" });
       return;
     }
 
     const profil = await getProfileDataByUserId(userId);
-    console.log("✅ Profil erfolgreich geladen:", profil);
+    console.log("Profil erfolgreich geladen:", profil);
 
     res.json(profil);
   } catch (err) {
-    console.error("❌ Fehler beim Laden des Profils:", err);
+    console.error("Fehler beim Laden des Profils:", err);
     res.status(500).json({ error: "Fehler beim Laden des Profils" });
   }
 };
@@ -59,3 +58,24 @@ export const updateProfileData = async (
     res.status(500).json({ error: "Error while saving profile" });
   }
 };
+
+export const uploadProfileImage = async (
+  req: AuthedRequest,
+  res: Response
+): Promise<void> => {
+  try {
+    const userId = (req.user as { userId: string })?.userId;
+
+    if (!userId || !req.file) {
+      res.status(400).json({ error: "Bild oder Token fehlt" });
+      return;
+    }
+
+    const imageUrl = await uploadProfileImageToSupabase(userId, req.file);
+    res.json({ url: imageUrl });
+  } catch (error) {
+    console.error("Upload-Fehler:", error);
+    res.status(500).json({ error: "Upload fehlgeschlagen" });
+  }
+};
+
