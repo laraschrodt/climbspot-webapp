@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { authenticateUserCredentials, createUserAccount, changePasswordInDatabase } from "../services/userService";
+import { authenticateUserCredentials, createUserAccount, changePasswordInDatabase } from "../services/account.service";
 import { ERROR_UNKNOWN } from "../utils/errorMessages";
 import { AuthedRequest } from "../middlewares/auth.middleware";
 

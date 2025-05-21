@@ -29,6 +29,8 @@ const Profil: React.FC = () => {
 
   // Formulardaten für das Bearbeiten des Profils
   const [formData, setFormData] = useState({
+    vorname: "",
+    nachname: "",
     email: "",
     password: "",
     location: "",
@@ -46,6 +48,8 @@ const Profil: React.FC = () => {
           },
         });
         setFormData({
+          vorname: res.data.vorname,
+          nachname: res.data.nachname,
           email: res.data.email,
           password: res.data.password,
           location: res.data.location,
@@ -65,13 +69,13 @@ const Profil: React.FC = () => {
     <div>
       {/* Begrüßungsbereich */}
       <section
-        className="h-96 md:h-[32rem] bg-cover bg-center flex items-center justify-center relative"
+        className="h-64 md:h-[32rem] bg-cover bg-center flex items-center justify-center relative"
         style={{ backgroundImage: `url(${backgroundImage})` }}
       >
         <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
         <div className="relative z-10 text-center text-white px-6">
           <h1 className="text-3xl md:text-4xl font-bold mb-2">
-            Willkommen {formData.username} 👋
+            Willkommen {formData.vorname} {formData.nachname} 👋
           </h1>
           <p className="text-lg max-w-xl mx-auto">
             Verwalte hier deine persönlichen Informationen, Favoriten und Bewertungen rund ums Klettern.

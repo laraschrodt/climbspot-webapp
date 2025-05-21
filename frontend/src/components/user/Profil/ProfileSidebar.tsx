@@ -2,16 +2,19 @@ import React, { useState } from "react";
 import { Edit2 } from "react-feather";
 import axios from "axios";
 
-// ---------- Props ----------
 interface Props {
   formData: {
+    nachname: string;
+    vorname: string;
     email: string;
-    password: string; // wird nicht mehr verwendet
+    password: string;
     location: string;
     username: string;
   };
   setFormData: React.Dispatch<
     React.SetStateAction<{
+      nachname: string;
+      vorname: string;
       email: string;
       password: string;
       location: string;
@@ -37,6 +40,8 @@ const ProfilSidebar: React.FC<Props> = ({ formData, setFormData }) => {
       await axios.put(
         "/api/profil",
         {
+          vorname: formData.vorname,
+          nachname: formData.nachname,
           email: formData.email,
           username: formData.username,
           location: formData.location,
@@ -48,10 +53,10 @@ const ProfilSidebar: React.FC<Props> = ({ formData, setFormData }) => {
         }
       );
 
-      alert("Profil erfolgreich gespeichert ✅");
+      alert("Profil erfolgreich gespeichert");
       setEditMode(false);
     } catch (error) {
-      console.error("❌ Fehler beim Speichern des Profils:", error);
+      console.error("Fehler beim Speichern des Profils:", error);
       alert("Fehler beim Speichern des Profils");
     }
   };
@@ -106,7 +111,30 @@ const ProfilSidebar: React.FC<Props> = ({ formData, setFormData }) => {
         </div>
 
         {editMode ? (
+
           <div className="space-y-4 text-sm text-gray-700">
+            <div>
+              <label className="block font-medium">Vorname</label>
+              <input
+                type="text"
+                name="vorname"
+                value={formData.vorname}
+                onChange={handleChange}
+                className="w-full mt-1 p-2 border rounded"
+              />
+            </div>
+
+            <div>
+              <label className="block font-medium">Nachname</label>
+              <input
+                type="text"
+                name="nachname"
+                value={formData.nachname}
+                onChange={handleChange}
+                className="w-full mt-1 p-2 border rounded"
+              />
+            </div>
+
             <div>
               <label className="block font-medium">E-Mail</label>
               <input
@@ -149,6 +177,8 @@ const ProfilSidebar: React.FC<Props> = ({ formData, setFormData }) => {
           </div>
         ) : (
           <div className="space-y-2 text-gray-700">
+            <p><strong>Vorname:</strong> {formData.vorname}</p>
+            <p><strong>Nachname:</strong> {formData.nachname}</p>
             <p><strong>E-Mail:</strong> {formData.email}</p>
             <p><strong>Benutzername:</strong> {formData.username}</p>
             <p><strong>Standort:</strong> {formData.location}</p>
