@@ -1,101 +1,193 @@
-// ProfileSidebar.tsx
-import React from "react";
-import { Bell, Camera, Eye, EyeOff } from "react-feather";
+import React, { useState } from "react";
+import { Edit2 } from "react-feather";
+import axios from "axios";
 
-// ---------- Props für die Sidebar-Komponente ----------
+// ---------- Props ----------
 interface Props {
-  profileImage: string; // Pfad oder URL zum Profilbild
-  handleImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void; // Funktion zum Ändern des Profilbildes
-  notifications: { id: number; message: string; date: string }[]; // Liste der Benachrichtigungen
-  togglePopup: () => void; // Funktion zum Öffnen/Schließen des Popups
   formData: {
     email: string;
-    password: string;
+    password: string; // wird nicht mehr verwendet
     location: string;
     username: string;
   };
-  showPassword: boolean; // Sichtbarkeit des Passworts
-  setShowPassword: (val: boolean) => void; // Umschalten der Passwortanzeige
+  setFormData: React.Dispatch<
+    React.SetStateAction<{
+      email: string;
+      password: string;
+      location: string;
+      username: string;
+    }>
+  >;
 }
 
-// ---------- Sidebar-Komponente ----------
-const ProfilSidebar: React.FC<Props> = ({
-  profileImage,
-  handleImageChange,
-  notifications,
-  togglePopup,
-  formData,
-  showPassword,
-  setShowPassword,
-}) => {
+const ProfilSidebar: React.FC<Props> = ({ formData, setFormData }) => {
+  const [editMode, setEditMode] = useState(false);
+
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const saveChanges = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      await axios.put(
+        "/api/profil",
+        {
+          email: formData.email,
+          username: formData.username,
+          location: formData.location,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      alert("Profil erfolgreich gespeichert ✅");
+      setEditMode(false);
+    } catch (error) {
+      console.error("❌ Fehler beim Speichern des Profils:", error);
+      alert("Fehler beim Speichern des Profils");
+    }
+  };
+
+  const changePassword = async () => {
+    if (!oldPassword || !newPassword) {
+      alert("Bitte altes und neues Passwort eingeben.");
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("token");
+
+      await axios.put(
+        "/api/user/password",
+        {
+          oldPassword,
+          newPassword,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      alert("Passwort erfolgreich geändert");
+      setOldPassword("");
+      setNewPassword("");
+    } catch {
+      console.error("Fehler beim Passwort-Ändern:"
+      );
+    }
+  };
+
+  const enterEditMode = () => {
+    setEditMode(true);
+  };
+
   return (
     <div className="flex flex-col items-center md:items-start gap-6">
-      
-      {/* ---------- Profilbild-Abschnitt ---------- */}
-      <div className="relative w-32 h-32">
-        <img
-          src={profileImage}
-          alt="Profilbild"
-          className="w-32 h-32 rounded-full border-2 border-black object-cover"
-        />
-        {/* Kamera-Icon mit Datei-Upload-Funktion */}
-        <label className="absolute bottom-0 right-0 bg-white p-1 rounded-full border cursor-pointer">
-          <Camera size={16} />
-          <input
-            type="file"
-            className="hidden"
-            accept="image/*"
-            onChange={handleImageChange}
-          />
-        </label>
-      </div>
-
-      {/* ---------- Benachrichtigungen ---------- */}
-      <div
-        className="flex items-center gap-2 cursor-pointer text-sm text-gray-800 hover:text-black"
-        onClick={togglePopup}
-      >
-        <div className="relative">
-          <Bell className="w-5 h-5" />
-          {notifications.length > 0 && (
-            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-              {notifications.length}
-            </span>
-          )}
-        </div>
-        <span>Benachrichtigungen</span>
-      </div>
-
-      {/* ---------- Persönliche Informationen ---------- */}
       <section className="bg-white p-6 rounded-xl shadow w-full">
-        <h2 className="text-xl font-semibold mb-4">Persönliche Informationen</h2>
-
-        {/* E-Mail */}
-        <p>
-          <strong>E-Mail:</strong> {formData.email}
-        </p>
-
-        {/* Benutzername */}
-        <p>
-          <strong>Benutzername:</strong> {formData.username}
-        </p>
-
-        {/* Passwort mit Sichtbarkeitsumschaltung */}
-        <p className="flex items-center gap-2">
-          <strong>Passwort:</strong>{" "}
-          {showPassword ? formData.password : "********"}
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-semibold">Persönliche Informationen</h2>
           <button
-            onClick={() => setShowPassword(!showPassword)}
-            className="text-gray-500 hover:text-black"
+            onClick={editMode ? () => setEditMode(false) : enterEditMode}
+            className="text-blue-600 flex items-center gap-1 text-sm"
           >
-            {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+            <Edit2 size={14} />
+            {editMode ? "Abbrechen" : "Bearbeiten"}
           </button>
-        </p>
+        </div>
 
-        {/* Standort */}
-        <p>
-          <strong>Standort:</strong> {formData.location}
-        </p>
+        {editMode ? (
+          <div className="space-y-4 text-sm text-gray-700">
+            <div>
+              <label className="block font-medium">E-Mail</label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                className="w-full mt-1 p-2 border rounded"
+              />
+            </div>
+
+            <div>
+              <label className="block font-medium">Benutzername</label>
+              <input
+                type="text"
+                name="username"
+                value={formData.username}
+                onChange={handleChange}
+                className="w-full mt-1 p-2 border rounded"
+              />
+            </div>
+
+            <div>
+              <label className="block font-medium">Standort</label>
+              <input
+                type="text"
+                name="location"
+                value={formData.location}
+                onChange={handleChange}
+                className="w-full mt-1 p-2 border rounded"
+              />
+            </div>
+
+            <button
+              onClick={saveChanges}
+              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            >
+              Speichern
+            </button>
+          </div>
+        ) : (
+          <div className="space-y-2 text-gray-700">
+            <p><strong>E-Mail:</strong> {formData.email}</p>
+            <p><strong>Benutzername:</strong> {formData.username}</p>
+            <p><strong>Standort:</strong> {formData.location}</p>
+          </div>
+        )}
+      </section>
+
+      {/* ---------- Passwort ändern ---------- */}
+      <section className="bg-white p-6 rounded-xl shadow w-full mt-6">
+        <h2 className="text-xl font-semibold mb-4">Passwort ändern</h2>
+
+        <div className="space-y-4 text-sm text-gray-700">
+          <div>
+            <label className="block font-medium">Altes Passwort</label>
+            <input
+              type="password"
+              value={oldPassword}
+              onChange={(e) => setOldPassword(e.target.value)}
+              className="w-full mt-1 p-2 border rounded"
+            />
+          </div>
+
+          <div>
+            <label className="block font-medium">Neues Passwort</label>
+            <input
+              type="password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              className="w-full mt-1 p-2 border rounded"
+            />
+          </div>
+
+          <button
+            onClick={changePassword}
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          >
+            Passwort ändern
+          </button>
+        </div>
       </section>
     </div>
   );
