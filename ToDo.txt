@@ -1,17 +1,18 @@
 Bald:
-TODO: Verkehrsanbindungen einbauen
-TODO: Platzhalter im Profil ersetzen und mit DB verbinden
-TODO: DB mit Daten von https://www.bergsteigen.com/ in die DB einfügen (am besten erstmal ca. 20 Datensätze)
-TODO: Platzhalter von den Location-Cards entfernen und mit DB verbinden
-TODO: Platzhalter von den einzelnen Location-Seiten entfernen und mit DB verbinden
-TODO: Location Liste muss alle Cards zeigen (20 pro Seite)
+[ ]: Verkehrsanbindungen einbauen
+[ ]: DB mit Daten von https://www.bergsteigen.com/ in die DB einfügen (am besten erstmal ca. 20 Datensätze)
+[ ]: Platzhalter von den Location-Cards entfernen und mit DB verbinden
+[ ]: Platzhalter von den einzelnen Location-Seiten entfernen und mit DB verbinden
+[ ]: Location Liste muss alle Cards zeigen (20 pro Seite)
 
 Gegen Ende vom Projekt:
-TODO: Kommentare von ChatGPT entfernen
-TODO: Funktionen/Components verkleinern und auseinander ziehen (ein usecase pro Datei - wie in Software Eng. besproche)
-TODO: Kommentare wie in Software Projekt einfügen
+[ ]: Funktionen/Components verkleinern und auseinander ziehen (ein usecase pro Datei - wie in Software Eng. besproche)
+[ ]: Kommentare wie in Software Projekt einfügen
+
+Wenn wir irgendwann noch Zeit/Lust haben:
+[ ]: Aktivitätsverlauf im Profil
 
 PL3:
-TODO: User Interface Mockup (Alex) – Figma
-TODO: BPMN Diagramm (Kimia)
-TODO: UML Diagramm (Lara bis Dienstag)
+[ ]: User Interface Mockup (Alex) – Figma
+[ ]: BPMN Diagramm (Kimia)
+[ ]: UML Diagramm (Lara bis Dienstag)
