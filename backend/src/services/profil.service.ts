@@ -7,7 +7,6 @@ import { randomUUID } from "crypto";
 **/
 
 export const getProfileDataFromDatabase = async (userId: string) => {
-  console.log("Suche Profildaten für userId:", userId);
 
   const { data, error } = await supabase
     .from("benutzer")

@@ -2,6 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Bell } from "react-feather";
 import axios from "axios";
 
+// TODO: Benachrichtigungen
+/**
+ * Der Pfad ins backend /api/profil/notifications ist schon vorbereitet,
+ * d.h. es muss nurnoch in der Servicelayer (und beim Controller) ergänzt werden.
+ * => @file: services/profil.service.ts und @file: router/profil.routes.ts
+**/
+
 interface Notification {
   id: number;
   message: string;

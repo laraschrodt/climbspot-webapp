@@ -1,33 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import ProfilSidebar from "./Sidebar/ProfileSidebar";
-//import ProfilDetails from "./ProfileDetails";
-// import ProfilNotification from "./ProfilNotification";
+import ProfilSidebar from "./LeftSide/ProfileSidebar";
+import ProfileDetails from "./RightSide/ProfileDetails";
 import backgroundImage from "../../../assets/images/profilBackground.jpg";
 
 const Profil: React.FC = () => {
-  // TODO: Profilbenachrichtigungen implementieren
-
-  // const [showPopup, setShowPopup] = useState(false);
-  // const [currentIndex, setCurrentIndex] = useState(0);
-
-  /*
-  // Zustand für Profilbild
-  const [profileImage, setProfileImage] = useState("src/assets/images/profilbildPlaceholder.png");
-
-  // Benachrichtigungen
-  const [notifications, setNotifications] = useState([]);
-
-  // Bildänderung lokal
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files?.[0]) {
-      const file = e.target.files[0];
-      setProfileImage(URL.createObjectURL(file));
-    }
-  };
-  */
-
-  // Formulardaten für das Bearbeiten des Profils
   const [formData, setFormData] = useState({
     vorname: "",
     nachname: "",
@@ -38,7 +15,11 @@ const Profil: React.FC = () => {
     profilbild_url: "",
   });
 
-  // Lade Profildaten vom Backend
+  const [userData, setUserData] = useState({
+    favorites: [] as string[],
+    reviews: [] as { location: string; rating: number; comment: string }[],
+  });
+
   useEffect(() => {
     const fetchProfil = async () => {
       try {
@@ -48,6 +29,7 @@ const Profil: React.FC = () => {
             Authorization: `Bearer ${token}`,
           },
         });
+
         setFormData({
           vorname: res.data.vorname,
           nachname: res.data.nachname,
@@ -57,6 +39,11 @@ const Profil: React.FC = () => {
           username: res.data.username,
           profilbild_url: res.data.profilbild_url,
         });
+
+        setUserData({
+          favorites: res.data.favorites || [],
+          reviews: res.data.reviews || [],
+        });
       } catch (err) {
         console.error("Fehler beim Laden des Profils:", err);
       }
@@ -64,8 +51,6 @@ const Profil: React.FC = () => {
 
     fetchProfil();
   }, []);
-
-  // const togglePopup = () => setShowPopup(!showPopup);
 
   return (
     <div>
@@ -85,32 +70,20 @@ const Profil: React.FC = () => {
         </div>
       </section>
 
-      {/* Hauptinhalt */}
       <main className="max-w-7xl mx-auto px-6 py-12">
         <div className="grid md:grid-cols-3 gap-10 items-start">
           <ProfilSidebar
-            // profileImage={profileImage}
-            // handleImageChange={handleImageChange}
-            // notifications={notifications}
-            // togglePopup={togglePopup}
             formData={formData}
             setFormData={setFormData}
           />
-
-          {/* <ProfilDetails
-
-          /> */}
+          <div className="md:col-span-2">
+            <ProfileDetails
+              favorites={userData.favorites}
+              reviews={userData.reviews}
+            />
+          </div>
         </div>
       </main>
-
-      {/* {showPopup && (
-        <ProfilNotification
-          // notifications={notifications}
-          currentIndex={currentIndex}
-          setCurrentIndex={setCurrentIndex}
-          onClose={togglePopup}
-        />
-      )} */}
     </div>
   );
 };

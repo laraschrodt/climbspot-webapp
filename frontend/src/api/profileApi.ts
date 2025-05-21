@@ -1,5 +1,5 @@
 import axios from "axios";
-import { FormDataType } from "../components/user/Profil/Sidebar/types";
+import { FormDataType } from "../components/user/Profil/LeftSide/types";
 
 // 🔼 Passe ggf. den Pfad zum FormDataType an, je nach Projektstruktur
 

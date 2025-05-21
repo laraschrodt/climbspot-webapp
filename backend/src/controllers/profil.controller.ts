@@ -83,7 +83,13 @@ export const uploadProfileImage = async (
 };
 
 export const getNotifications = async (req: Request, res: Response) => {
-  // TODO: Hier werden später  die Notifications bei neuen Locations geladen
+  /**
+   * Hier werden später  die Notifications bei neuen Locations geladen.
+   * Die eigentliche Logik, um die Notifications zu erstellen müssen in der Servicelayer implementiert werden,
+   * also in @file: services/profil.service.ts
+   * Die Platzhalterdaten sind hier nur für den Test.
+   * In dieser Methode verarbeitet der Controller die Anfrage und schickt eine Antwort zurück ans Frontend.
+   */
   const mockData = [
     { id: 1, message: "Du hast eine neue Nachricht", date: new Date().toISOString() },
     { id: 2, message: "Profil erfolgreich aktualisiert", date: new Date().toISOString() },
