@@ -9,6 +9,7 @@ import {
   saveProfile,
   updatePassword,
 } from "../../../../api/profileApi";
+import Notifications from "./Notifications";
 
 interface Props {
   formData: FormDataType;
@@ -68,6 +69,7 @@ const ProfilSidebar: React.FC<Props> = ({ formData, setFormData }) => {
   return (
     <div className="flex flex-col items-center md:items-start gap-6">
       <Profilbild imageUrl={formData.profilbild_url} onImageChange={handleImageChange} />
+      <Notifications />
       <PersönlicheInfos
         formData={formData}
         editMode={editMode}

@@ -20,8 +20,6 @@ export const getProfileDataFromDatabase = async (userId: string) => {
     throw new Error("Profil nicht gefunden");
   }
 
-  console.log("Profildaten gefunden:", data);
-
   return {
     vorname: data.vorname || "",
     nachname: data.nachname || "",

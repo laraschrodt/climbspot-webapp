@@ -1,4 +1,4 @@
-import { Response } from "express";
+import { Response, Request } from "express";
 import { AuthedRequest } from "../middlewares/auth.middleware";
 import { getProfileDataFromDatabase as getProfileDataByUserId } from "../services/profil.service";
 import { updateProfileInDatabase, uploadProfileImageToSupabase } from "../services/profil.service";
@@ -82,3 +82,12 @@ export const uploadProfileImage = async (
   }
 };
 
+export const getNotifications = async (req: Request, res: Response) => {
+  // TODO: Hier werden später  die Notifications bei neuen Locations geladen
+  const mockData = [
+    { id: 1, message: "Du hast eine neue Nachricht", date: new Date().toISOString() },
+    { id: 2, message: "Profil erfolgreich aktualisiert", date: new Date().toISOString() },
+  ];
+
+  res.json(mockData);
+};
