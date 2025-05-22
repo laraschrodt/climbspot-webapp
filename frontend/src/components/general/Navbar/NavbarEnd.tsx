@@ -1,14 +1,14 @@
 import { FC } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../../../auth/AuthContext";
+import { useUserSession } from "../../../auth/useUserSession";
 
 const NavbarEnd: FC = () => {
-  const { user, logout } = useAuth();
+  const { user, clearSession } = useUserSession();
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    logout();          // Token + User im Context löschen
-    navigate("/");     // zurück in Gast-Ansicht
+    clearSession();
+    navigate("/");
   };
 
   return (
@@ -51,6 +51,12 @@ const NavbarEnd: FC = () => {
       </div>
 
       {/* Profil-Menü */}
+      //TODO: Hier muss noch das Profilbild angezeigt werden.
+      {/**
+       * In dem @foder frontend/src/api muss eine Datei erstellt werden, die eine Anfrage ans Backend sendet.
+       * Diese anfrage kommt in @file profile.router.ts an und wird an @file profile.controller.ts weitergeleitet.
+       * Der Controller ruft die Service Layer in @file profile.service.ts auf, wo eine Methode implementiert werden muss, die das Bild anhand der userId holt.
+       **/}
       <div className="dropdown dropdown-end">
         {/* Avatar-Button */}
         <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
@@ -93,7 +99,7 @@ const NavbarEnd: FC = () => {
           {user && (
             <>
               <li>
-                <Link to="/profil">Profil</Link>
+                <Link to="/profile">Profil</Link>
               </li>
               <li>
                 <button onClick={handleLogout}>Logout</button>

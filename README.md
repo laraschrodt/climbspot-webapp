@@ -22,6 +22,8 @@ npm install
 npm run dev
 ```
 
+3. Uns nach .env Datei fragen
+
 
 ## 🛠️ Tech Stack
 

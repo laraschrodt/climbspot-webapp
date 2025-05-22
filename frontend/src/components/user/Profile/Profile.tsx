@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import ProfilSidebar from "./LeftSide/ProfileSidebar";
+import ProfileSidebar from "./LeftSide/ProfileSidebar";
 import ProfileDetails from "./RightSide/ProfileDetails";
 import backgroundImage from "../../../assets/images/profilBackground.jpg";
 
-const Profil: React.FC = () => {
+const Profile: React.FC = () => {
   const [formData, setFormData] = useState({
     vorname: "",
     nachname: "",
@@ -21,10 +21,10 @@ const Profil: React.FC = () => {
   });
 
   useEffect(() => {
-    const fetchProfil = async () => {
+    const fetchProfile = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("/api/profil", {
+        const res = await axios.get("/api/profile", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -49,7 +49,7 @@ const Profil: React.FC = () => {
       }
     };
 
-    fetchProfil();
+    fetchProfile();
   }, []);
 
   return (
@@ -72,7 +72,7 @@ const Profil: React.FC = () => {
 
       <main className="max-w-7xl mx-auto px-6 py-12">
         <div className="grid md:grid-cols-3 gap-10 items-start">
-          <ProfilSidebar
+          <ProfileSidebar
             formData={formData}
             setFormData={setFormData}
           />
@@ -88,4 +88,4 @@ const Profil: React.FC = () => {
   );
 };
 
-export default Profil;
+export default Profile;

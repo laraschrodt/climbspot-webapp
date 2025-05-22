@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import "leaflet.markercluster"; // 🆕 Cluster-Plugin
+import "leaflet.markercluster";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 
@@ -18,7 +18,7 @@ const Map = () => {
   useEffect(() => {
     const existingMap = document.getElementById("map");
     if (!existingMap) return;
-    if ((existingMap as any)._leaflet_id) return;
+    if ((existingMap as HTMLElement & { _leaflet_id?: number })._leaflet_id) return;
 
     const map = L.map("map", {
       center: [51.1657, 10.4515],
@@ -48,7 +48,6 @@ const Map = () => {
       },
     ];
 
-    // @ts-ignore ⬅️ Damit TypeScript nicht meckert
     const markers = L.markerClusterGroup();
 
     locations.forEach((loc) => {

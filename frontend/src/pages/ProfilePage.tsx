@@ -1,15 +1,15 @@
 import { Navbar } from "../components/general/Navbar";
-import Profil  from "../components/user/Profil";
+import Profile  from "../components/user/Profile";
 import Footer from "../components/general/Footer/Footer";
 
-function ProfilPage(){
+function ProfilePage(){
   return(
     <div>
       <Navbar/>
-      <Profil/>
+      <Profile/>
       <Footer/>
     </div>
 
   );
-} 
-export default ProfilPage;
+}
+export default ProfilePage;

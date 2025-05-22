@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../../../auth/AuthContext";
+import { useUserSession } from "../../../auth/useUserSession";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -9,9 +9,8 @@ const Login: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { storeLoginData } = useUserSession();
 
-  /* ------------ Submit ------------ */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -28,10 +27,8 @@ const Login: React.FC = () => {
 
       if (!res.ok) throw new Error(data.message || "Login fehlgeschlagen");
 
-      /* ------ Token + User speichern ------ */
-      login({ username: email.split("@")[0] }, data.token);
+      storeLoginData({ username: email.split("@")[0] }, data.token);
 
-      /* Weiterleitung – Startseite */
       navigate("/");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unbekannter Fehler");
@@ -40,7 +37,6 @@ const Login: React.FC = () => {
     }
   };
 
-  /* ------------ JSX ------------ */
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 min-h-screen">
       <div className="flex items-center justify-center bg-base-100 p-10">

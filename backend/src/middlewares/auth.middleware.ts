@@ -6,26 +6,26 @@ export interface AuthedRequest extends Request {
   file?: Express.Multer.File;
 }
 
-export const verifyToken = (
-  req: AuthedRequest,
-  res: Response,
-  next: NextFunction
-): void => {
-  const authHeader = req.headers.authorization;
+class AuthMiddleware {
+  verifyToken(req: AuthedRequest, res: Response, next: NextFunction): void {
+    const authHeader = req.headers.authorization;
 
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    res.status(401).json({ error: "Token fehlt oder ist ungültig" });
-    return;
-  }
-
-  const token = authHeader.split(" ")[1];
-
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || "defaultSecret");
-    req.user = decoded;
-    next();
-  } catch (err) {
-        console.error("JWT Fehler:", err);
-        res.status(401).json({ error: "Token ungültig oder abgelaufen" });
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      res.status(401).json({ error: "Token fehlt oder ist ungültig" });
+      return;
     }
-};
+
+    const token = authHeader.split(" ")[1];
+
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET || "defaultSecret");
+      req.user = decoded;
+      next();
+    } catch (err) {
+      console.error("JWT Fehler:", err);
+      res.status(401).json({ error: "Token ungültig oder abgelaufen" });
+    }
+  }
+}
+
+export default new AuthMiddleware();

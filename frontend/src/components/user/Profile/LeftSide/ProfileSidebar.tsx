@@ -16,7 +16,7 @@ interface Props {
   setFormData: React.Dispatch<React.SetStateAction<FormDataType>>;
 }
 
-const ProfilSidebar: React.FC<Props> = ({ formData, setFormData }) => {
+const ProfileSidebar: React.FC<Props> = ({ formData, setFormData }) => {
   const [editMode, setEditMode] = useState(false);
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -88,4 +88,4 @@ const ProfilSidebar: React.FC<Props> = ({ formData, setFormData }) => {
   );
 };
 
-export default ProfilSidebar;
+export default ProfileSidebar;
