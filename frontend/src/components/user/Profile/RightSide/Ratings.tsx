@@ -3,9 +3,9 @@ import React from "react";
 // TODO: Ratings anzeigen lassen (am besten erst wenn alle normalen Locations schon implementiert sind)
 /**
  * Backend hierfür steht noch nicht.
- * HTTP-Request an /profil/favorites in @file: backend/src/routes/profil.routes.ts
- * und @file: backend/src/controllers/profil.controller.ts bzw.
- * @file: backend/src/services/profil.service.ts, un die Logik zu implementieren.
+ * HTTP-Request an /profile/favorites in @file: backend/src/routes/profile.routes.ts
+ * und @file: backend/src/controllers/profile.controller.ts bzw.
+ * @file: backend/src/services/profile.service.ts, un die Logik zu implementieren.
  */
 
 interface Review {

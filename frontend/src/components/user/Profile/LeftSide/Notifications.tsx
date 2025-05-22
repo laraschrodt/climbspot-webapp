@@ -4,9 +4,9 @@ import axios from "axios";
 
 // TODO: Benachrichtigungen
 /**
- * Der Pfad ins backend /api/profil/notifications ist schon vorbereitet,
+ * Der Pfad ins backend /api/profile/notifications ist schon vorbereitet,
  * d.h. es muss nurnoch in der Servicelayer (und beim Controller) ergänzt werden.
- * => @file: services/profil.service.ts und @file: router/profil.routes.ts
+ * => @file: services/profile.service.ts und @file: router/profile.routes.ts
 **/
 
 interface Notification {
@@ -25,7 +25,7 @@ const Notifications: React.FC = () => {
     const fetchNotifications = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("/api/profil/notifications", {
+        const response = await axios.get("/api/profile/notifications", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

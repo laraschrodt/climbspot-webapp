@@ -10,7 +10,7 @@ interface Props {
 }
 
 // ---------- Komponente für einzelne Benachrichtigungs-Popups ----------
-const ProfilNotification: React.FC<Props> = ({
+const ProfileNotification: React.FC<Props> = ({
   notifications,
   currentIndex,
   setCurrentIndex,
@@ -59,4 +59,4 @@ const ProfilNotification: React.FC<Props> = ({
   );
 };
 
-export default ProfilNotification;
+export default ProfileNotification;

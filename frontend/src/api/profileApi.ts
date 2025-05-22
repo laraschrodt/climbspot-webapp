@@ -1,7 +1,7 @@
 import axios from "axios";
-import { FormDataType } from "../components/user/Profil/LeftSide/types";
+import { FormDataType } from "../components/user/Profile/LeftSide/types";
 
-// 🔼 Passe ggf. den Pfad zum FormDataType an, je nach Projektstruktur
+//class profileAPI {}
 
 export const uploadProfileImage = async (file: File): Promise<string> => {
   const formData = new FormData();
@@ -9,7 +9,7 @@ export const uploadProfileImage = async (file: File): Promise<string> => {
 
   const token = localStorage.getItem("token");
 
-  const response = await axios.post("/api/profil/upload-image", formData, {
+  const response = await axios.post("/api/profile/upload-image", formData, {
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "multipart/form-data",
@@ -22,7 +22,7 @@ export const uploadProfileImage = async (file: File): Promise<string> => {
 export const saveProfile = async (data: Omit<FormDataType, "password">): Promise<void> => {
   const token = localStorage.getItem("token");
 
-  await axios.put("/api/profil", data, {
+  await axios.put("/api/profile", data, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -36,7 +36,7 @@ export const updatePassword = async (
   const token = localStorage.getItem("token");
 
   await axios.put(
-    "/api/user/password",
+    "/api/profile/password",
     { oldPassword, newPassword },
     {
       headers: {
