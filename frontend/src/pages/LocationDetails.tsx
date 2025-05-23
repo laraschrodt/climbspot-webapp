@@ -1,6 +1,5 @@
 import React from "react";
 
-// TypeScript-Interface für die Location-Daten
 interface Location {
     name: string;
     schwierigkeit: string;
@@ -21,7 +20,7 @@ interface Location {
     bewertung: string;
 }
 
-// Statische Dummy-Daten für eine Beispiel-Location
+// Statische Dummy-Daten für eine Bsp-Location
 const location: Location = {
     name: "Klettergarten Isarwinkel",
     schwierigkeit: "5a – 7c",
@@ -42,7 +41,7 @@ const location: Location = {
     bewertung: "4.5 / 5"
 };
 
-// Die React-Komponente, die die Location-Details als HTML (JSX) darstellt
+// React-Komponente, die die Location-Details als HTML darstellt
 const LocationDetails: React.FC = () => {
     return (
         <div className="max-w-2xl mx-auto p-4">
