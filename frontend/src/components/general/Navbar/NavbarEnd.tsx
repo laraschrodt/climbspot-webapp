@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useUserSession } from "../../../auth/useUserSession";
+import { useUserSession } from "../../../auth/UseUserSession";
 
 const NavbarEnd: FC = () => {
   const { user, clearSession } = useUserSession();
@@ -51,7 +51,7 @@ const NavbarEnd: FC = () => {
       </div>
 
       {/* Profil-Menü */}
-      //TODO: Hier muss noch das Profilbild angezeigt werden.
+      {/* TODO: Hier muss noch das Profilbild angezeigt werden. */}
       {/**
        * In dem @foder frontend/src/api muss eine Datei erstellt werden, die eine Anfrage ans Backend sendet.
        * Diese anfrage kommt in @file profile.router.ts an und wird an @file profile.controller.ts weitergeleitet.

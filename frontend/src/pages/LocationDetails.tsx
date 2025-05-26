@@ -19,7 +19,6 @@ interface Location {
     absicherung: string;
     bewertung: string;
 }
-
 // Statische Dummy-Daten für eine Bsp-Location
 const location: Location = {
     name: "Klettergarten Isarwinkel",
