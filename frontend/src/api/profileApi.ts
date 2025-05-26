@@ -1,7 +1,7 @@
 import axios from "axios";
 import { FormDataType } from "../components/user/Profile/LeftSide/types";
 
-//class profileAPI {}
+// TODO: class ProfileApi {} einfügen, damit die Methoden nicht ohne Klasse stehen
 
 export const uploadProfileImage = async (file: File): Promise<string> => {
   const formData = new FormData();

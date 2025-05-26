@@ -21,6 +21,7 @@ interface Location {
     absicherung: string;
     bewertung: string;
 }
+<<<<<<< HEAD
 
 // Dummy-Daten
 const dummyLocations: Location[] = Array.from({ length: 12 }, (_, i) => ({
@@ -43,6 +44,28 @@ const dummyLocations: Location[] = Array.from({ length: 12 }, (_, i) => ({
   absicherung: "Sehr gut mit Klebehaken",
   bewertung: `${(4 + (i % 2) * 0.5).toFixed(1)} / 5`,
 }));
+=======
+// Statische Dummy-Daten für eine Bsp-Location
+const location: Location = {
+    name: "Klettergarten Isarwinkel",
+    schwierigkeit: "5a – 7c",
+    koordinaten: "47.5600, 11.3785",
+    charakter: "Plattig, technische Routen",
+    land: "Deutschland",
+    region: "Oberbayern",
+    gebirge: "Bayerische Alpen",
+    berg: "Brauneck",
+    berghoehe_m: 1555,
+    talort: "Lenggries",
+    ausruestung: "60m Seil, 12 Expressen",
+    kletterlaenge_m: 22,
+    kletterzeit: "1,5h",
+    kletterart: "Sportklettern",
+    kinderfreundlichkeit: "Gut – flacher Einstieg",
+    absicherung: "Sehr gut mit Klebehaken",
+    bewertung: "4.5 / 5"
+};
+>>>>>>> aca564a991a0fbcfccfd3d90f622259927b8f010
 
 const LocationDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
