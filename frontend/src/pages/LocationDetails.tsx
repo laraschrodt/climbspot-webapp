@@ -19,7 +19,6 @@ interface Location {
     absicherung: string;
     bewertung: string;
 }
-// TODO: das nochmal als Component machen und Page selbst machen
 // Statische Dummy-Daten für eine Bsp-Location
 const location: Location = {
     name: "Klettergarten Isarwinkel",

@@ -6,7 +6,6 @@ const Hero: React.FC = () => {
       className="hero min-h-[50vh]" /* sorgt dafür, dass Element mindestens 50% der Höhe des Bildschirms einnimmt  */
       style={{
         backgroundImage:
-          /* [ ]: ein passendes Bild suchen (oder das behalten), zu src/assets/images hinzufügen und hier den Link ersetzen */
           "url(https://cdn.climbing.com/wp-content/uploads/2020/04/landscape-climb-2.jpg?crop=535:301&width=1070&enable=upscale)",
       }}
     >
