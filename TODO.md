@@ -4,7 +4,7 @@ Bald:
 [ ]: Platzhalter von den Location-Cards entfernen und mit DB verbinden
 [ ]: Platzhalter von den einzelnen Location-Seiten entfernen und mit DB verbinden
 [ ]: Location Liste muss alle Cards zeigen (20 pro Seite)
-[ ]: /profil im Gastmodus unzugänglich machen
+[ ]: /profil im Gastmodus unzugänglich machen (stattdessen an Login weitergeleitet werden)
 
 Gegen Ende vom Projekt:
 [ ]: Funktionen/Components verkleinern und auseinander ziehen (ein usecase pro Datei - wie in Software Eng. besproche)

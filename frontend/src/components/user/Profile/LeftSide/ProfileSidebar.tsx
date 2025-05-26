@@ -8,7 +8,7 @@ import {
   uploadProfileImage,
   saveProfile,
   updatePassword,
-} from "../../../../api/profileApi";
+} from "../../../../api/ProfileApi";
 import Notifications from "./Notifications";
 
 interface Props {

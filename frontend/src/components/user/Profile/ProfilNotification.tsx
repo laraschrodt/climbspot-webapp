@@ -1,22 +1,20 @@
 import React from "react";
 import { ChevronLeft, ChevronRight } from "react-feather";
 
-// ---------- Props-Definition für die Benachrichtigungskomponente ----------
 interface Props {
-  notifications: { id: number; message: string; date: string }[]; // Liste der Benachrichtigungen
-  currentIndex: number; // Index der aktuell angezeigten Benachrichtigung
-  setCurrentIndex: (val: number | ((i: number) => number)) => void; // Funktion zum Ändern des Index
-  onClose: () => void; // Funktion zum Schließen des Popups
+  notifications: { id: number; message: string; date: string }[];
+  currentIndex: number;
+  setCurrentIndex: (val: number | ((i: number) => number)) => void;
+  onClose: () => void;
 }
 
-// ---------- Komponente für einzelne Benachrichtigungs-Popups ----------
 const ProfileNotification: React.FC<Props> = ({
   notifications,
   currentIndex,
   setCurrentIndex,
   onClose,
 }) => {
-  const currentNotification = notifications[currentIndex]; // Aktuelle Nachricht basierend auf dem Index
+  const currentNotification = notifications[currentIndex];
 
   return (
     <div className="fixed bottom-4 right-4 bg-white shadow-lg rounded-xl p-4 border border-gray-300 max-w-sm z-50">

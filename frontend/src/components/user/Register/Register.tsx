@@ -1,14 +1,19 @@
+// src/components/user/Register.tsx
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { RegisterApi } from "../../../api/RegisterApi";
+
+const registerApi = new RegisterApi();
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
-
   const [formData, setFormData] = useState({
     username: "",
     email: "",
     password: ""
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError]     = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -17,23 +22,22 @@ const Register: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
+    setError(null);
 
-    const res = await fetch("http://localhost:3001/api/auth/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        username: formData.username,
-        email: formData.email,
-        password: formData.password
-      })
-    });
+    try {
+      const user = await registerApi.register(
+        formData.username,
+        formData.email,
+        formData.password
+      );
 
-    if (res.ok) {
-      alert("Registrierung erfolgreich!");
+      alert(`Willkommen, ${user.username}! Registrierung erfolgreich.`);
       navigate("/login");
-    } else {
-      const { message } = await res.json();
-      alert("Fehler: " + message);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Unbekannter Fehler");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -47,6 +51,9 @@ const Register: React.FC = () => {
           </p>
 
           <form className="flex flex-col space-y-5" onSubmit={handleSubmit}>
+            {error && (
+              <p className="text-red-600 text-sm -mt-2">{error}</p>
+            )}
             <div className="flex flex-col">
               <label htmlFor="username" className="mb-1 text-sm font-medium text-gray-700">
                 Benutzername
@@ -58,7 +65,7 @@ const Register: React.FC = () => {
                 value={formData.username}
                 onChange={handleChange}
                 placeholder="Benutzername eingeben"
-                className="p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-600"
+                className="p-3 border rounded focus:ring-2 focus:ring-green-600"
               />
             </div>
 
@@ -73,7 +80,7 @@ const Register: React.FC = () => {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="E-Mail eingeben"
-                className="p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-600"
+                className="p-3 border rounded focus:ring-2 focus:ring-green-600"
               />
             </div>
 
@@ -88,15 +95,16 @@ const Register: React.FC = () => {
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="Passwort eingeben"
-                className="p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-600"
+                className="p-3 border rounded focus:ring-2 focus:ring-green-600"
               />
             </div>
 
             <button
               type="submit"
-              className="bg-green-700 text-white font-semibold py-3 rounded hover:bg-green-600 transition"
+              disabled={loading}
+              className="bg-green-700 text-white font-semibold py-3 rounded hover:bg-green-600 disabled:opacity-50"
             >
-              Registrieren
+              {loading ? "Registrieren …" : "Registrieren"}
             </button>
 
             <div className="flex items-center justify-center text-gray-400 text-sm">

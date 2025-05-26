@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useUserSession } from "../../../auth/useUserSession";
+import { useUserSession } from "../../../auth/UseUserSession";
+import { LoginApi } from "../../../api/LoginApi";
+
+const loginApi = new LoginApi();
 
 const Login: React.FC = () => {
-  const [email, setEmail] = useState("");
+  const [email, setEmail]       = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading]   = useState(false);
+  const [error, setError]       = useState<string | null>(null);
 
   const navigate = useNavigate();
   const { storeLoginData } = useUserSession();
@@ -17,18 +20,11 @@ const Login: React.FC = () => {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:3001/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password })
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) throw new Error(data.message || "Login fehlgeschlagen");
-
-      storeLoginData({ username: email.split("@")[0] }, data.token);
-
+      const token = await loginApi.login(email, password);
+      storeLoginData(
+        { username: email.split("@")[0] },
+        token
+      );
       navigate("/");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unbekannter Fehler");
