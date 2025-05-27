@@ -52,6 +52,14 @@ HTTP-Request an den Pfad "/profile/favorites" in *backend/src/routes/profile.rou
 *backend/src/services/profile.service.ts*, un die Logik zu implementieren (Backend hierfür steht noch nicht).
 In der DB auf Supabase gibt es eine Zwischentabelle für Bewertungen (Benutzer - Locations).
 
+#### 6. Location Details nochmal ordnentlich machen
+- Component und Logik auslagern
+- Page so anpassen dass es den Header/Footer gibt
+- Button zu Favoriten hinzufügen und entfernen
+- Foto von der Location
+- Sterne-Bewertung (wie auf den einzelnen Cards)
+- Route ins Backend
+- Komplette implementierung im Backend (inkl. index.ts, Router, Kontroller, Service wie bei den anderen Implementierungen)
 
 ### Niedriger Aufwand
 
@@ -60,7 +68,7 @@ In der DB auf Supabase gibt es eine Zwischentabelle für Bewertungen (Benutzer -
 - class ProfileApi {} in */api/ProfileApi.ts* implementieren, damit die Methoden nicht ohne Klasse stehen
 - Dafür sorgen, dass in NavBarEnd.tsx das Profilbild angezeigt wird und nicht der Platzhalter
 So wie in *components/user/Profile/LeftSide/ProfilePicture.tsx*. Es kann hier aber der Kontext *contexts/UserContext.tsx* benutzt werden, welcher die Bild-URL providet, um an den Profilbild-Link aus der DB zu kommen.
-- In *Hero.tsx*: das Bild zu src/assets/images hinzufügen und damit den Link ersetzen */
+- In *Hero.tsx*: das Bild zu src/assets/images hinzufügen und damit den Link ersetzen
 
 
 ## 🟡 Gegen Ende vom Projekt:
@@ -69,4 +77,6 @@ So wie in *components/user/Profile/LeftSide/ProfilePicture.tsx*. Es kann hier ab
 
 ## 🟢 Wenn wir irgendwann noch Zeit/Lust haben:
 - Aktivitätsverlauf im Profil
+
+# PL4: Testen
 
