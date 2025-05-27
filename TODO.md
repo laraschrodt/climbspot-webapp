@@ -1,21 +1,26 @@
 # 📋 ToDo-Liste und Aufgabenverteilung
 
 ## ✅ Aufgabenverteilung verteilt nach Person
-> **Nächstes Meeting (Deadline):** dd.mm um --:-- Uhr
+> **Deadline vom Hochladen der Programmieraufgaben:** 01.06.2025 irgendwann Nachmittags
+> **Meeting für PL4:** 28.06.2025 um 19:00 Uhr
 
 ### Lara
--
+- Platzhalter von den Location-Cards entfernen und mit DB verbinden
+- Favoriten
+- siehe "Niedriger Aufwand"
 
 ### Kimia
--
+- Ratings
 
 ### Alex
 - DB mit Daten von https://www.bergsteigen.com/ in die DB einfügen (am besten erstmal ca. 20 Datensätze)
+- 7. Suchleiste:
+- siehe "Niedriger Aufwand"
 
 ### Nelly
--
+- 6. Location Details nochmal ordnentlich machen
+- siehe "Niedriger Aufwand"
 
-<br>
 
 ## 🔴 Bald:
 ### Hoher Aufwand
@@ -60,13 +65,22 @@ In der DB auf Supabase gibt es eine Zwischentabelle für Bewertungen (Benutzer -
 - Sterne-Bewertung (wie auf den einzelnen Cards)
 - Route ins Backend
 - Komplette implementierung im Backend (inkl. index.ts, Router, Kontroller, Service wie bei den anderen Implementierungen)
+- Google Maps weiterleitung
+/details/{location.name}
+
+#### 7. Suchleiste:
+- Es werden bei Eingabe vom User Locations vorgeschlagen und ein drauf Klicken wird man aud die Locationdetails Page weitergeleitet
+/details/{location.name}
+
+#### 8. Karte muss interaktiv werden
+
+#### 9. Administratoren moderieren Einträge und verwalten Nutzerkonten
 
 ### Niedriger Aufwand
 
-- Platzhalter von den einzelnen Location-Seiten (also das was Nelly gebaut hat) entfernen und mit DB verbinden
-- /profil im Gastmodus unzugänglich machen (stattdessen an Login weitergeleitet werden)
-- class ProfileApi {} in */api/ProfileApi.ts* implementieren, damit die Methoden nicht ohne Klasse stehen
-- Dafür sorgen, dass in NavBarEnd.tsx das Profilbild angezeigt wird und nicht der Platzhalter
+- Nelly: /profil im Gastmodus unzugänglich machen (stattdessen an Login weitergeleitet werden)
+- Lara: class ProfileApi {} in */api/ProfileApi.ts* implementieren, damit die Methoden nicht ohne Klasse stehen
+- Alex: Dafür sorgen, dass in NavBarEnd.tsx das Profilbild angezeigt wird und nicht der Platzhalter
 So wie in *components/user/Profile/LeftSide/ProfilePicture.tsx*. Es kann hier aber der Kontext *contexts/UserContext.tsx* benutzt werden, welcher die Bild-URL providet, um an den Profilbild-Link aus der DB zu kommen.
 - In *Hero.tsx*: das Bild zu src/assets/images hinzufügen und damit den Link ersetzen
 
