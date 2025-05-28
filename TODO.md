@@ -5,9 +5,13 @@
 > **Meeting für PL4:** 28.06.2025 um 19:00 Uhr
 
 ### Lara
-- Platzhalter von den Location-Cards entfernen und mit DB verbinden
+- 3. Platzhalter von den Location-Cards entfernen und mit DB verbinden
+- Filter
 - Favoriten
-- siehe "Niedriger Aufwand"
+[x] siehe "Niedriger Aufwand"
+
+Wiederverwendbar:
+
 
 ### Kimia
 - Ratings
@@ -79,7 +83,6 @@ In der DB auf Supabase gibt es eine Zwischentabelle für Bewertungen (Benutzer -
 ### Niedriger Aufwand
 
 - Nelly: /profil im Gastmodus unzugänglich machen (stattdessen an Login weitergeleitet werden)
-- Lara: class ProfileApi {} in */api/ProfileApi.ts* implementieren, damit die Methoden nicht ohne Klasse stehen
 - Alex: Dafür sorgen, dass in NavBarEnd.tsx das Profilbild angezeigt wird und nicht der Platzhalter
 So wie in *components/user/Profile/LeftSide/ProfilePicture.tsx*. Es kann hier aber der Kontext *contexts/UserContext.tsx* benutzt werden, welcher die Bild-URL providet, um an den Profilbild-Link aus der DB zu kommen.
 - In *Hero.tsx*: das Bild zu src/assets/images hinzufügen und damit den Link ersetzen

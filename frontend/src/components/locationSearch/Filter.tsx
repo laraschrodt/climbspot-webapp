@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 
 const Filter: React.FC = () => {
-  const [open, setOpen] = useState(true); // Filter standardmäßig sichtbar
+  const [open, setOpen] = useState(true);
 
   return (
     <aside className="w-full bg-base-100 text-base-content shadow-md">
-      {/* Header mit Toggle */}
       <div
         className="flex items-center justify-between p-4 cursor-pointer select-none"
         onClick={() => setOpen(!open)}
@@ -14,10 +13,8 @@ const Filter: React.FC = () => {
         <span className="text-xl">{open ? "▲" : "▼"}</span>
       </div>
 
-      {/* Inhalt ein-/ausblendbar */}
       {open && (
         <form className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
-          {/* ------- Ort ------- */}
           <div>
             <label className="font-semibold block mb-2">Ort</label>
             <div className="flex gap-4">

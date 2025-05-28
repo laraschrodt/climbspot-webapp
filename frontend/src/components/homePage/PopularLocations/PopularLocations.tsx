@@ -1,35 +1,31 @@
+import { useEffect, useState } from "react";
 import LocationCard from "../../locationSearch/LocationCard";
+import axios from "axios";
 
-/* Bereich für die beliebtesten Locations im Home Menü */
+interface Spot {
+  id: string;
+  name: string;
+  location: string;
+  difficulty: string;
+  rating: number;
+  imageUrl: string;
+}
+
 const PopularLocations = () => {
-  // Beispielhafte Daten – später durch echte Daten aus API/Props ersetzbar
-  const popularSpots = [
-    {
-      id: 1,
-      name: "Kletterhalle Nord",
-      location: "München",
-      difficulty: "Mittel",
-      rating: 4,
-      imageUrl: "https://hansens-esszimmer.de/cms/wp-content/uploads/2021/04/placeholder-2.png",
-    },
-    {
-      id: 2,
-      name: "Boulder Base",
-      location: "Berlin",
-      difficulty: "Schwer",
-      rating: 5,
-      imageUrl: "https://hansens-esszimmer.de/cms/wp-content/uploads/2021/04/placeholder-2.png",
-    },
-    {
-      id: 3,
-      name: "Bloc City",
-      location: "Hamburg",
-      difficulty: "Leicht",
-      rating: 3,
-      imageUrl: "https://hansens-esszimmer.de/cms/wp-content/uploads/2021/04/placeholder-2.png",
-    },
-    // weitere Spots ...
-  ];
+  const [popularSpots, setPopularSpots] = useState<Spot[]>([]);
+
+  useEffect(() => {
+    const fetchPopularLocations = async () => {
+      try {
+        const response = await axios.get("/api/locations/popular");
+        setPopularSpots(response.data);
+      } catch (error) {
+        console.error("Fehler beim Laden der populären Orte:", error);
+      }
+    };
+
+    fetchPopularLocations();
+  }, []);
 
   return (
     <div className="container mx-auto p-4">

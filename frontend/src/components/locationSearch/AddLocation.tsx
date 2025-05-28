@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 
+
+
 const AddLocation: React.FC = () => {
-  const [open, setOpen] = useState(true); // Standardmäßig geöffnet
+  const [open, setOpen] = useState(true);
 
   return (
     <aside className="w-full bg-base-100 text-base-content shadow-md">
