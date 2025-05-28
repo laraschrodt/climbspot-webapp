@@ -1,13 +1,17 @@
 # 📋 ToDo-Liste und Aufgabenverteilung
 
 ## ✅ Aufgabenverteilung verteilt nach Person
-> **Deadline vom Hochladen der Programmieraufgaben:** 01.06.2025 irgendwann Nachmittags
-> **Meeting für PL4:** 28.06.2025 um 19:00 Uhr
+> **Deadline vom Hochladen der Programmieraufgaben:** 01.06.2025 irgendwann Nachmittags <br>
+> **Bis dahin PL4 fertig haben:** 04.06.2025
 
 ### Lara
-- Platzhalter von den Location-Cards entfernen und mit DB verbinden
+- [3.] Platzhalter von den Location-Cards entfernen und mit DB verbinden
+- Filter
 - Favoriten
-- siehe "Niedriger Aufwand"
+[x] siehe "Niedriger Aufwand"
+
+Wiederverwendbar:
+
 
 ### Kimia
 - Ratings
@@ -79,7 +83,6 @@ In der DB auf Supabase gibt es eine Zwischentabelle für Bewertungen (Benutzer -
 ### Niedriger Aufwand
 
 - Nelly: /profil im Gastmodus unzugänglich machen (stattdessen an Login weitergeleitet werden)
-- Lara: class ProfileApi {} in */api/ProfileApi.ts* implementieren, damit die Methoden nicht ohne Klasse stehen
 - Alex: Dafür sorgen, dass in NavBarEnd.tsx das Profilbild angezeigt wird und nicht der Platzhalter
 So wie in *components/user/Profile/LeftSide/ProfilePicture.tsx*. Es kann hier aber der Kontext *contexts/UserContext.tsx* benutzt werden, welcher die Bild-URL providet, um an den Profilbild-Link aus der DB zu kommen.
 - In *Hero.tsx*: das Bild zu src/assets/images hinzufügen und damit den Link ersetzen
@@ -92,5 +95,59 @@ So wie in *components/user/Profile/LeftSide/ProfilePicture.tsx*. Es kann hier ab
 ## 🟢 Wenn wir irgendwann noch Zeit/Lust haben:
 - Aktivitätsverlauf im Profil
 
-# PL4: Testen
+<br><br>
 
+# PL4: Testen
+> **Link zur Testfall-Exceltabelle:**: https://1drv.ms/x/c/23559581fb38386f/EZuOYUoH3uVPmOzSAYC2WCQBOGaiWynGtfcgwRQj_CQ91Q?e=YQjzGF <br>
+> **Link zum Testkonzept Word-Dokument**: https://1drv.ms/w/c/23559581fb38386f/EaC5elM6aalMjtz9R05jOhwBSYFSbZMbm-CKxJJv4ME5tw?e=gZf1bS
+## Teil 1: Testkonzept (Dokumentation – PDF, ca. 2 Seiten)
+### Verantwortlich:
+Aufgabe: Schreibe das vollständige Testkonzept nach den vorgegebenen Bausteinen:
+### Inhalte: Lara
+- Testumfang (Was wird getestet? – z. B. UI, Login, Location-Vorschläge etc.)
+- Teststrategie (Black-Box-Systemtests, geplante Unit- und ggf. Integrationstests)
+- Testziele (z. B. funktionierende Kernfunktionen, Benutzerfreundlichkeit)
+- Testkriterien (Wann sind Tests bestanden? Erfolgskriterien, Abdeckungsgrad)
+- Ressourcen (Browser, Jest, Excel, Teamrollen)
+- Zeitplan (z. B. Systemtests vor Review, Unit-Tests ab Paket 5 etc.)
+
+> Endergebnis: PDF-Datei, z. B. “KletterApp_Testkonzept.pdf”
+
+## Teil 2: Systemtestfälle (Excel – Login & Registrierung)
+> Akzeptanzkriterien aus Jira beachten!
+### Verantwortlich: Alex
+Aufgabe: Testfälle für alle Anforderungen rund um:
+- Registrierung (Gast/Benutzer)
+- Login
+- Fehlerhafte Eingaben (falsches Passwort, leeres Feld)
+
+Inhalte je Testfall: ID, Beschreibung, Bezug zu US, Eingaben, erwartete Ausgaben, Testschritte
+
+> Endergebnis: Excel-Sheet mit Testfällen → später gesammelt mit den anderen
+
+## Teil 3: Systemtestfälle (Excel – Location, Suche, Karte)
+> Akzeptanzkriterien aus Jira beachten!
+### Verantwortlich: Person C
+### Aufgabe: Kimia
+Testfälle für:
+- Location-Eintrag & Bewertung
+- Suche mit Filter
+- Kartenanzeige & Interaktion
+
+Inhalte je Testfall:
+- Realistische Eingaben (z. B. Outdoor, Umkreis), auch Fehlerfälle (z. B. leere Suche)
+
+> Endergebnis: Eigene Zeilen im Excel, später zusammengeführt
+
+## Teil 4: Systemtestfälle (Excel – Nahverkehr, Benachrichtigung)
+> Akzeptanzkriterien aus Jira beachten!
+### Verantwortlich: Nelly
+### Aufgabe:
+Testfälle für:
+- Nahverkehrsvorschläge anzeigen
+- Benachrichtigungen erhalten (z. B. neue Location)
+- Optional: Zugriff als Gast mit eingeschränkten Rechten
+
+Besonderheiten: Auch Varianten testen, z. B. kein Nahverkehr verfügbar
+
+> Endergebnis: Excel-Zeilen im Gesamtdokument
