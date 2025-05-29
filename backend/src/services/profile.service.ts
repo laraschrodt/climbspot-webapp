@@ -98,9 +98,6 @@ class ProfileService {
     return publicUrl;
   }
 
-  /**
-   * Holt alle Favoriten des Users und gibt sie als Location-Objekte zurück.
-   */
   async getFavoriteLocationsFromDB(userId: string): Promise<Location[]> {
     const { data, error } = await supabase
       .from("favoriten")
