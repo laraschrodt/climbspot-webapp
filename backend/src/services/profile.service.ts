@@ -1,11 +1,19 @@
 import { supabase } from "../lib/supabase";
 import { randomUUID } from "crypto";
+import { Location } from "../types/Location";
+
+interface Bewertung {
+  sterne: number;
+}
+
+interface RawFavoriteRow {
+  o: Location & { bewertungen?: Bewertung[] };
+}
 
 /**
  * Alle Methoden in dieser Klasse werden in der /profile Route verwendet.
  * Sie sind für das Laden und Aktualisieren der Profildaten zuständig.
  */
-
 class ProfileService {
   async getProfileDataByUserId(userId: string) {
     const { data, error } = await supabase
@@ -67,27 +75,55 @@ class ProfileService {
   async uploadProfileImageToDatabase(userId: string, file: Express.Multer.File) {
     const fileName = `profile-pictures/${userId}-${randomUUID()}.jpg`;
 
-    const { error } = await supabase.storage
+    const { error: uploadError } = await supabase.storage
       .from("profile-pictures")
       .upload(fileName, file.buffer, {
         contentType: file.mimetype,
         upsert: true,
       });
 
-    if (error) throw new Error("Supabase-Upload fehlgeschlagen: " + error.message);
+    if (uploadError) {
+      throw new Error("Supabase-Upload fehlgeschlagen: " + uploadError.message);
+    }
 
-    const { data: urlData } = supabase.storage
-      .from("profile-pictures")
-      .getPublicUrl(fileName);
-
-    const imageUrl = urlData.publicUrl;
+    const {
+      data: { publicUrl },
+    } = supabase.storage.from("profile-pictures").getPublicUrl(fileName);
 
     await supabase
       .from("benutzer")
-      .update({ profilbild_url: imageUrl })
+      .update({ profilbild_url: publicUrl })
       .eq("benutzer_id", userId);
 
-    return imageUrl;
+    return publicUrl;
+  }
+
+  /**
+   * Holt alle Favoriten des Users und gibt sie als Location-Objekte zurück.
+   */
+  async getFavoriteLocationsFromDB(userId: string): Promise<Location[]> {
+    const { data, error } = await supabase
+      .from("favoriten")
+      .select(`
+        o:orte (
+          ort_id,
+          name,
+          region,
+          land,
+          schwierigkeit,
+          picture_url,
+          bewertungen ( sterne )
+        )
+      `)
+      .eq("benutzer_id", userId);
+
+    if (error) {
+      console.error("Supabase-Fehler beim Laden der Favoriten:", error);
+      throw new Error("Favoriten nicht gefunden");
+    }
+
+    const rows = (data ?? []) as unknown as RawFavoriteRow[];
+    return rows.map((row) => row.o);
   }
 }
 

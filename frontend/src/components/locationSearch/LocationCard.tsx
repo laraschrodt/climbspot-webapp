@@ -17,7 +17,7 @@ const LocationCard: React.FC<LocationCardProps> = ({
   imageUrl,
 }) => {
   return (
-    <div className="card bg-base-100 shadow-sm w-full">
+    <div className="card bg-white shadow-sm w-full">
       <figure>
         <img src={imageUrl} alt={name} className="h-48 w-full object-cover" />
       </figure>

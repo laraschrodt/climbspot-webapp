@@ -7,7 +7,7 @@
 ### Lara
 [x] Platzhalter von den Location-Cards entfernen und mit DB verbinden
 [x] Filter
-- Favoriten
+[x] Favoriten
 [x] siehe "Niedriger Aufwand"
 
 Wiederverwendbar:

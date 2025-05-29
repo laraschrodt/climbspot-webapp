@@ -77,6 +77,7 @@ const LocationList: React.FC = () => {
       <Navbar />
       <div className="flex flex-1">
         <Filter onApply={handleFilter} />
+        // TODO: Gucken wie man das implementiert (es müssen alle Felder aus der DB da sein)
         <AddLocation />
       </div>
       <LocationGallery locations={filteredLocations} />
