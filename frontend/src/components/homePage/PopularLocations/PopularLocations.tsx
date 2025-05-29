@@ -1,30 +1,27 @@
-import { useEffect, useState } from "react";
+// src/components/home/PopularLocations.tsx
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import LocationCard from "../../locationSearch/LocationCard";
 import axios from "axios";
+import { Location } from "../../../models/Location";
 
-interface Spot {
-  id: string;
-  name: string;
-  location: string;
-  difficulty: string;
+interface PopularLocation extends Location {
   rating: number;
-  imageUrl: string;
 }
 
-const PopularLocations = () => {
-  const [popularSpots, setPopularSpots] = useState<Spot[]>([]);
+const PopularLocations: React.FC = () => {
+  const [popularSpots, setPopularSpots] = useState<PopularLocation[]>([]);
 
   useEffect(() => {
-    const fetchPopularLocations = async () => {
+    const fetchPopular = async () => {
       try {
-        const response = await axios.get("/api/locations/popular");
+        const response = await axios.get<PopularLocation[]>("/api/locations/popular");
         setPopularSpots(response.data);
-      } catch (error) {
-        console.error("Fehler beim Laden der populären Orte:", error);
+      } catch (err) {
+        console.error("Fehler beim Laden der populären Orte:", err);
       }
     };
-
-    fetchPopularLocations();
+    fetchPopular();
   }, []);
 
   return (
@@ -32,14 +29,19 @@ const PopularLocations = () => {
       <h1 className="mb-8 mt-8 text-2xl font-bold">Popular Locations</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
         {popularSpots.map((spot) => (
-          <LocationCard
-            key={spot.id}
-            name={spot.name}
-            location={spot.location}
-            difficulty={spot.difficulty}
-            rating={spot.rating}
-            imageUrl={spot.imageUrl}
-          />
+          <Link
+            to={`/details/${spot.ort_id}`}
+            key={spot.ort_id}
+            className="block"
+          >
+            <LocationCard
+              name={spot.name}
+              location={`${spot.region}, ${spot.land}`}
+              difficulty={spot.schwierigkeit.toString()}
+              rating={spot.rating}
+              imageUrl={spot.picture_url ?? ""}
+            />
+          </Link>
         ))}
       </div>
     </div>

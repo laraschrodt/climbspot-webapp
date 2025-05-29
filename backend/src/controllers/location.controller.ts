@@ -1,28 +1,28 @@
-import { Response } from "express";
-import { AuthedRequest } from "../middlewares/auth.middleware";
-import TopLocationsService from "../services/top.locations.service";
-import AllLocationsService from "../services/all.locations.service";
+// src/controllers/location.controller.ts
+import { Response } from 'express'
+import { AuthedRequest } from '../middlewares/auth.middleware'
+import LocationsService from '../services/location.service'
 
 class LocationController {
-  async getPopularLocations(req: AuthedRequest, res: Response): Promise<void> {
+  async getAllLocations(req: AuthedRequest, res: Response): Promise<void> {
     try {
-      const spots = await TopLocationsService.get12BestLocationsFromDB();
-      res.json(spots);
+      const locations = await LocationsService.getAllLocationsFromDB()
+      res.json(locations)
     } catch (err) {
-      console.error("Fehler in getPopularLocations:", err);
-      res.status(500).json({ error: "Serverfehler beim Laden der beliebten Orte" });
+      console.error('Fehler in getAllLocations:', err)
+      res.status(500).json({ error: 'Serverfehler beim Laden aller Orte' })
     }
   }
 
-  async getAllLocations(req: AuthedRequest, res: Response): Promise<void> {
+  async getPopularLocations(req: AuthedRequest, res: Response): Promise<void> {
     try {
-      const locations = await AllLocationsService.getAllLocations();
-      res.json(locations);
+      const popular = await LocationsService.getPopularLocationsFromDB()
+      res.json(popular)
     } catch (err) {
-      console.error("Fehler in getAllLocations:", err);
-      res.status(500).json({ error: "Serverfehler beim Laden aller Orte" });
+      console.error('Fehler in getPopularLocations:', err)
+      res.status(500).json({ error: 'Serverfehler beim Laden beliebter Orte' })
     }
   }
 }
 
-export default new LocationController();
+export default new LocationController()
