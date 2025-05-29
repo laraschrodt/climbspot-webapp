@@ -1,30 +1,35 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import LocationCard from "./LocationCard";
+import { Location } from "../../models/Location";
 
-// Beispiel-Daten
-const spots = Array.from({ length: 12 }, (_, i) => ({
-  id: i + 1,
-  name: `Kletterspot ${i + 1}`,
-  location: `Ort ${i + 1}`,
-  difficulty: ["Leicht", "Mittel", "Schwer"][i % 3],
-  rating: (i % 5) + 1,
-  imageUrl: "https://hansens-esszimmer.de/cms/wp-content/uploads/2021/04/placeholder-2.png",
-}));
+interface LocationGalleryProps {
+  locations: Location[];
+}
 
-const LocationGallery: React.FC = () => {
+const LocationGallery: React.FC<LocationGalleryProps> = ({ locations }) => {
+  const calculateAverageRating = (bewertungen: { sterne: number }[] = []) => {
+    if (bewertungen.length === 0) return 0;
+    const sum = bewertungen.reduce((a, b) => a + b.sterne, 0);
+    return Math.round(sum / bewertungen.length);
+  };
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="mb-8 mt-8 text-2xl font-bold">Locations</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-        {spots.map((spot) => (
-          <Link to={`/details/${spot.id}`} key={spot.id} className="block">
+        {locations.map((spot) => (
+          <Link
+            to={`/details/${spot.ort_id}`}
+            key={spot.ort_id}
+            className="block"
+          >
             <LocationCard
               name={spot.name}
-              location={spot.location}
-              difficulty={spot.difficulty}
-              rating={spot.rating}
-              imageUrl={spot.imageUrl}
+              location={`${spot.region}, ${spot.land}`}
+              difficulty={spot.schwierigkeit.toString()}
+              rating={calculateAverageRating(spot.bewertungen)}
+              imageUrl={spot.picture_url ?? ""}
             />
           </Link>
         ))}

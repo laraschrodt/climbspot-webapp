@@ -4,11 +4,7 @@ import Profilbild from "./ProfilePicture";
 import PersönlicheInfos from "./ProfileForm";
 import PasswortÄndern from "./ChangePassword";
 import { FormDataType } from "./types";
-import {
-  uploadProfileImage,
-  saveProfile,
-  updatePassword,
-} from "../../../../api/ProfileApi";
+import ProfileApi from "../../../../api/ProfileApi";
 import Notifications from "./Notifications";
 
 interface Props {
@@ -30,7 +26,7 @@ const ProfileSidebar: React.FC<Props> = ({ formData, setFormData }) => {
     if (!file) return;
 
     try {
-      const imageUrl = await uploadProfileImage(file);
+      const imageUrl = await ProfileApi.uploadProfileImage(file);
       setFormData((prev) => ({ ...prev, profilbild_url: imageUrl }));
     } catch (error) {
       console.error("Fehler beim Hochladen des Bildes:", error);
@@ -41,7 +37,7 @@ const ProfileSidebar: React.FC<Props> = ({ formData, setFormData }) => {
   const saveChanges = async () => {
     try {
       const { vorname, nachname, email, username, location, profilbild_url } = formData;
-      await saveProfile({ vorname, nachname, email, username, location, profilbild_url });
+      await ProfileApi.saveProfile({ vorname, nachname, email, username, location, profilbild_url });
       alert("Profil erfolgreich gespeichert");
       setEditMode(false);
     } catch (error) {
@@ -57,7 +53,7 @@ const ProfileSidebar: React.FC<Props> = ({ formData, setFormData }) => {
     }
 
     try {
-      await updatePassword(oldPassword, newPassword);
+      await ProfileApi.updatePassword(oldPassword, newPassword);
       alert("Passwort erfolgreich geändert");
       setOldPassword("");
       setNewPassword("");

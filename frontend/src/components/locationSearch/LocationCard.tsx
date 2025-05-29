@@ -6,7 +6,7 @@ interface LocationCardProps {
   location: string;
   difficulty: string;
   rating: number;
-  imageUrl?: string;
+  imageUrl: string;
 }
 
 const LocationCard: React.FC<LocationCardProps> = ({
@@ -14,10 +14,10 @@ const LocationCard: React.FC<LocationCardProps> = ({
   location,
   difficulty,
   rating,
-  imageUrl = "https://hansens-esszimmer.de/cms/wp-content/uploads/2021/04/placeholder-2.png",
+  imageUrl,
 }) => {
   return (
-    <div className="card bg-base-100 shadow-sm w-full">
+    <div className="card bg-white shadow-sm w-full">
       <figure>
         <img src={imageUrl} alt={name} className="h-48 w-full object-cover" />
       </figure>

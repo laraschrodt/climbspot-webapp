@@ -5,13 +5,14 @@
 > **Bis dahin PL4 fertig haben:** 04.06.2025
 
 ### Lara
-- [3.] Platzhalter von den Location-Cards entfernen und mit DB verbinden
-- Filter
-- Favoriten
+[x] Platzhalter von den Location-Cards entfernen und mit DB verbinden
+[x] Filter
+[x] Favoriten
 [x] siehe "Niedriger Aufwand"
 
 Wiederverwendbar:
-
+- Location.ts im backend und im frontend
+- Nelly: die Methode getAllLocationsFromDB() in location.service.ts
 
 ### Kimia
 - Ratings

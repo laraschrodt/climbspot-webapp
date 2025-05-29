@@ -95,6 +95,23 @@ class ProfileController {
       res.status(400).json({ error: (err as Error).message });
     }
   }
+
+  async getFavorites(req: AuthedRequest, res: Response): Promise<void> {
+    try {
+      const userId = (req.user as { userId: string }).userId;
+      if (!userId) {
+        res.status(400).json({ error: "Ungültiger Token" });
+        return;
+      }
+      const favorites = await ProfileService.getFavoriteLocationsFromDB(userId);
+      res.json(favorites);
+    } catch (err) {
+      console.error("Fehler in getFavorites:", err);
+      res
+        .status(500)
+        .json({ error: "Serverfehler beim Laden der Favoriten" });
+    }
+  }
 }
 
 export default new ProfileController();
