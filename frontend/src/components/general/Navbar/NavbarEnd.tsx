@@ -1,8 +1,11 @@
-import { FC } from "react";
+import { FC, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserSession } from "../../../auth/UseUserSession";
+import axios from "axios";
 
 const NavbarEnd: FC = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [suggestions, setSuggestions] = useState<any[]>([]);
   const { user, clearSession } = useUserSession();
   const navigate = useNavigate();
 
@@ -11,14 +14,56 @@ const NavbarEnd: FC = () => {
     navigate("/");
   };
 
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      if (searchTerm.trim() === "") {
+        setSuggestions([]);
+        return;
+      }
+
+      axios
+        .get(`http://localhost:3001/api/locations/search?query=${searchTerm}`)
+        .then((res) => {
+          setSuggestions(res.data);
+        })
+        .catch((err) => {
+          console.error("Fehler beim Suchen:", err);
+          setSuggestions([]);
+        });
+    }, 300);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchTerm]);
+
   return (
     <div className="navbar-end flex items-center gap-2">
       {/* Suche (Desktop) */}
-      <input
-        type="text"
-        placeholder="Suche"
-        className="hidden lg:block input input-bordered input-sm w-60"
-      />
+      <div className="relative hidden lg:block">
+        <input
+          type="text"
+          placeholder="Suche"
+          className="input input-bordered input-sm w-60"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        {suggestions.length > 0 && (
+          <ul className="absolute z-10 bg-white border w-60 mt-1 max-h-60 overflow-auto rounded shadow">
+            {suggestions.map((location) => (
+              <li
+                key={location.ort_id}
+                className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                onClick={() => {
+                  navigate(`/details/${location.name}`);
+                  setSearchTerm("");
+                  setSuggestions([]);
+                }}
+              >
+                {location.name}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
 
       {/* Suche (Mobile Dropdown) */}
       <div className="dropdown dropdown-end lg:hidden">
@@ -51,14 +96,7 @@ const NavbarEnd: FC = () => {
       </div>
 
       {/* Profil-Menü */}
-      {/* TODO: Hier muss noch das Profilbild angezeigt werden. */}
-      {/**
-       * In dem @foder frontend/src/api muss eine Datei erstellt werden, die eine Anfrage ans Backend sendet.
-       * Diese anfrage kommt in @file profile.router.ts an und wird an @file profile.controller.ts weitergeleitet.
-       * Der Controller ruft die Service Layer in @file profile.service.ts auf, wo eine Methode implementiert werden muss, die das Bild anhand der userId holt.
-       **/}
       <div className="dropdown dropdown-end">
-        {/* Avatar-Button */}
         <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
           <div className="w-6 h-6 rounded-full bg-neutral text-base-100 flex items-center justify-center">
             {user ? user.username[0].toUpperCase() : (
@@ -80,30 +118,21 @@ const NavbarEnd: FC = () => {
           </div>
         </label>
 
-        {/* Dropdown-Inhalt */}
         <ul
           tabIndex={0}
           className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
         >
           {!user && (
             <>
-              <li>
-                <Link to="/login">Login</Link>
-              </li>
-              <li>
-                <Link to="/register">Registrieren</Link>
-              </li>
+              <li><Link to="/login">Login</Link></li>
+              <li><Link to="/register">Registrieren</Link></li>
             </>
           )}
 
           {user && (
             <>
-              <li>
-                <Link to="/profile">Profil</Link>
-              </li>
-              <li>
-                <button onClick={handleLogout}>Logout</button>
-              </li>
+              <li><Link to="/profile">Profil</Link></li>
+              <li><button onClick={handleLogout}>Logout</button></li>
             </>
           )}
         </ul>
