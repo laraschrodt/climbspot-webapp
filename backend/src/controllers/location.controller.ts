@@ -1,4 +1,3 @@
-// src/controllers/location.controller.ts
 import { Response } from 'express'
 import { AuthedRequest } from '../middlewares/auth.middleware'
 import LocationsService from '../services/location.service'
@@ -23,6 +22,23 @@ class LocationController {
       res.status(500).json({ error: 'Serverfehler beim Laden beliebter Orte' })
     }
   }
+
+  async searchLocations(req: AuthedRequest, res: Response): Promise<void> {
+    const query = req.query.query as string;
+
+    if (!query) {
+      res.status(400).json({ error: "Query-Parameter fehlt." });
+      return;
+    }
+
+    try {
+      const results = await LocationsService.searchLocations(query);
+      res.json(results);
+    } catch (err) {
+      console.error("Fehler bei der Standortsuche:", err);
+      res.status(500).json({ error: "Serverfehler bei der Standortsuche" });
+    }
+  }
 }
 
-export default new LocationController()
+export default new LocationController();
