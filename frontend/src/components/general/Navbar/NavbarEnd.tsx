@@ -2,10 +2,13 @@ import { FC, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserSession } from "../../../auth/UseUserSession";
 import axios from "axios";
+import ProfileApi from "../../../api/profileApi"; // ✅ korrekt
+
 
 const NavbarEnd: FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [suggestions, setSuggestions] = useState<any[]>([]);
+  const [profileImage, setProfileImage] = useState<string | null>(null);
   const { user, clearSession } = useUserSession();
   const navigate = useNavigate();
 
@@ -34,6 +37,21 @@ const NavbarEnd: FC = () => {
 
     return () => clearTimeout(delayDebounceFn);
   }, [searchTerm]);
+
+  useEffect(() => {
+    const fetchProfileImage = async () => {
+      try {
+        const data = await ProfileApi.fetchUserProfile();
+        if (data.profilbild_url) {
+          setProfileImage(data.profilbild_url);
+        }
+      } catch (error) {
+        console.error("Fehler beim Laden des Profilbilds:", error);
+      }
+    };
+
+    if (user) fetchProfileImage();
+  }, [user]);
 
   return (
     <div className="navbar-end flex items-center gap-2">
@@ -98,8 +116,12 @@ const NavbarEnd: FC = () => {
       {/* Profil-Menü */}
       <div className="dropdown dropdown-end">
         <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
-          <div className="w-6 h-6 rounded-full bg-neutral text-base-100 flex items-center justify-center">
-            {user ? user.username[0].toUpperCase() : (
+          <div className="w-6 h-6 rounded-full bg-neutral text-base-100 flex items-center justify-center overflow-hidden">
+            {profileImage ? (
+              <img src={profileImage} alt="Profilbild" className="w-full h-full object-cover" />
+            ) : user ? (
+              user.username[0].toUpperCase()
+            ) : (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="w-4 h-4"
@@ -128,7 +150,6 @@ const NavbarEnd: FC = () => {
               <li><Link to="/register">Registrieren</Link></li>
             </>
           )}
-
           {user && (
             <>
               <li><Link to="/profile">Profil</Link></li>

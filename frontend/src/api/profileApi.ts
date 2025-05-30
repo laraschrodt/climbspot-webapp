@@ -41,6 +41,19 @@ class ProfileApi {
       }
     );
   }
+
+  // ✅ Neue Methode zum Abrufen des Nutzerprofils inkl. Bild
+  static async fetchUserProfile(): Promise<FormDataType> {
+    const token = localStorage.getItem("token");
+
+    const response = await axios.get("/api/profile", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data;
+  }
 }
 
 export default ProfileApi;
