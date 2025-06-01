@@ -15,6 +15,7 @@ interface RawFavoriteRow {
  * Sie sind für das Laden und Aktualisieren der Profildaten zuständig.
  */
 class ProfileService {
+  
   async getProfileDataByUserId(userId: string) {
     const { data, error } = await supabase
       .from("benutzer")
@@ -121,6 +122,44 @@ class ProfileService {
 
     const rows = (data ?? []) as unknown as RawFavoriteRow[];
     return rows.map((row) => row.o);
+  }
+
+  async getUserReviewsFromDB(userId: string) {
+    const { data, error } = await supabase
+      .from("bewertungen")
+      .select(`
+        sterne,
+        kommentar,
+        erstellt_am,
+        orte (
+          name,
+          picture_url
+        )
+      `)
+      .eq("benutzer_id", userId)
+      .order("erstellt_am", { ascending: false });
+  
+    if (error) {
+      console.error("Fehler beim Laden der Bewertungen:", error);
+      throw new Error("Bewertungen konnten nicht geladen werden.");
+    }
+  
+    return data;
+  }
+
+  async getNotificationsByUserId(userId: string) {
+    const { data, error } = await supabase
+      .from("benachrichtigungen")
+      .select("id, message, erstellt_am")
+      .eq("benutzer_id", userId)
+      .order("erstellt_am", { ascending: false });
+  
+    if (error) {
+      console.error("Fehler beim Laden der Benachrichtigungen:", error);
+      throw new Error("Konnte Benachrichtigungen nicht laden");
+    }
+  
+    return data;
   }
 }
 

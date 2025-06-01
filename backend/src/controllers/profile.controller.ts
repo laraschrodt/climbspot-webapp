@@ -1,4 +1,4 @@
-import { Response, Request } from "express";
+import { Response} from "express";
 import { AuthedRequest } from "../middlewares/auth.middleware";
 import ProfileService from "../services/profile.service";
 import AccountService from "../services/account.service";
@@ -9,6 +9,7 @@ import AccountService from "../services/account.service";
  */
 
 class ProfileController {
+
   async getProfileData(req: AuthedRequest, res: Response): Promise<void> {
     try {
       const userId = (req.user as { userId: string })?.userId;
@@ -69,13 +70,21 @@ class ProfileController {
     }
   }
 
-  async getNotifications(req: Request, res: Response): Promise<void> {
-    const mockData = [
-      { id: 1, message: "Du hast eine neue Nachricht", date: new Date().toISOString() },
-      { id: 2, message: "Profil erfolgreich aktualisiert", date: new Date().toISOString() },
-    ];
-
-    res.json(mockData);
+  async getNotifications(req: AuthedRequest, res: Response): Promise<void> {
+    try {
+      const userId = (req.user as { userId: string })?.userId;
+  
+      if (!userId) {
+        res.status(400).json({ error: "Kein Benutzer gefunden" });
+        return;
+      }
+  
+      const notifications = await ProfileService.getNotificationsByUserId(userId);
+      res.json(notifications);
+    } catch (err) {
+      console.error("Fehler beim Laden der Benachrichtigungen:", err);
+      res.status(500).json({ error: "Serverfehler" });
+    }
   }
 
   async changePassword(req: AuthedRequest, res: Response): Promise<void> {
@@ -110,6 +119,23 @@ class ProfileController {
       res
         .status(500)
         .json({ error: "Serverfehler beim Laden der Favoriten" });
+    }
+  }
+
+  async getUserReviews(req: AuthedRequest, res: Response): Promise<void> {
+    try {
+      const userId = (req.user as { userId: string })?.userId;
+
+      if (!userId) {
+        res.status(400).json({ error: "Ungültiger Token" });
+        return;
+      }
+
+      const reviews = await ProfileService.getUserReviewsFromDB(userId);
+      res.json(reviews);
+    } catch (err) {
+      console.error("Fehler beim Laden der Bewertungen:", err);
+      res.status(500).json({ error: "Fehler beim Laden der Bewertungen" });
     }
   }
 }
