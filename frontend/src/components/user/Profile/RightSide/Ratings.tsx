@@ -18,7 +18,7 @@ interface Props {
   reviews: Review[];
 }
 
-const Ratings: React.FC<Props> = ({ reviews }) => {
+const Review: React.FC<Props> = ({ reviews }) => {
   return (
     <section className="bg-white p-6 rounded-xl shadow-md">
       <h2 className="text-lg font-semibold mb-4">Bewertungen</h2>
@@ -40,4 +40,4 @@ const Ratings: React.FC<Props> = ({ reviews }) => {
   );
 };
 
-export default Ratings;
+export default Review;

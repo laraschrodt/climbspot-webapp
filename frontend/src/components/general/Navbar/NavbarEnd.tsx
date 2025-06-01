@@ -2,11 +2,12 @@ import { FC, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserSession } from "../../../auth/UseUserSession";
 import axios from "axios";
-import ProfileApi from "../../../api/profileApi"; // ✅ korrekt
+import ProfileApi from "../../../api/profileApi";
 
 
 const NavbarEnd: FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  // FIXME: any weg machen weil sonst error
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const { user, clearSession } = useUserSession();

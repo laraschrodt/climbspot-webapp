@@ -1,6 +1,6 @@
 import React from "react";
 import Favorites from "./Favorites";
-import Ratings from "./Ratings";
+import Review from "./Ratings";
 
 interface Review {
   location: string;
@@ -17,7 +17,7 @@ const ProfileDetails: React.FC<Props> = ({ favorites, reviews }) => {
   return (
     <div className="space-y-8">
       <Favorites favorites={favorites} />
-      <Ratings reviews={reviews} />
+      <Review reviews={reviews} />
     </div>
   );
 };
