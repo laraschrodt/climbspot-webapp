@@ -42,7 +42,6 @@ class ProfileApi {
     );
   }
 
-  // ✅ Neue Methode zum Abrufen des Nutzerprofils inkl. Bild
   static async fetchUserProfile(): Promise<FormDataType> {
     const token = localStorage.getItem("token");
 
