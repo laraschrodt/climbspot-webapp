@@ -23,5 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 
-*.env
+#machen das .env ignoriert wird
+.env
 private_todo.txt

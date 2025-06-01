@@ -52,6 +52,19 @@ class LocationsService {
       .sort((a, b) => b.rating - a.rating)
       .slice(0, 12)
   }
+
+  async searchLocations(query: string): Promise<Location[]> {
+    const { data, error } = await supabase
+      .from('orte')
+      .select('*')
+      .ilike('name', `%${query}%`) // Case-insensitive Suche nach dem Namen
+
+    if (error) {
+      throw new Error(`Fehler bei der Locationsuche: ${error.message}`)
+    }
+
+    return (data ?? []) as Location[]
+  }
 }
 
 export default new LocationsService()
