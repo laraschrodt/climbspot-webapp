@@ -2,7 +2,6 @@ import axios from "axios";
 import { FormDataType } from "../components/user/Profile/LeftSide/types";
 
 class ProfileApi {
-
   static async uploadProfileImage(file: File): Promise<string> {
     const formData = new FormData();
     formData.append("file", file);
@@ -54,19 +53,6 @@ class ProfileApi {
 
     return response.data;
   }
-
-  static async getUserReviews() {
-    const token = localStorage.getItem("token");
-  
-    const response = await axios.get("/api/profile/reviews", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-  
-    return response.data;
-  }
-  
 }
 
 export default ProfileApi;
