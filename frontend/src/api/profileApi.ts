@@ -53,6 +53,11 @@ class ProfileApi {
 
     return response.data;
   }
+
+  static async getAllReviews() {
+    const response = await axios.get("/api/profile/all-reviews");
+    return response.data;
+  }
 }
 
 export default ProfileApi;

@@ -112,6 +112,17 @@ class ProfileController {
         .json({ error: "Serverfehler beim Laden der Favoriten" });
     }
   }
+
+  async getAllReviews(req: Request, res: Response): Promise<void> {
+    try {
+      const reviews = await ProfileService.getAllReviews();
+      res.json(reviews);
+    } catch (err) {
+      console.error("Fehler beim Abrufen aller Bewertungen:", err);
+      res.status(500).json({ error: "Konnte Bewertungen nicht laden" });
+    }
+  }
+  
 }
 
 export default new ProfileController();

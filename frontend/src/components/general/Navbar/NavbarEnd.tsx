@@ -2,7 +2,7 @@ import { FC, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserSession } from "../../../auth/UseUserSession";
 import axios from "axios";
-import ProfileApi from "../../../api/profileApi";
+import ProfileApi from "../../../api/ProfileApi";
 
 
 const NavbarEnd: FC = () => {

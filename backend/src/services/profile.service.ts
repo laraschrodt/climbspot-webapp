@@ -122,6 +122,32 @@ class ProfileService {
     const rows = (data ?? []) as unknown as RawFavoriteRow[];
     return rows.map((row) => row.o);
   }
+
+  async getAllReviews() {
+    const { data, error } = await supabase
+      .from("bewertungen")
+      .select(`
+        sterne,
+        kommentar,
+        erstellt_am,
+        orte (
+          name,
+          picture_url
+        ),
+        benutzer (
+          benutzername,
+          profilbild_url
+        )
+      `)
+      .order("erstellt_am", { ascending: false });
+  
+    if (error) {
+      throw new Error("Fehler beim Laden der Bewertungen: " + error.message);
+    }
+  
+    return data;
+  }
+  
 }
 
 export default new ProfileService();
