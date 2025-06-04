@@ -15,10 +15,13 @@ router.put("/", AuthMiddleware.verifyToken, profileController.updateProfileData)
 router.put("/password", AuthMiddleware.verifyToken, profileController.changePassword);
 router.get("/notifications", AuthMiddleware.verifyToken, profileController.getNotifications);
 router.get("/favorites", AuthMiddleware.verifyToken, profileController.getFavorites);
-router.get("/all-reviews", profileController.getAllReviews);
+router.get("/all-reviews", AuthMiddleware.verifyToken, profileController.getAllReviews);
+router.get("/all-favorites", profileController.getAllFavorites);
+
 
 
 const upload = multer({ storage: multer.memoryStorage() });
 router.post("/upload-image", AuthMiddleware.verifyToken, upload.single("file"), profileController.uploadProfileImage);
+
 
 export default router;

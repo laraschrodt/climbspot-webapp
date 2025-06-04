@@ -98,18 +98,18 @@ class ProfileController {
 
   async getFavorites(req: AuthedRequest, res: Response): Promise<void> {
     try {
-      const userId = (req.user as { userId: string }).userId;
+      const userId = (req.user as { userId: string })?.userId;
+  
       if (!userId) {
         res.status(400).json({ error: "Ungültiger Token" });
         return;
       }
+  
       const favorites = await ProfileService.getFavoriteLocationsFromDB(userId);
       res.json(favorites);
     } catch (err) {
       console.error("Fehler in getFavorites:", err);
-      res
-        .status(500)
-        .json({ error: "Serverfehler beim Laden der Favoriten" });
+      res.status(500).json({ error: "Fehler beim Laden der Favoriten" });
     }
   }
 
@@ -120,6 +120,16 @@ class ProfileController {
     } catch (err) {
       console.error("Fehler beim Abrufen aller Bewertungen:", err);
       res.status(500).json({ error: "Konnte Bewertungen nicht laden" });
+    }
+  }
+
+  async getAllFavorites(req: Request, res: Response): Promise<void> {
+    try {
+      const favorites = await ProfileService.getAllFavorites();
+      res.json(favorites);
+    } catch (err) {
+      console.error("Fehler beim Laden aller Favoriten:", err);
+      res.status(500).json({ error: "Konnte Favoriten nicht laden" });
     }
   }
   

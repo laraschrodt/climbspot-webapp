@@ -18,7 +18,7 @@ const Favorites: React.FC = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get<FavoriteLocation[]>(
-        "/api/profile/favorites",
+        "/api/profile/all-favorites",      
         {
           headers: {
             Authorization: `Bearer ${token}`,

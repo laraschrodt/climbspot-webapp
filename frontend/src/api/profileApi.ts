@@ -58,6 +58,17 @@ class ProfileApi {
     const response = await axios.get("/api/profile/all-reviews");
     return response.data;
   }
+
+  static async getFavorites() {
+    const token = localStorage.getItem("token");
+    const response = await axios.get("/api/profile/favorites", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  }
+   
 }
 
 export default ProfileApi;

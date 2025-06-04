@@ -14,6 +14,7 @@ interface RawFavoriteRow {
  * Alle Methoden in dieser Klasse werden in der /profile Route verwendet.
  * Sie sind für das Laden und Aktualisieren der Profildaten zuständig.
  */
+
 class ProfileService {
   async getProfileDataByUserId(userId: string) {
     const { data, error } = await supabase
@@ -140,14 +141,39 @@ class ProfileService {
         )
       `)
       .order("erstellt_am", { ascending: false });
-  
+
     if (error) {
       throw new Error("Fehler beim Laden der Bewertungen: " + error.message);
     }
-  
+
     return data;
   }
-  
+
+  async getAllFavorites(): Promise<Location[]> {
+    const { data, error } = await supabase
+      .from("favoriten")
+      .select(`
+        o:orte (
+          ort_id,
+          name,
+          region,
+          land,
+          schwierigkeit,
+          picture_url,
+          bewertungen ( sterne )
+        )
+      `);
+
+    if (error) {
+      console.error("Fehler beim Laden aller Favoriten:", error);
+      throw new Error("Konnte alle Favoriten nicht laden");
+    }
+
+    const rows = (data ?? []) as unknown as RawFavoriteRow[];
+    return rows.map((row) => row.o);
+  }
+
 }
 
 export default new ProfileService();
+

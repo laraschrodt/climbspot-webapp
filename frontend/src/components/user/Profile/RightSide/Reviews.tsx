@@ -1,13 +1,5 @@
 import React, { useEffect, useState } from "react";
-import ProfileApi from "../../../../api/ProfileApi";
-
-// TODO: Ratings anzeigen lassen (am besten erst wenn alle normalen Locations schon implementiert sind)
-/**
- * Backend hierfür steht noch nicht.
- * HTTP-Request an /profile/favorites in @file: backend/src/routes/profile.routes.ts
- * und @file: backend/src/controllers/profile.controller.ts bzw.
- * @file: backend/src/services/profile.service.ts, un die Logik zu implementieren.
- */
+import axios from "axios";
 
 interface Review {
   sterne: number;
@@ -23,19 +15,37 @@ interface Review {
   };
 }
 
+
 const Reviews: React.FC = () => {
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    ProfileApi.getAllReviews()
-      .then(setReviews)
-      .catch((err) => {
+    const fetchReviews = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.get("/api/profile/all-reviews", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setReviews(response.data);
+      } catch (err) {
         console.error("Fehler beim Laden der Bewertungen:", err);
-      });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchReviews();
   }, []);
 
+  if (loading) {
+    return <p>Lade Bewertungen…</p>;
+  }
+
   if (reviews.length === 0) {
-    return <p className="text-gray-500 italic">Keine Bewertungen vorhanden.</p>;
+    return <p className="italic text-gray-500">Keine Bewertungen vorhanden.</p>;
   }
 
   return (
