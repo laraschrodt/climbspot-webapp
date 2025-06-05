@@ -9,4 +9,3 @@ router.get("/popular", LocationController.getPopularLocations);
 router.get("/search", LocationController.searchLocations);
 
 export default router;
-
