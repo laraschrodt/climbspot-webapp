@@ -1,21 +1,16 @@
 import React from "react";
-import { useParams } from "react-router-dom";
-import { Navbar } from "../components/general/Navbar";
+import Navbar from "../components/general/Navbar/Navbar";
 import Footer from "../components/general/Footer/Footer";
-import LocationDetails from "../components/locationDetails/LocationDetails";
+import LocationDetails from "../components/locationDetails/LocationInfo";
 
-const LocationDetailsPage: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
-
+function LocationDetailsPage() {
   return (
-    <>
+    <div>
       <Navbar />
-      <main className="container mx-auto px-4 py-6">
-        <LocationDetails locationName={id!} />
-      </main>
+      <LocationDetails />
       <Footer />
-    </>
+    </div>
   );
-};
+}
 
 export default LocationDetailsPage;

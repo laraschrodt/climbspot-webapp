@@ -6,7 +6,7 @@ import RegisterPage from "./pages/RegisterPage";
 import LocationList from "./pages/LocationList";
 import LocationMap from "./pages/LocationMap";
 import ProfilePage from "./pages/ProfilePage";
-import LocationDetails from "./pages/LocationDetailsPage";
+import LocationDetailsPage from "./pages/LocationDetailsPage";
 
 export default function App() {
   return (
@@ -15,9 +15,9 @@ export default function App() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/profile" element={<ProfilePage />} />
-      <Route path="/details/:id" element={<LocationDetails />} />
       <Route path="/locations" element={<LocationList />} />
       <Route path="/map" element={<LocationMap />} />
+      <Route path="/details/:locationId" element={<LocationDetailsPage />} />
     </Routes>
   );
 }

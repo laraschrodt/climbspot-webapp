@@ -7,5 +7,6 @@ router.get("/all", LocationController.getAllLocations);
 router.get("/popular", LocationController.getPopularLocations);
 
 router.get("/search", LocationController.searchLocations);
+router.get("/details/:locationId", LocationController.getLocationById);
 
 export default router;

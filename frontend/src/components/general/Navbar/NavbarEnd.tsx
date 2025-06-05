@@ -26,7 +26,7 @@ const NavbarEnd: FC = () => {
       }
 
       axios
-        .get(`http://localhost:3001/api/locations/search?query=${searchTerm}`)
+        .get(`/api/locations/search?query=${searchTerm}`)
         .then((res) => {
           setSuggestions(res.data);
         })
