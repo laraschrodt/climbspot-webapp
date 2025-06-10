@@ -1,7 +1,7 @@
-import 'dotenv/config'; // <--- NEU: Damit .env geladen wird
-
 import express from "express";
 import cors from "cors";
+import "dotenv/config"; // .env wird geladen
+
 import authRoutes from "./routes/account.routes";
 import profileRoutes from "./routes/profile.routes";
 import locationRouter from "./routes/location.router";

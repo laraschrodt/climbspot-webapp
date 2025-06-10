@@ -72,9 +72,7 @@ const Filter: React.FC<FilterProps> = ({ onApply }) => {
               max="10"
               value={maxDifficulty}
               className="range range-primary"
-              onChange={(e) =>
-                setMaxDifficulty(parseInt(e.target.value, 10))
-              }
+              onChange={(e) => setMaxDifficulty(parseInt(e.target.value, 10))}
             />
             <div className="text-right">{maxDifficulty}</div>
           </div>
@@ -100,31 +98,23 @@ const Filter: React.FC<FilterProps> = ({ onApply }) => {
               className="input input-bordered w-full"
               placeholder="z. B. 2"
               value={kletterzeit}
-              onChange={(e) =>
-                setKletterzeit(Number(e.target.value))
-              }
+              onChange={(e) => setKletterzeit(Number(e.target.value))}
             />
           </div>
 
           <div>
-            <label className="font-semibold block mb-2">
-              Kletterlänge (m)
-            </label>
+            <label className="font-semibold block mb-2">Kletterlänge (m)</label>
             <input
               type="number"
               className="input input-bordered w-full"
               placeholder="z. B. 30"
               value={kletterlaenge}
-              onChange={(e) =>
-                setKletterlaenge(Number(e.target.value))
-              }
+              onChange={(e) => setKletterlaenge(Number(e.target.value))}
             />
           </div>
 
           <div>
-            <label className="font-semibold block mb-2">
-              Kinderfreundlich
-            </label>
+            <label className="font-semibold block mb-2">Kinderfreundlich</label>
             <div className="flex gap-4">
               {["ja", "nein"].map((val) => (
                 <label key={val} className="label cursor-pointer">
