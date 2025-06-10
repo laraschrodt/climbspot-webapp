@@ -4,6 +4,7 @@ import Reviews from './LeftSide/Reviews';
 import LocationInfo from './RightSide/LocationInfo';
 import { Location } from '../../models/Location';
 
+/*
 // Berechnungslogik für Sterne
 const calculateAverageRating = (bewertungen: { sterne: number }[] = []) => {
   if (bewertungen.length === 0) return 0;
@@ -13,6 +14,7 @@ const calculateAverageRating = (bewertungen: { sterne: number }[] = []) => {
 
 const StarRating: React.FC<{ rating: number, onClick: (rating: number) => void }> = ({ rating, onClick }) => {
   const stars = [1, 2, 3, 4, 5];
+  
   return (
     <div className="flex items-center">
       {stars.map((star) => (
@@ -34,6 +36,7 @@ const StarRating: React.FC<{ rating: number, onClick: (rating: number) => void }
     </div>
   );
 };
+*/
 
 const LocationDetails: React.FC = () => {
   const [location, setLocation] = useState<Location | null>(null);
@@ -53,7 +56,7 @@ const LocationDetails: React.FC = () => {
 
         setLocation(data);
         setIsFavorited(data.isFavorited ?? false);
-        setRating(calculateAverageRating(data.bewertungen));
+        // setRating(calculateAverageRating(data.bewertungen));
       } finally {
         setLoading(false);
       }
@@ -146,18 +149,23 @@ const LocationDetails: React.FC = () => {
 
           <div className="space-y-4">
             {/* Sterne-Bewertung */}
-            <StarRating rating={rating} onClick={handleStarClick} />
+            {/* <StarRating rating={rating} onClick={handleStarClick} /> */}
             {/* Favoriten-Button */}
             <button onClick={handleFavoriteToggle} className="w-full btn btn-primary">
               {isFavorited ? 'Vom Favoriten entfernen' : 'Zu Favoriten hinzufügen'}
             </button>
             {/* ÖPNV-Button */}
-            <button
-              className="btn btn-secondary w-full"
-              onClick={() => window.open(`https://www.google.com/maps/search/?q=${location?.lat},${location?.long}`, "_blank")}
-            >
-              ÖPNV - Route zu Google Maps
-            </button>
+            {location?.lat && location?.long && (
+              <button
+                className="btn btn-secondary w-full"
+                onClick={() => {
+                  const url = `https://www.google.com/maps/dir/?api=1&destination=${location.lat},${location.long}&travelmode=transit`;
+                  window.open(url, "_blank");
+                }}
+              >
+                ÖPNV - Route zu Google Maps
+              </button>
+            )}
           </div>
         </div>
 
