@@ -9,6 +9,10 @@ interface RawLocation extends Location {
   bewertungen?: Bewertung[];
 }
 
+interface RawFavoriteRow {
+  o: Location & { bewertungen?: Bewertung[] };
+}
+
 class LocationsService {
   async getLocationByIdFromDB(locationId: string): Promise<Location | null> {
     const { data, error } = await supabase
@@ -73,6 +77,75 @@ class LocationsService {
     }
 
     return (data ?? []) as Location[];
+  }
+
+  async getFavoriteLocationsFromDB(userId: string): Promise<Location[]> {
+    const { data, error } = await supabase
+      .from("favoriten")
+      .select(`
+        o:orte (
+          ort_id,
+          name,
+          region,
+          land,
+          schwierigkeit,
+          picture_url,
+          bewertungen ( sterne )
+        )
+      `)
+      .eq("benutzer_id", userId);
+  
+    if (error) {
+      console.error("Supabase-Fehler beim Laden der Favoriten:", error);
+      throw new Error("Favoriten nicht gefunden");
+    }
+  
+    const rows = (data ?? []) as unknown as RawFavoriteRow[];
+    return rows.map((row) => row.o);
+  }
+  
+  async getUserReviewsFromDB(userId: string) {
+    const { data, error } = await supabase
+      .from("bewertungen")
+      .select(`
+        sterne,
+        kommentar,
+        erstellt_am,
+        orte (
+          name,
+          picture_url
+        )
+      `)
+      .eq("benutzer_id", userId)
+      .order("erstellt_am", { ascending: false });
+    
+    if (error) {
+      console.error("Fehler beim Laden der Bewertungen:", error);
+      throw new Error("Bewertungen konnten nicht geladen werden.");
+    }
+    
+    return data;
+  }
+
+  async addFavorite(userId: string, locationId: string): Promise<void> {
+    const { error } = await supabase
+      .from("favoriten") 
+      .insert([{benutzer_id: userId, ort_id: locationId }]);
+
+    if (error) {
+      throw new Error(`Fehler beim Hinzufügen des Favoriten: ${error.message}`);
+    }
+  }
+
+  async removeFavorite(userId: string, locationId: string): Promise<void> {
+    const { error } = await supabase
+      .from("favoriten") 
+      .delete()
+      .match({benutzer_id: userId, ort_id: locationId });
+
+    if (error) {
+      throw new Error(`Fehler beim Entfernen des Favoriten: ${error.message}`);
+    }
   }
 }
 

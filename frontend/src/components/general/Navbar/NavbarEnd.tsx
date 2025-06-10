@@ -72,7 +72,7 @@ const NavbarEnd: FC = () => {
                 key={location.ort_id}
                 className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
                 onClick={() => {
-                  navigate(`/details/${location.name}`);
+                  navigate(`/details/${location.ort_id}`);
                   setSearchTerm("");
                   setSuggestions([]);
                 }}

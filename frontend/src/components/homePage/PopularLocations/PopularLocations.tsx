@@ -30,8 +30,8 @@ const PopularLocations: React.FC = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
         {popularSpots.map((spot) => (
           <Link
-            to={`/details/${spot.name}`}
-            key={spot.name}
+            to={`/details/${spot.ort_id}`}
+            key={spot.ort_id}
             className="block"
           >
             <LocationCard
