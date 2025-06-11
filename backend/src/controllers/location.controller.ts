@@ -2,8 +2,6 @@ import { Request, Response } from "express";
 import LocationsService from "../services/location.service";
 import { AuthedRequest } from "../middlewares/auth.middleware";
 import locationService from "../services/location.service";
-import ProfileService from "../services/profile.service";
-import AccountService from "../services/account.service";
 
 class LocationController {
   async getLocationById(req: Request, res: Response): Promise<void> {
@@ -66,26 +64,26 @@ class LocationController {
         res.status(400).json({ error: "Ungültiger Token" });
         return;
       }
-      const favorites = await LocationsService.getFavoriteLocationsFromDB(userId);
+      const favorites = await LocationsService.getFavoriteLocationsFromDB(
+        userId
+      );
       res.json(favorites);
     } catch (err) {
       console.error("Fehler in getFavorites:", err);
-      res
-        .status(500)
-        .json({ error: "Serverfehler beim Laden der Favoriten" });
+      res.status(500).json({ error: "Serverfehler beim Laden der Favoriten" });
     }
   }
-  
+
   async getUserReviews(req: AuthedRequest, res: Response): Promise<void> {
     try {
       const userId = (req.user as { userId: string })?.userId;
-  
+
       if (!userId) {
         res.status(400).json({ error: "Ungültiger Token" });
         return;
       }
-  
-      const reviews = await ProfileService.getUserReviewsFromDB(userId);
+
+      const reviews = await LocationsService.getUserReviewsFromDB(userId);
       res.json(reviews);
     } catch (err) {
       console.error("Fehler beim Laden der Bewertungen:", err);
@@ -102,7 +100,9 @@ class LocationController {
       res.status(200).json({ message: "Favorit hinzugefügt" });
     } catch (err) {
       console.error("Fehler beim Hinzufügen des Favoriten:", err);
-      res.status(500).json({ error: "Serverfehler beim Hinzufügen des Favoriten" });
+      res
+        .status(500)
+        .json({ error: "Serverfehler beim Hinzufügen des Favoriten" });
     }
   }
 
@@ -117,7 +117,9 @@ class LocationController {
       res.status(200).json({ message: "Favorit entfernt" });
     } catch (err) {
       console.error("Fehler beim Entfernen des Favoriten:", err);
-      res.status(500).json({ error: "Serverfehler beim Entfernen des Favoriten" });
+      res
+        .status(500)
+        .json({ error: "Serverfehler beim Entfernen des Favoriten" });
     }
   }
 }
