@@ -17,10 +17,10 @@
 
 ### Unit-Tests:
 
-- [ ] `Lara`:
-      - Neue Page um Location hinzuzufügen
-      - Komm in die Community Button verlinken
-      - Admin Funktionen und Rollen einbauen (-> Gastrechte beschränken)
+- [ ] `Lara`: <br>
+      - Neue Page um Location hinzuzufügen <br>
+      - Komm in die Community Button verlinken <br>
+      - Admin Funktionen und Rollen einbauen (-> Gastrechte beschränken) <br>
       - jest config
 - [ ] `Kimia`: Größe von Location Cards im Profil anpassen
 - [ ] `Nelly`: Gucken dass man von jeder Page aus zu Favoriten hinzufügen/entfernen kann ()
