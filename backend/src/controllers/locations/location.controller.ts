@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import LocationsService from "../services/location.service";
-import { AuthedRequest } from "../middlewares/auth.middleware";
-import locationService from "../services/location.service";
+import LocationsService from "../../services/location.service";
+import { AuthedRequest } from "../../middlewares/auth.middleware";
+import locationService from "../../services/location.service";
 
 class LocationController {
   async getLocationById(req: Request, res: Response): Promise<void> {
