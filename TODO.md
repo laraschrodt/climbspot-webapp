@@ -2,8 +2,8 @@
 
 ## ✅ Aufgabenverteilung verteilt nach Person
 
-> **Kurze Rückmeldung am Sonntag Abend wie es läuft** > **Bis dahin alle Tests fertig haben + MEETING:** Montag, 16.06.2025 19 Uhr
-> **Bis dahin alle Unit/Integration Tests implementert haben** Freitag, 20.06.2025
+> **Kurze Rückmeldung am Sonntag Abend wie es läuft** > **Bis dahin alle Tests fertig haben + MEETING:** Montag, 16.06.2025 19 Uhr <br>
+> **Bis dahin alle Unit/Integration Tests implementert haben** Freitag, 20.06.2025 <br>
 > **Deployment + MEETING:** Sonntag, 22.06.2025 19 Uhr
 
 ## 🧪 Testen
