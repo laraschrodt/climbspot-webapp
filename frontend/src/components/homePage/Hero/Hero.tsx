@@ -1,9 +1,10 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Hero: React.FC = () => {
   return (
     <div
-      className="hero min-h-[50vh]" /* sorgt dafür, dass Element mindestens 50% der Höhe des Bildschirms einnimmt  */
+      className="hero min-h-[50vh]"
       style={{
         backgroundImage:
           "url(https://cdn.climbing.com/wp-content/uploads/2020/04/landscape-climb-2.jpg?crop=535:301&width=1070&enable=upscale)",
@@ -23,7 +24,9 @@ const Hero: React.FC = () => {
             dir alles, was du brauchst, um die perfekte Kletterlocation zu
             finden und neue Höhen zu erklimmen!
           </p>
-          <button className="btn btn-primary">Komm in die Community</button>
+          <Link to="/login">
+            <button className="btn btn-primary">Komm in die Community</button>
+          </Link>{" "}
         </div>
       </div>
     </div>

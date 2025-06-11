@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 export interface FilterCriteria {
   kletterart: string;
@@ -144,6 +145,9 @@ const Filter: React.FC<FilterProps> = ({ onApply }) => {
           </div>
 
           <div className="col-span-full flex justify-end">
+            <Link to="/add-location" className="btn btn-secondary mr-4">
+              Neue Location hinzufügen
+            </Link>
             <button type="submit" className="btn btn-primary px-8">
               Filter anwenden
             </button>

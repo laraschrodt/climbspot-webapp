@@ -7,6 +7,7 @@ import LocationList from "./pages/LocationList";
 import LocationMap from "./pages/LocationMap";
 import ProfilePage from "./pages/ProfilePage";
 import LocationDetailsPage from "./pages/LocationDetailsPage";
+import AddLocationPage from "./pages/AddLocationPage";
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
       <Route path="/locations" element={<LocationList />} />
       <Route path="/map" element={<LocationMap />} />
       <Route path="/details/:locationId" element={<LocationDetailsPage />} />
+      <Route path="/add-location" element={<AddLocationPage />} />
     </Routes>
   );
 }

@@ -3,7 +3,6 @@ import axios from "axios";
 import { Navbar } from "../components/general/Navbar";
 import Footer from "../components/general/Footer/Footer";
 import Filter, { FilterCriteria } from "../components/locationSearch/Filter";
-import AddLocation from "../components/locationSearch/AddLocation";
 import LocationGallery from "../components/locationSearch/LocationGallery";
 import { Location } from "../models/Location";
 
@@ -77,7 +76,6 @@ const LocationList: React.FC = () => {
       <Navbar />
       <div className="flex flex-1">
         <Filter onApply={handleFilter} />
-        <AddLocation />
       </div>
       <LocationGallery locations={filteredLocations} />
       <Footer />

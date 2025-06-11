@@ -8,17 +8,23 @@ class ProfileApi {
 
     const token = localStorage.getItem("token");
 
-    const response = await axios.post("/api/profile/upload-image", formData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    const response = await axios.post(
+      "/api/profile/upload-profile-pic",
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
 
     return response.data.url;
   }
 
-  static async saveProfile(data: Omit<FormDataType, "password">): Promise<void> {
+  static async saveProfile(
+    data: Omit<FormDataType, "password">
+  ): Promise<void> {
     const token = localStorage.getItem("token");
 
     await axios.put("/api/profile", data, {
@@ -28,7 +34,10 @@ class ProfileApi {
     });
   }
 
-  static async updatePassword(oldPassword: string, newPassword: string): Promise<void> {
+  static async updatePassword(
+    oldPassword: string,
+    newPassword: string
+  ): Promise<void> {
     const token = localStorage.getItem("token");
 
     await axios.put(

@@ -1,5 +1,14 @@
 {
   "name": "climbspot-backend",
   "private": true,
-  "type": "commonjs"
+  "type": "commonjs",
+  "scripts": {
+    "test": "jest"
+  },
+  "dependencies": {
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "@types/uuid": "^10.0.0"
+  }
 }
