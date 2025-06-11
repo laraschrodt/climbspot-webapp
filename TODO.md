@@ -2,7 +2,8 @@
 
 ## ✅ Aufgabenverteilung verteilt nach Person
 
-> **Kurze Rückmeldung am Sonntag Abend wie es läuft** > **Bis dahin alle Tests fertig haben + MEETING:** Montag, 16.06.2025 19 Uhr <br>
+> **Kurze Rückmeldung am Sonntag Abend wie es läuft** <br>
+> **Bis dahin alle Tests fertig haben + MEETING:** Montag, 16.06.2025 19 Uhr <br>
 > **Bis dahin alle Unit/Integration Tests implementert haben** Freitag, 20.06.2025 <br>
 > **Deployment + MEETING:** Sonntag, 22.06.2025 19 Uhr
 
@@ -16,7 +17,11 @@
 
 ### Unit-Tests:
 
-- [ ] Neue Page um Location hinzuzufügen (`Lara`) + Komm in die Community Button + Admin Funktionen + Gastrechte + jest config
+- [ ] `Lara`:
+      - Neue Page um Location hinzuzufügen
+      - Komm in die Community Button verlinken
+      - Admin Funktionen und Rollen einbauen (-> Gastrechte beschränken)
+      - jest config
 - [ ] `Kimia`: Größe von Location Cards im Profil anpassen
 - [ ] `Nelly`: Gucken dass man von jeder Page aus zu Favoriten hinzufügen/entfernen kann ()
 - [ ] `Nelly`: Berwertungen schreiben (Sterne-Rating und kurzer Text) und anzeigen auf LocationDetails - Bei jeder LocationDetail Seite gibt es über den Bewertungen einen Bereich indem man selbst ein
