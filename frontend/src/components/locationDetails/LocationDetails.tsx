@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import Reviews from './LeftSide/Reviews';
-import LocationInfo from './RightSide/LocationInfo';
-import { Location } from '../../models/Location';
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import Reviews from "./LeftSide/Reviews";
+import LocationInfo from "./RightSide/LocationInfo";
+import { Location } from "../../models/Location";
 
 /*
 // Berechnungslogik für Sterne
@@ -14,7 +14,7 @@ const calculateAverageRating = (bewertungen: { sterne: number }[] = []) => {
 
 const StarRating: React.FC<{ rating: number, onClick: (rating: number) => void }> = ({ rating, onClick }) => {
   const stars = [1, 2, 3, 4, 5];
-  
+
   return (
     <div className="flex items-center">
       {stars.map((star) => (
@@ -49,7 +49,7 @@ const LocationDetails: React.FC = () => {
     const fetchData = async () => {
       try {
         const res = await fetch(`/api/locations/details/${locationId}`);
-        if (!res.ok) throw new Error('Standort nicht gefunden');
+        if (!res.ok) throw new Error("Standort nicht gefunden");
         const data = await res.json();
 
         console.log("Backend Antwort:", data);
@@ -74,11 +74,11 @@ const LocationDetails: React.FC = () => {
     }
 
     try {
-      const res = await fetch(`http://localhost:3001/api/locations/${locationId}/review`, {
+      const res = await fetch(`/api/locations/${locationId}/review`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ sterne: newRating }),
       });
@@ -103,13 +103,16 @@ const LocationDetails: React.FC = () => {
     }
 
     try {
-      const res = await fetch(`http://localhost:3001/api/locations/favorite/${locationId}`, {
-        method: isFavorited ? 'DELETE' : 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-      });
+      const res = await fetch(
+        `http://localhost:3001/api/locations/favorite/${locationId}`,
+        {
+          method: isFavorited ? "DELETE" : "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (res.ok) {
         setIsFavorited(!isFavorited);
@@ -118,7 +121,7 @@ const LocationDetails: React.FC = () => {
         console.error("Fehler beim Aktualisieren des Favoritenstatus:", text);
       }
     } catch (error) {
-      console.error('Fehler:', error);
+      console.error("Fehler:", error);
     }
   };
 
@@ -134,7 +137,8 @@ const LocationDetails: React.FC = () => {
         <h1 className="text-4xl font-bold">{location?.name}</h1>
         {/* Untertitel ändern */}
         <p className="text-lg max-w-xl px-4">
-          Erfahre mehr über diesen Kletterspot – Bewertungen, Beschreibung und Besonderheiten.
+          Erfahre mehr über diesen Kletterspot – Bewertungen, Beschreibung und
+          Besonderheiten.
         </p>
       </div>
 
@@ -151,8 +155,13 @@ const LocationDetails: React.FC = () => {
             {/* Sterne-Bewertung */}
             {/* <StarRating rating={rating} onClick={handleStarClick} /> */}
             {/* Favoriten-Button */}
-            <button onClick={handleFavoriteToggle} className="w-full btn btn-primary">
-              {isFavorited ? 'Vom Favoriten entfernen' : 'Zu Favoriten hinzufügen'}
+            <button
+              onClick={handleFavoriteToggle}
+              className="w-full btn btn-primary"
+            >
+              {isFavorited
+                ? "Vom Favoriten entfernen"
+                : "Zu Favoriten hinzufügen"}
             </button>
             {/* ÖPNV-Button */}
             {location?.lat && location?.long && (

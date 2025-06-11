@@ -2,23 +2,45 @@
 
 ## ✅ Aufgabenverteilung verteilt nach Person
 
-> **Bis dahin alle Tests fertig haben:**
+> **Kurze Rückmeldung am Sonntag Abend wie es läuft** > **Bis dahin alle Tests fertig haben + MEETING:** Montag, 16.06.2025 19 Uhr
+> **Bis dahin alle Unit/Integration Tests implementert haben** Freitag, 20.06.2025
+> **Deployment + MEETING:** Sonntag, 22.06.2025 19 Uhr
 
-### Lara
+## 🧪 Testen
 
-- [ ]
+### Javadoc Dokumentation schreiben im Code (`Alex`)
 
-### Kimia
+- nur wichtige Dinge, keine unnötigen Kommentare (welche Dinge beschreiben die man eh auf den ersten Blick sieht)
+- in Kontext zum Rest unserer Architektur stellen, sodass man das Zusammenspiel der Komponenten versteht
+- also nicht übertreiben
 
-- [ ] Ratings
+### Unit-Tests:
 
-### Alex
+- [ ] Neue Page um Location hinzuzufügen (`Lara`) + Komm in die Community Button + Admin Funktionen + Gastrechte + jest config
+- [ ] `Kimia`: Größe von Location Cards im Profil anpassen
+- [ ] `Nelly`: Gucken dass man von jeder Page aus zu Favoriten hinzufügen/entfernen kann ()
+- [ ] `Nelly`: Berwertungen schreiben (Sterne-Rating und kurzer Text) und anzeigen auf LocationDetails - Bei jeder LocationDetail Seite gibt es über den Bewertungen einen Bereich indem man selbst ein
+      Sterne-Rating abgeben kann und einen kurzen Bewertungstext schreiben kann - die eigene Bewertung ist persistiert und änderbar (so ähnlich wie das Ändern von Infos im Formular vielleicht)
+- [ ] `Alex`: Interaktive Karte und gucken dass der Filter funktioniert bei der Karte
+- [ ] `Kimia`: Benachrichtigungen bei neuer Location
 
-- [ ] Location Daten
+---
 
-### Nelly
+- [ ] Regestrierung (`Kimia`)
+- [ ] Anmeldung (`Nelly`)
+- [ ] Location hinzufügen (`Nelly`)
+- [ ] Bewertung schreiben (`Kimia`)
+- [ ] Location favorisieren (`Lara`)
+- [ ] Admin-Funktionen (`Lara`)
+- [ ] Suchfunktion im Header (`Alex`)
+- [ ] Filterfunktion bei Karte und Liste (`Alex`)
+- [ ] Nahverkehrsintegration (`Nelly`)
+- [ ] Interaktive Karte (`Lara`)
+- [ ] Benachrichtigungen (`Kimia`)
 
-- [ ]
+> Tests kommen in den `tests`-Ordner jeweils im Frontend und im Backend.<br>
+> Macht euch einen Unterordner für euer Feauture, das ihr testet (z.B. `register`, `login` etc.) <br>
+> Wenn Funktionen zu groß sind um eine Funktion zu testen zieht sie auseinander. <br>
 
 ## 🔴 Bald:
 
@@ -36,31 +58,11 @@ Ein REST-Endpunkt zur Abfrage dieser Notifications ist bereits vorbereitet unter
 
 ---
 
-#### 2. Verkehrsanbindungen mit Weiterleitung an Google Maps einbauen (irgendwo auf der Page **_Locationdetails.tsx_** bzw. in ihren Components)
-
-Entweder es wird nach der momentanen Location gefragt und diese als Startposition mit weitergeleitet und/oder man gibt die Startposition der Route an.
-
----
-
 #### 3. Ratings anzeigen lassen
 
 HTTP-Request an den Pfad "/profile/favorites" in _backend/src/routes/profile.routes.ts_ und _backend/src/controllers/profile.controller.ts_ bzw.
 _backend/src/services/profile.service.ts_, un die Logik zu implementieren (Backend hierfür steht noch nicht).
 In der DB auf Supabase gibt es eine Zwischentabelle für Bewertungen (Benutzer - Locations).
-
----
-
-#### 4. Location Details nochmal ordnentlich machen
-
-- Component und Logik auslagern
-- Page so anpassen dass es den Header/Footer gibt
-- Button zu Favoriten hinzufügen und entfernen
-- Foto von der Location
-- Sterne-Bewertung (wie auf den einzelnen Cards)
-- Route ins Backend
-- Komplette implementierung im Backend (inkl. index.ts, Router, Kontroller, Service wie bei den anderen Implementierungen)
-- Google Maps weiterleitung
-  /details/{location.name}
 
 ---
 
@@ -70,23 +72,7 @@ In der DB auf Supabase gibt es eine Zwischentabelle für Bewertungen (Benutzer -
 
 #### 6. Administratoren moderieren Einträge und verwalten Nutzerkonten
 
-### Niedriger Aufwand
-
-- Nelly: /profil im Gastmodus unzugänglich machen (stattdessen an Login weitergeleitet werden)
-- In _Hero.tsx_: das Bild zu src/assets/images hinzufügen und damit den Link ersetzen
-
 ## 🟡 Gegen Ende vom Projekt:
 
 - Funktionen/Components verkleinern und auseinander ziehen (ein usecase pro Datei - wie in Software Eng. besproche)
 - Kommentare wie in Software Projekt einfügen
-
-## PL5: Testen
-
-- Javadoc Dokumentation schreiben im Code
-  - nur wichtige Dinge, keine unnötigen Kommentare (welche Dinge beschreiben die man eh auf den ersten Blick sieht)
-  - in Kontext zum Rest unserer Architektur stellen, sodass man das Zusammenspiel der Komponenten versteht
-  - also nicht übertreiben
-- Unit-Tests (??Integrationstests??):
-  - d
-
-> Das Ergebnis ist eine ZIP-Datei des kompletten Quellcodes inkl. der Unit-Tests. Bitte säubern Sie die Verzeichnisse bevor Sie diese zippen. Es sollten z.B. keine Binärdateien oder Bibliotheken (wie das Verzeichnis "node_modules") mit abgeben werden.
