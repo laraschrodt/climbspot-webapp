@@ -1,8 +1,6 @@
 import { Request, Response } from "express";
-import LocationsService from "../../services/location.service";
+import LocationsService from "../../services/locations/location.service";
 import { AuthedRequest } from "../../middlewares/auth.middleware";
-import locationService from "../../services/location.service";
-
 class LocationController {
   async getLocationById(req: Request, res: Response): Promise<void> {
     const { locationId } = req.params;
@@ -88,38 +86,6 @@ class LocationController {
     } catch (err) {
       console.error("Fehler beim Laden der Bewertungen:", err);
       res.status(500).json({ error: "Fehler beim Laden der Bewertungen" });
-    }
-  }
-
-  async addFavorite(req: AuthedRequest, res: Response): Promise<void> {
-    try {
-      const userId = (req.user as { userId: string })?.userId;
-      const locationId = req.params.locationId;
-
-      await locationService.addFavorite(userId, locationId);
-      res.status(200).json({ message: "Favorit hinzugefügt" });
-    } catch (err) {
-      console.error("Fehler beim Hinzufügen des Favoriten:", err);
-      res
-        .status(500)
-        .json({ error: "Serverfehler beim Hinzufügen des Favoriten" });
-    }
-  }
-
-  async removeFavorite(req: AuthedRequest, res: Response): Promise<void> {
-    try {
-      const userId = (req.user as { userId: string })?.userId;
-      const locationId = req.params.locationId;
-
-      console.log("Füge Favorit hinzu:", userId, locationId);
-
-      await locationService.removeFavorite(userId, locationId);
-      res.status(200).json({ message: "Favorit entfernt" });
-    } catch (err) {
-      console.error("Fehler beim Entfernen des Favoriten:", err);
-      res
-        .status(500)
-        .json({ error: "Serverfehler beim Entfernen des Favoriten" });
     }
   }
 }

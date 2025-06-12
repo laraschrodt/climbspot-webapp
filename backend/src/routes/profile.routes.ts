@@ -1,6 +1,6 @@
 import { Router } from "express";
 import AuthMiddleware from "../middlewares/auth.middleware";
-import profileController from "../controllers/profile.controller";
+import profileController from "../controllers/profiles/profile.controller";
 import multer from "multer";
 
 /**

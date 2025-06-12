@@ -1,6 +1,6 @@
-import { supabase } from "../lib/supabase";
+import { supabase } from "../../lib/supabase";
 import { randomUUID } from "crypto";
-import { Location } from "../types/Location";
+import { Location } from "../../types/Location";
 
 interface Bewertung {
   sterne: number;
@@ -18,7 +18,9 @@ class ProfileService {
   async getProfileDataByUserId(userId: string) {
     const { data, error } = await supabase
       .from("benutzer")
-      .select("vorname, nachname, email, benutzername, stadt, passwort_hash, profilbild_url")
+      .select(
+        "vorname, nachname, email, benutzername, stadt, passwort_hash, profilbild_url"
+      )
       .eq("benutzer_id", userId)
       .single();
 
@@ -72,7 +74,10 @@ class ProfileService {
     return { success: true };
   }
 
-  async uploadProfileImageToDatabase(userId: string, file: Express.Multer.File) {
+  async uploadProfileImageToDatabase(
+    userId: string,
+    file: Express.Multer.File
+  ) {
     const fileName = `profile-pictures/${userId}-${randomUUID()}.jpg`;
 
     const { error: uploadError } = await supabase.storage
@@ -101,7 +106,8 @@ class ProfileService {
   async getFavoriteLocationsFromDB(userId: string): Promise<Location[]> {
     const { data, error } = await supabase
       .from("favoriten")
-      .select(`
+      .select(
+        `
         o:orte (
           ort_id,
           name,
@@ -111,7 +117,8 @@ class ProfileService {
           picture_url,
           bewertungen ( sterne )
         )
-      `)
+      `
+      )
       .eq("benutzer_id", userId);
 
     if (error) {

@@ -88,7 +88,7 @@ const AddLocation: React.FC = () => {
 
   return (
     <section className="max-w-4xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-8 text-center">Neue Location</h1>
+      <h1 className="mb-8 mt-8 text-2xl font-bold">Popular Locations</h1>
 
       <div className="flex justify-center mb-8">
         <LocationPicture

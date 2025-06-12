@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import AccountService from "../services/account.service";
-import ErrorMessages from "../utils/ErrorMessages";
+import AccountService from "../../services/accounts/account.service";
+import ErrorMessages from "../../utils/ErrorMessages";
 
 /**
  * Alle Methoden in dieser Datei werden in der Registrierung und Authentifizierung verwendet.
@@ -11,7 +11,10 @@ class AccountController {
     const { email, password } = req.body;
 
     try {
-      const token = await AccountService.authenticateUserCredentials(email, password);
+      const token = await AccountService.authenticateUserCredentials(
+        email,
+        password
+      );
       res.status(200).json({ token });
     } catch (err) {
       const msg = err instanceof Error ? err.message : ErrorMessages.UNKNOWN;
@@ -23,14 +26,17 @@ class AccountController {
     const { email, password, username } = req.body;
 
     try {
-      const result = await AccountService.createUserAccount(email, password, username);
+      const result = await AccountService.createUserAccount(
+        email,
+        password,
+        username
+      );
       res.status(201).json(result);
     } catch (err) {
       const msg = err instanceof Error ? err.message : ErrorMessages.UNKNOWN;
       res.status(400).json({ message: msg });
     }
   }
-
 }
 
 export default new AccountController();
