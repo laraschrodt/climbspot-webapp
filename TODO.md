@@ -21,8 +21,9 @@
 - [x] Neue Page um Location hinzuzufügen
 - [x] Komm in die Community Button verlinken
 - [ ] Im Profil eine Seite machen in der man die Locations sieht, die man selbst hinzugefügt hat
+- [ ] Eigene Locations bearbeitbar machen
 - [ ] Admin Funktionen und Rollen einbauen (-> Gastrechte beschränken)
-- [ ] jest config
+- [x] jest config
 
 `Kimia`:
 

@@ -21,7 +21,7 @@ interface Props {
 const Review: React.FC<Props> = ({ reviews }) => {
   return (
     <section className="bg-white p-6 rounded-xl shadow-md">
-      <h2 className="text-lg font-semibold mb-4">Bewertungen</h2>
+      <h2 className="mb-8 mt-8 text-2xl font-bold">Bewertungen</h2>
       <ul className="space-y-2 text-gray-700">
         {reviews.length > 0 ? (
           reviews.map((rev, idx) => (

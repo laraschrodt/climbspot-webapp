@@ -28,7 +28,7 @@ const LocationGallery: React.FC<LocationGalleryProps> = ({ locations }) => {
               name={spot.name}
               location={`${spot.region}, ${spot.land}`}
               difficulty={spot.schwierigkeit.toString()}
-              rating={calculateAverageRating(spot.bewertungen)}
+              rating={calculateAverageRating(spot.rating)}
               imageUrl={spot.picture_url ?? ""}
             />
           </Link>

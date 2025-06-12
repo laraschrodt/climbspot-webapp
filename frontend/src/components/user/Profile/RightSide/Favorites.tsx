@@ -6,7 +6,7 @@ import axios from "axios";
 import { Location } from "../../../../models/Location";
 
 interface FavoriteLocation extends Location {
-  bewertungen?: { sterne: number }[];
+  rating?: { sterne: number }[];
 }
 
 const Favorites: React.FC = () => {
@@ -14,31 +14,28 @@ const Favorites: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-  const fetchFavorites = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const response = await axios.get<FavoriteLocation[]>(
-        "/api/profile/favorites",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setFavorites(response.data);
-    } catch (err) {
-      console.error("Fehler beim Laden der Favoriten:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-  fetchFavorites();
-}, []);
+    const fetchFavorites = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.get<FavoriteLocation[]>(
+          "/api/profile/favorites",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setFavorites(response.data);
+      } catch (err) {
+        console.error("Fehler beim Laden der Favoriten:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchFavorites();
+  }, []);
 
-
-  const calculateAverageRating = (
-    bewertungen: { sterne: number }[] = []
-  ) => {
+  const calculateAverageRating = (bewertungen: { sterne: number }[] = []) => {
     if (bewertungen.length === 0) return 0;
     const sum = bewertungen.reduce((acc, b) => acc + b.sterne, 0);
     return Math.round(sum / bewertungen.length);
@@ -75,7 +72,7 @@ const Favorites: React.FC = () => {
               name={spot.name}
               location={`${spot.region}, ${spot.land}`}
               difficulty={spot.schwierigkeit.toString()}
-              rating={calculateAverageRating(spot.bewertungen)}
+              rating={calculateAverageRating(spot.rating)}
               imageUrl={spot.picture_url ?? ""}
             />
           </Link>
