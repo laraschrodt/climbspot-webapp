@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet.markercluster";
@@ -9,12 +9,22 @@ type Location = {
   name: string;
   city: string;
   lat: number;
-  lng: number;
+  long: number;
   rating: number;
   difficulty: string;
 };
 
+async function fetchLocations(): Promise<Location[]> {
+  const res = await fetch("http://localhost:3001/api/locations/all");
+  if (!res.ok) {
+    throw new Error("Fehler beim Laden der Locations");
+  }
+  return res.json();
+}
+
 const Map = () => {
+  const [locations, setLocations] = useState<Location[]>([]);
+
   useEffect(() => {
     const existingMap = document.getElementById("map");
     if (!existingMap) return;
@@ -29,39 +39,31 @@ const Map = () => {
       attribution: "&copy; OpenStreetMap contributors",
     }).addTo(map);
 
-    const locations: Location[] = [
-      {
-        name: "Kletterwand Ost",
-        city: "Berlin",
-        lat: 52.52,
-        lng: 13.405,
-        rating: 4,
-        difficulty: "Mittel",
-      },
-      {
-        name: "Felswand Süd",
-        city: "München",
-        lat: 48.1351,
-        lng: 11.582,
-        rating: 5,
-        difficulty: "Schwer",
-      },
-    ];
-
     const markers = L.markerClusterGroup();
 
-    locations.forEach((loc) => {
-      const marker = L.marker([loc.lat, loc.lng]).bindPopup(
+fetchLocations()
+  .then((data) => {
+    console.log(" Geladene Locations:", data); 
+
+    setLocations(data);
+
+    data.forEach((loc) => {
+      const marker = L.marker([loc.lat, loc.long]).bindPopup(
         `<b>${loc.name}</b><br>` +
         `📍 Ort: ${loc.city}<br>` +
         `⭐ Bewertung: ${"⭐".repeat(loc.rating)}<br>` +
         `🧗‍♂️ Schwierigkeit: ${loc.difficulty}`
       );
-
       markers.addLayer(marker);
     });
 
     map.addLayer(markers);
+  })
+
+
+      .catch((error) => {
+        console.error("Fehler beim Laden der Locations:", error);
+      });
   }, []);
 
   return (
