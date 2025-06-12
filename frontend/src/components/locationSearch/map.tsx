@@ -1,18 +1,24 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet.markercluster";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
+import { FilterCriteria } from "./Filter";
 
 type Location = {
   name: string;
-  city: string;
+  talort: string;
+  region: string;
   lat: number;
   long: number;
-  rating: number;
-  difficulty: string;
+  kletterart: string;
+  schwierigkeit: string;
 };
+
+interface MapProps {
+  filter: FilterCriteria | null;
+}
 
 async function fetchLocations(): Promise<Location[]> {
   const res = await fetch("http://localhost:3001/api/locations/all");
@@ -22,13 +28,13 @@ async function fetchLocations(): Promise<Location[]> {
   return res.json();
 }
 
-const Map = () => {
-  const [locations, setLocations] = useState<Location[]>([]);
+const Map: React.FC<MapProps> = ({ filter }) => {
+  const mapRef = useRef<L.Map | null>(null);
+  const markersRef = useRef<L.MarkerClusterGroup | null>(null);
 
+  // Initialisiere Map nur einmal
   useEffect(() => {
-    const existingMap = document.getElementById("map");
-    if (!existingMap) return;
-    if ((existingMap as HTMLElement & { _leaflet_id?: number })._leaflet_id) return;
+    if (mapRef.current) return; // schon initialisiert
 
     const map = L.map("map", {
       center: [51.1657, 10.4515],
@@ -40,31 +46,60 @@ const Map = () => {
     }).addTo(map);
 
     const markers = L.markerClusterGroup();
-
-fetchLocations()
-  .then((data) => {
-    console.log(" Geladene Locations:", data); 
-
-    setLocations(data);
-
-    data.forEach((loc) => {
-      const marker = L.marker([loc.lat, loc.long]).bindPopup(
-        `<b>${loc.name}</b><br>` +
-        `📍 Ort: ${loc.city}<br>` +
-        `⭐ Bewertung: ${"⭐".repeat(loc.rating)}<br>` +
-        `🧗‍♂️ Schwierigkeit: ${loc.difficulty}`
-      );
-      markers.addLayer(marker);
-    });
-
     map.addLayer(markers);
-  })
 
-
-      .catch((error) => {
-        console.error("Fehler beim Laden der Locations:", error);
-      });
+    mapRef.current = map;
+    markersRef.current = markers;
   }, []);
+
+  // Aktualisiere Marker bei Filter-Änderung
+  useEffect(() => {
+    const updateMarkers = async () => {
+      if (!mapRef.current || !markersRef.current) return;
+
+      try {
+        const data = await fetchLocations();
+        console.log("📦 Geladene Locations:", data);
+        console.log("🔎 Aktiver Filter:", filter);
+
+        const filtered = data.filter((loc) => {
+          if (!filter) return true;
+
+          const matchesKletterart =
+            filter.kletterart === "" ||
+            loc.kletterart?.toLowerCase() === filter.kletterart.toLowerCase();
+
+          const matchesDifficulty =
+            !isNaN(parseInt(loc.schwierigkeit)) &&
+            parseInt(loc.schwierigkeit) <= filter.maxDifficulty;
+
+          const matchesRegion =
+            filter.standort === "" ||
+            loc.region?.toLowerCase().includes(filter.standort.toLowerCase());
+
+          return matchesKletterart && matchesDifficulty && matchesRegion;
+        });
+
+        const markers = markersRef.current;
+        markers.clearLayers();
+
+        filtered.forEach((loc) => {
+          const marker = L.marker([loc.lat, loc.long]).bindPopup(
+            `<b>${loc.name}</b><br>` +
+            `📍 Talort: ${loc.talort}<br>` +
+            `🌍 Region: ${loc.region}<br>` +
+            `🧗‍♂️ Schwierigkeit: ${loc.schwierigkeit}<br>` +
+            `🧱 Art: ${loc.kletterart}`
+          );
+          markers.addLayer(marker);
+        });
+      } catch (error) {
+        console.error("Fehler beim Laden oder Filtern:", error);
+      }
+    };
+
+    updateMarkers();
+  }, [filter]);
 
   return (
     <div className="flex-1 bg-gray-200">
