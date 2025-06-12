@@ -32,6 +32,12 @@ router.get(
   profileController.getFavorites
 );
 
+router.get(
+  "/reviews",
+  AuthMiddleware.verifyToken,
+  profileController.getReviews
+)
+
 const upload = multer({ storage: multer.memoryStorage() });
 router.post(
   "/upload-profile-pic",

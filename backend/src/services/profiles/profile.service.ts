@@ -129,6 +129,27 @@ class ProfileService {
     const rows = (data ?? []) as unknown as RawFavoriteRow[];
     return rows.map((row) => row.o);
   }
+
+  async getReviewsByUserId(userId: string) {
+    const { data, error } = await supabase
+      .from("bewertungen")
+      .select(`
+        sterne,
+        kommentar,
+        erstellt_am,
+        orte (
+          name,
+          picture_url
+        )
+      `)
+      .eq("benutzer_id", userId);
+
+    if (error) {
+      console.error("Supabase-Fehler beim Laden der Bewertungen:", error);
+      throw new Error("Bewertungen konnten nicht geladen werden");
+    }
+    return data || [];
+  }
 }
 
 export default new ProfileService();

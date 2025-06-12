@@ -10,7 +10,7 @@ const Rating: React.FC<RatingProps> = ({ value }) => {
       {[1, 2, 3, 4, 5].map((i) => (
         <div
           key={i}
-          className={`mask mask-star ${i <= value ? "bg-yellow-400" : "bg-gray-300"}`}
+          className={`mask mask-star w-4 h-4 ${i <= value ? "bg-yellow-400" : "bg-gray-300"}`}
           aria-label={`${i} star`}
           aria-current={i === value ? "true" : undefined}
         />

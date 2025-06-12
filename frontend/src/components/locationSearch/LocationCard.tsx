@@ -25,7 +25,7 @@ const LocationCard: React.FC<LocationCardProps> = ({
         <h2 className="card-title">{name}</h2>
         <p className="text-sm text-gray-600">{location}</p>
         <div className="flex justify-between items-center mt-2">
-          <span className="text-sm font-medium">Schwierigkeit: {difficulty}</span>
+          <span className="text-xs font-medium">Schwierigkeit: {difficulty}</span>
           <Rating value={rating} />
         </div>
       </div>

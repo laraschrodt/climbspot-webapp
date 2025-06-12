@@ -69,7 +69,7 @@ const Favorites: React.FC = () => {
           <Link
             to={`/details/${spot.ort_id}`}
             key={spot.ort_id}
-            className="block"
+            className="block max-w-xl mx-auto"
           >
             <LocationCard
               name={spot.name}

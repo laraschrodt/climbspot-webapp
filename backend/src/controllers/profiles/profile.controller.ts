@@ -132,6 +132,28 @@ class ProfileController {
       res.status(500).json({ error: "Serverfehler beim Laden der Favoriten" });
     }
   }
+  
+  async getReviews(req: AuthedRequest, res: Response): Promise<void> {
+    const userId =
+      req.user && typeof req.user === "object" && "userId" in req.user
+        ? (req.user as { userId: string }).userId
+        : undefined;
+
+    if (!userId) {
+      res.status(401).json({ error: "Kein gültiger Token." });
+      return;
+    }
+
+    try {
+      const reviews = await ProfileService.getReviewsByUserId(userId);
+      res.json(reviews);
+    } catch (error) {
+      console.error("Fehler beim Laden der Bewertungen:", error);
+      res
+        .status(500)
+        .json({ error: "Serverfehler beim Laden der Bewertungen" });
+    }
+  }
 }
 
 export default new ProfileController();

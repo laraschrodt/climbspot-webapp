@@ -1,6 +1,6 @@
 import React from "react";
 import Favorites from "./Favorites";
-import Review from "./Ratings";
+import Review from "./Reviews";
 
 interface Review {
   location: string;
