@@ -3,10 +3,6 @@ import jwt from "jsonwebtoken";
 import { supabase } from "../../lib/supabase";
 import ErrorMessages from "../../utils/ErrorMessages";
 
-/**
- * Alle Methoden in dieser Klasse werden für Registrierung und Authentifizierung verwendet.
- */
-
 class AccountService {
   async authenticateUserCredentials(
     email: string,
@@ -23,9 +19,16 @@ class AccountService {
     const match = await bcrypt.compare(password, data.passwort_hash);
     if (!match) throw new Error(ErrorMessages.WRONG_PASSWORD);
 
-    return jwt.sign({ userId: data.benutzer_id }, process.env.JWT_SECRET!, {
-      expiresIn: "2h",
-    });
+    return jwt.sign(
+      {
+        userId: data.benutzer_id,
+        role: data.rolle,
+      },
+      process.env.JWT_SECRET!,
+      {
+        expiresIn: "2h",
+      }
+    );
   }
 
   async createUserAccount(

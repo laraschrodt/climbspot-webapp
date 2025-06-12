@@ -6,10 +6,10 @@ import { LoginApi } from "../../../api/LoginApi";
 const loginApi = new LoginApi();
 
 const Login: React.FC = () => {
-  const [email, setEmail]       = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading]   = useState(false);
-  const [error, setError]       = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const navigate = useNavigate();
   const { storeLoginData } = useUserSession();
@@ -20,11 +20,10 @@ const Login: React.FC = () => {
     setLoading(true);
 
     try {
-      const token = await loginApi.login(email, password);
-      storeLoginData(
-        { username: email.split("@")[0] },
-        token
-      );
+      const { token, username, role } = await loginApi.login(email, password);
+
+      storeLoginData({ username, role }, token);
+
       navigate("/");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unbekannter Fehler");
@@ -35,17 +34,21 @@ const Login: React.FC = () => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 min-h-screen">
+      {/* --- Formular & UI unverändert --- */}
       <div className="flex items-center justify-center bg-base-100 p-10">
         <div className="w-full max-w-md">
           <h1 className="text-xl font-bold mb-2">Willkommen bei Climbspot!</h1>
-          <p className="mb-6 !text-sm text-gray-600">
+          <p className="mb-6 text-sm text-gray-600">
             Geben Sie Ihre Anmeldedaten ein, um auf Ihr Konto zuzugreifen
           </p>
 
           <form onSubmit={handleSubmit} className="flex flex-col space-y-5">
             {/* E-Mail */}
             <div className="flex flex-col">
-              <label htmlFor="email" className="mb-1 text-sm font-medium text-gray-700">
+              <label
+                htmlFor="email"
+                className="mb-1 text-sm font-medium text-gray-700"
+              >
                 E-Mail Adresse
               </label>
               <input
@@ -55,13 +58,16 @@ const Login: React.FC = () => {
                 required
                 placeholder="E-Mail Adresse eingeben"
                 className="p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-600"
-                onChange={e => setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
 
             {/* Passwort */}
             <div className="flex flex-col">
-              <label htmlFor="password" className="mb-1 text-sm font-medium text-gray-700">
+              <label
+                htmlFor="password"
+                className="mb-1 text-sm font-medium text-gray-700"
+              >
                 Passwort
               </label>
               <input
@@ -71,14 +77,12 @@ const Login: React.FC = () => {
                 required
                 placeholder="Passwort eingeben"
                 className="p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-600"
-                onChange={e => setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
 
-            {/* Fehleranzeige */}
             {error && <p className="text-red-600 text-sm -mt-2">{error}</p>}
 
-            {/* Submit */}
             <button
               type="submit"
               disabled={loading}
@@ -87,14 +91,12 @@ const Login: React.FC = () => {
               {loading ? "Login …" : "Login"}
             </button>
 
-            {/* Trennlinie */}
             <div className="flex items-center justify-center text-gray-400 text-sm">
               <hr className="w-full border-gray-200" />
               <span className="px-3">oder</span>
               <hr className="w-full border-gray-200" />
             </div>
 
-            {/* Link Registrieren */}
             <p className="text-sm text-center text-gray-700 mt-6">
               Haben Sie noch kein Konto?{" "}
               <Link to="/register" className="text-green-500 hover:underline">
@@ -105,7 +107,6 @@ const Login: React.FC = () => {
         </div>
       </div>
 
-      {/* Bild rechts */}
       <div className="hidden md:block">
         <img
           src="https://www.valgardena.it/fileadmin/_processed_/0/2/csm_klettern-groeden-21_f0fec0d9df.jpg"

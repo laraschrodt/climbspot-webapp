@@ -1,8 +1,7 @@
 import React, { createContext, useState, useEffect } from "react";
 import { UserSessionStorage } from "./UserSessionStorage";
 
-
-type User = { username: string } | null;
+type User = { username: string; role: string } | null;
 
 interface UserSessionType {
   user: User;
@@ -12,7 +11,9 @@ interface UserSessionType {
 
 export const UserSessionContext = createContext<UserSessionType>(null as never);
 
-export const UserSessionProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const UserSessionProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [user, setUser] = useState<User>(null);
 
   useEffect(() => {
@@ -22,7 +23,11 @@ export const UserSessionProvider: React.FC<{ children: React.ReactNode }> = ({ c
 
   const storeLoginData = (user: User, token: string) => {
     if (!user) return;
-    UserSessionStorage.saveUsernameAndTokenInStorage(token, user.username);
+    UserSessionStorage.saveUsernameAndTokenInStorage(
+      token,
+      user.username,
+      user.role
+    );
     setUser(user);
   };
 
