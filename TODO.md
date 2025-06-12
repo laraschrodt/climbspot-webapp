@@ -12,17 +12,37 @@
 - in Kontext zum Rest unserer Architektur stellen, sodass man das Zusammenspiel der Komponenten versteht
 - also nicht übertreiben
 
-### Unit-Tests:
+---
 
-- [ ] `Lara`: <br> - [ ] Neue Page um Location hinzuzufügen <br> - [x] Komm in die Community Button verlinken <br> - [ ] Admin Funktionen und Rollen einbauen (-> Gastrechte beschränken) <br> - [ ] jest config
-- [ ] `Kimia`: Größe von Location Cards im Profil anpassen
-- [ ] `Nelly`: Gucken dass man von jeder Page aus zu Favoriten hinzufügen/entfernen kann ()
-- [ ] `Nelly`: Berwertungen schreiben (Sterne-Rating und kurzer Text) und anzeigen auf LocationDetails - Bei jeder LocationDetail Seite gibt es über den Bewertungen einen Bereich indem man selbst ein
-      Sterne-Rating abgeben kann und einen kurzen Bewertungstext schreiben kann - die eigene Bewertung ist persistiert und änderbar (so ähnlich wie das Ändern von Infos im Formular vielleicht)
-- [ ] `Alex`: Interaktive Karte und gucken dass der Filter funktioniert bei der Karte
-- [ ] `Kimia`: Benachrichtigungen bei neuer Location
+### Zu erledigen vor den Tests:
+
+`Lara`:
+
+- [x] Neue Page um Location hinzuzufügen
+- [x] Komm in die Community Button verlinken
+- [ ] Im Profil eine Seite machen in der man die Locations sieht, die man selbst hinzugefügt hat
+- [ ] Admin Funktionen und Rollen einbauen (-> Gastrechte beschränken)
+- [ ] jest config
+
+`Kimia`:
+
+- [ ] Größe von Location Cards im Profil anpassen
+- [ ] Benachrichtigungen bei neuer Location
+
+`Nelly`:
+
+- [ ] Gucken dass man von jeder Page aus zu Favoriten hinzufügen/entfernen kann ()
+- [ ] Berwertungen schreiben (Sterne-Rating und kurzer Text) und anzeigen auf LocationDetails
+  - Bei jeder LocationDetail Seite gibt es über den Bewertungen einen Bereich indem man selbst ein
+    Sterne-Rating abgeben kann und einen kurzen Bewertungstext schreiben kann - die eigene Bewertung ist persistiert und änderbar (so ähnlich wie das Ändern von Infos im Formular vielleicht)
+
+`Alex`:
+
+- [ ] Interaktive Karte und gucken dass der Filter funktioniert bei der Karte
 
 ---
+
+### Unit-Tests:
 
 - [ ] Regestrierung (`Kimia`)
 - [ ] Anmeldung (`Nelly`)

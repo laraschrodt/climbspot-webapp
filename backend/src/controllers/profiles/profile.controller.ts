@@ -1,7 +1,7 @@
 import { Response, Request } from "express";
-import { AuthedRequest } from "../middlewares/auth.middleware";
-import ProfileService from "../services/profile.service";
-import AccountService from "../services/account.service";
+import { AuthedRequest } from "../../middlewares/auth.middleware";
+import ProfileService from "../../services/profiles/profile.service";
+import AccountService from "../../services/accounts/account.service";
 
 /**
  * Alle Methoden in dieser Datei werden in der /profile Route verwendet.
@@ -32,7 +32,14 @@ class ProfileController {
       const userId = (req.user as { userId: string })?.userId;
       const { vorname, nachname, email, username, location } = req.body;
 
-      if (!userId || !vorname || !nachname || !email || !username || !location) {
+      if (
+        !userId ||
+        !vorname ||
+        !nachname ||
+        !email ||
+        !username ||
+        !location
+      ) {
         res.status(400).json({ error: "All fields are required" });
         return;
       }
@@ -61,7 +68,10 @@ class ProfileController {
         return;
       }
 
-      const imageUrl = await ProfileService.uploadProfileImageToDatabase(userId, req.file);
+      const imageUrl = await ProfileService.uploadProfileImageToDatabase(
+        userId,
+        req.file
+      );
       res.json({ url: imageUrl });
     } catch (error) {
       console.error("Upload-Fehler:", error);
@@ -71,8 +81,16 @@ class ProfileController {
 
   async getNotifications(req: Request, res: Response): Promise<void> {
     const mockData = [
-      { id: 1, message: "Du hast eine neue Nachricht", date: new Date().toISOString() },
-      { id: 2, message: "Profil erfolgreich aktualisiert", date: new Date().toISOString() },
+      {
+        id: 1,
+        message: "Du hast eine neue Nachricht",
+        date: new Date().toISOString(),
+      },
+      {
+        id: 2,
+        message: "Profil erfolgreich aktualisiert",
+        date: new Date().toISOString(),
+      },
     ];
 
     res.json(mockData);
@@ -88,7 +106,11 @@ class ProfileController {
         return;
       }
 
-      await AccountService.changePasswordInDatabase(userId, oldPassword, newPassword);
+      await AccountService.changePasswordInDatabase(
+        userId,
+        oldPassword,
+        newPassword
+      );
       res.json({ message: "Password updated successfully" });
     } catch (err) {
       console.error("Password update error:", err);
@@ -107,9 +129,7 @@ class ProfileController {
       res.json(favorites);
     } catch (err) {
       console.error("Fehler in getFavorites:", err);
-      res
-        .status(500)
-        .json({ error: "Serverfehler beim Laden der Favoriten" });
+      res.status(500).json({ error: "Serverfehler beim Laden der Favoriten" });
     }
   }
 }

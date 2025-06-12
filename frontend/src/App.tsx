@@ -20,6 +20,14 @@ export default function App() {
       <Route path="/map" element={<LocationMap />} />
       <Route path="/details/:locationId" element={<LocationDetailsPage />} />
       <Route path="/add-location" element={<AddLocationPage />} />
+      <Route
+        path="*"
+        element={
+          <div>
+            <h1>Error 404: Diese Seite gibt es nicht</h1>
+          </div>
+        }
+      />
     </Routes>
   );
 }

@@ -1,15 +1,19 @@
 import React from "react";
 import { Camera } from "react-feather";
+import placeholderLocation from "../../assets/images/placeholder-location.png";
 
 interface LocationPictureProps {
   imageUrl: string;
   onImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const LocationPicture: React.FC<LocationPictureProps> = ({ imageUrl, onImageChange }) => (
+const LocationPicture: React.FC<LocationPictureProps> = ({
+  imageUrl,
+  onImageChange,
+}) => (
   <div className="relative w-48 h-48">
     <img
-      src={imageUrl || "/placeholder-location.jpg"}
+      src={imageUrl || placeholderLocation}
       alt="Location"
       className="w-48 h-48 rounded-lg border-2 border-gray-300 object-cover"
     />

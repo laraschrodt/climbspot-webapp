@@ -3,6 +3,7 @@ import AddLocationController from "../controllers/locations/add.location.control
 import LocationController from "../controllers/locations/location.controller";
 import AuthMiddleware from "../middlewares/auth.middleware";
 import uploadMiddleware from "../middlewares/upload.middlewear";
+import FavoritesLocationController from "../controllers/locations/favorites.location.controller";
 
 const router = Router();
 
@@ -26,12 +27,12 @@ router.get(
 router.post(
   "/favorite/:locationId",
   AuthMiddleware.verifyToken,
-  LocationController.addFavorite
+  FavoritesLocationController.addFavorite
 );
 router.delete(
   "/favorite/:locationId",
   AuthMiddleware.verifyToken,
-  LocationController.removeFavorite
+  FavoritesLocationController.removeFavorite
 );
 
 router.post(

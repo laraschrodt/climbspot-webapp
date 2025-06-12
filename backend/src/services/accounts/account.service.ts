@@ -1,14 +1,17 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { supabase } from "../lib/supabase";
-import ErrorMessages from "../utils/ErrorMessages";
+import { supabase } from "../../lib/supabase";
+import ErrorMessages from "../../utils/ErrorMessages";
 
 /**
  * Alle Methoden in dieser Klasse werden für Registrierung und Authentifizierung verwendet.
  */
 
 class AccountService {
-  async authenticateUserCredentials(email: string, password: string): Promise<string> {
+  async authenticateUserCredentials(
+    email: string,
+    password: string
+  ): Promise<string> {
     const { data, error } = await supabase
       .from("benutzer")
       .select("*")
@@ -20,14 +23,16 @@ class AccountService {
     const match = await bcrypt.compare(password, data.passwort_hash);
     if (!match) throw new Error(ErrorMessages.WRONG_PASSWORD);
 
-    return jwt.sign(
-      { userId: data.benutzer_id },
-      process.env.JWT_SECRET!,
-      { expiresIn: "2h" }
-    );
+    return jwt.sign({ userId: data.benutzer_id }, process.env.JWT_SECRET!, {
+      expiresIn: "2h",
+    });
   }
 
-  async createUserAccount(email: string, password: string, benutzername: string): Promise<{ benutzer_id: string; email: string; benutzername: string }> {
+  async createUserAccount(
+    email: string,
+    password: string,
+    benutzername: string
+  ): Promise<{ benutzer_id: string; email: string; benutzername: string }> {
     const hashed = await bcrypt.hash(password, 10);
 
     const { count } = await supabase
@@ -42,7 +47,7 @@ class AccountService {
       .insert({
         email,
         passwort_hash: hashed,
-        benutzername
+        benutzername,
       })
       .select()
       .single();
