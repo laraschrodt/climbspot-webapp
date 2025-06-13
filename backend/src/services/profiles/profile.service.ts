@@ -157,38 +157,6 @@ class ProfileService {
     }
     return data || [];
   }
-  
-  async getNotifications(): Promise<OrtNotification[]> {
-    const { data, error } = await supabase
-      .from("orte")
-      .select("ort_id, name, region, land, picture_url")
-      .order("ort_id", { ascending: false })
-      .limit(10);
-  
-    if (error) {
-      console.error("Fehler beim Laden der Benachrichtigungen:", error);
-      throw new Error("Fehler beim Laden der Benachrichtigungen");
-    }
-  
-    // Definiere das aktuelle Datum EINMAL außerhalb der map-Callback!
-    const today = new Date().toLocaleDateString("de-DE"); // z.B. "13.06.2025"
-  
-    type OrtRow = {
-      ort_id: string;
-      name: string;
-      region: string;
-      land: string;
-      picture_url: string;
-    };
-
-    return (data ?? []).map((o: OrtRow) => ({
-      id: o.ort_id,
-      name: o.name,
-      picture_url: o.picture_url,
-      message: `Neuer Ort: ${o.name} (${o.region}, ${o.land})`,
-      date: today,
-    }));
-   }
-  } 
+} 
 
 export default new ProfileService();

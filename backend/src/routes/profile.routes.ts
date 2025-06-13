@@ -21,11 +21,7 @@ router.put(
   AuthMiddleware.verifyToken,
   profileController.changePassword
 );
-router.get(
-  "/notifications",
-  AuthMiddleware.verifyToken,
-  profileController.getNotifications
-);
+
 router.get(
   "/favorites",
   AuthMiddleware.verifyToken,
@@ -36,12 +32,6 @@ router.get(
   "/reviews",
   AuthMiddleware.verifyToken,
   profileController.getReviews
-)
-
-router.get(
-  "/notifications",
-  AuthMiddleware.verifyToken,
-  profileController.getNotifications
 );
 
 const upload = multer({ storage: multer.memoryStorage() });

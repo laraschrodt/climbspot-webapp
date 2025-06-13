@@ -1,4 +1,4 @@
-import { Response, Request } from "express";
+import { Response} from "express";
 import { AuthedRequest } from "../../middlewares/auth.middleware";
 import ProfileService from "../../services/profiles/profile.service";
 import AccountService from "../../services/accounts/account.service";
@@ -76,16 +76,6 @@ class ProfileController {
     } catch (error) {
       console.error("Upload-Fehler:", error);
       res.status(500).json({ error: "Upload fehlgeschlagen" });
-    }
-  }
-
-  async getNotifications(req: Request, res: Response): Promise<void> {
-    try {
-      const notifications = await ProfileService.getNotifications();
-      res.json(notifications);
-    } catch (e) {
-      console.error("Unbekannter Fehler bei getNotifications:", e);
-      res.status(500).json({ error: "Serverfehler beim Laden der Benachrichtigungen" });
     }
   }
 
