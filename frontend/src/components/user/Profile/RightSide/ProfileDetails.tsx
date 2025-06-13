@@ -18,6 +18,7 @@ const ProfileDetails: React.FC<Props> = ({ favorites, reviews }) => {
     <div className="space-y-8">
       <Favorites favorites={favorites} />
       <Review reviews={reviews} />
+      <MyLocations />
     </div>
   );
 };

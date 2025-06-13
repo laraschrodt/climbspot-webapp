@@ -1,8 +1,7 @@
 import React, { createContext, useState, useEffect } from "react";
 import { UserSessionStorage } from "./UserSessionStorage";
 
-
-type User = { username: string } | null;
+type User = { username: string; role: string } | null;
 
 interface UserSessionType {
   user: User;
@@ -12,18 +11,24 @@ interface UserSessionType {
 
 export const UserSessionContext = createContext<UserSessionType>(null as never);
 
-export const UserSessionProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User>(null);
+export const UserSessionProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
+  const [user, setUser] = useState<User>(() =>
+    UserSessionStorage.loadUsernameAndTokenFromStorage()
+  );
 
   useEffect(() => {
-    const storedUser = UserSessionStorage.loadUsernameAndTokenFromStorage();
-    if (storedUser) setUser(storedUser);
+    const handle = () =>
+      setUser(UserSessionStorage.loadUsernameAndTokenFromStorage());
+    window.addEventListener("storage", handle);
+    return () => window.removeEventListener("storage", handle);
   }, []);
 
-  const storeLoginData = (user: User, token: string) => {
-    if (!user) return;
-    UserSessionStorage.saveUsernameAndTokenInStorage(token, user.username);
-    setUser(user);
+  const storeLoginData = (u: User, token: string) => {
+    if (!u) return;
+    UserSessionStorage.saveUsernameAndTokenInStorage(token, u.username, u.role);
+    setUser(u);
   };
 
   const clearSession = () => {

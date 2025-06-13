@@ -1,24 +1,30 @@
-// src/api/LoginApi.ts
+/**
+ * Ruft den Login-Endpoint auf und liefert
+ * { token, username, role } zurück.
+ */
 export interface LoginResponse {
   token: string;
+  username: string;
+  role: string;
+  message?: string;
 }
 
 export class LoginApi {
   private readonly baseUrl = "http://localhost:3001/api";
 
-  async login(email: string, password: string): Promise<string> {
+  async login(email: string, password: string): Promise<LoginResponse> {
     const res = await fetch(`${this.baseUrl}/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password })
+      body: JSON.stringify({ email, password }),
     });
 
-    const data = (await res.json()) as LoginResponse & { message?: string };
+    const data: LoginResponse = await res.json();
 
     if (!res.ok) {
-      throw new Error(data.message || "Login fehlgeschlagen");
+      throw new Error(data.message ?? "Login fehlgeschlagen");
     }
 
-    return data.token;
+    return data;
   }
 }

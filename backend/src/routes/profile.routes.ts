@@ -1,7 +1,8 @@
 import { Router } from "express";
 import AuthMiddleware from "../middlewares/auth.middleware";
-import profileController from "../controllers/profiles/profile.controller";
 import multer from "multer";
+import MyLocationsProfileController from "../controllers/profiles/my.locations.profile.controller";
+import profileController from "../controllers/profiles/profile.controller";
 
 /**
  * Alle Methoden in dieser Datei werden in der /profile Route verwendet.
@@ -44,6 +45,12 @@ router.post(
   AuthMiddleware.verifyToken,
   upload.single("file"),
   profileController.uploadProfileImage
+);
+
+router.get(
+  "/get-my-locations",
+  AuthMiddleware.verifyToken,
+  MyLocationsProfileController.getMyLocations
 );
 
 export default router;

@@ -24,12 +24,14 @@ export async function addLocation(request: Request): Promise<string> {
       contentType: file.mimetype,
       upsert: true,
     });
+
   if (storageError) throw new Error(storageError.message);
 
   const { data: urlData } = supabase.storage
     .from("location-pictures")
     .getPublicUrl(storageName);
 
+  /* ---------- 3. Location-Datensatz aufbauen ---------- */
   const locationId = request.body.ort_id || randomUUID();
 
   const record = {
@@ -60,7 +62,17 @@ export async function addLocation(request: Request): Promise<string> {
   };
 
   try {
-    await supabase.from("orte").insert(record);
+    const { error: insertOrtErr } = await supabase.from("orte").insert(record);
+    if (insertOrtErr) throw insertOrtErr;
+
+    const userId = (request as any).user?.userId as string | undefined;
+    if (!userId) throw new Error("Missing userId in request context");
+
+    const { error: insertLinkErr } = await supabase
+      .from("my-locations")
+      .insert({ benutzer_id: userId, ort_id: locationId });
+
+    if (insertLinkErr) throw insertLinkErr;
   } catch (err) {
     logSupabaseError("addLocation", err as PostgrestError);
     throw err;

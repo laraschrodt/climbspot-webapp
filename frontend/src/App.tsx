@@ -8,6 +8,8 @@ import LocationMap from "./pages/LocationMap";
 import ProfilePage from "./pages/ProfilePage";
 import LocationDetailsPage from "./pages/LocationDetailsPage";
 import AddLocationPage from "./pages/AddLocationPage";
+import ProtectedRoute from "./routes/ProtectedRoute";
+import UnauthorizedPage from "./pages/UnauthorizedPage";
 
 export default function App() {
   return (
@@ -15,19 +17,25 @@ export default function App() {
       <Route path="/" element={<HomePage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
-      <Route path="/profile" element={<ProfilePage />} />
+
+      <Route
+        path="/profile"
+        element={<ProtectedRoute roles={["user"]} element={<ProfilePage />} />}
+      />
+
+      <Route
+        path="/add-location"
+        element={
+          <ProtectedRoute roles={["user"]} element={<AddLocationPage />} />
+        }
+      />
+
       <Route path="/locations" element={<LocationList />} />
       <Route path="/map" element={<LocationMap />} />
       <Route path="/details/:locationId" element={<LocationDetailsPage />} />
-      <Route path="/add-location" element={<AddLocationPage />} />
-      <Route
-        path="*"
-        element={
-          <div>
-            <h1>Error 404: Diese Seite gibt es nicht</h1>
-          </div>
-        }
-      />
+
+      <Route path="/unauthorized" element={<UnauthorizedPage />} />
+      <Route path="*" element={<h1>Error 404: Diese Seite gibt es nicht</h1>} />
     </Routes>
   );
 }

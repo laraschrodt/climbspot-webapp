@@ -1,10 +1,8 @@
 import { Request, Response } from "express";
+import jwt from "jsonwebtoken";
 import AccountService from "../../services/accounts/account.service";
 import ErrorMessages from "../../utils/ErrorMessages";
-
-/**
- * Alle Methoden in dieser Datei werden in der Registrierung und Authentifizierung verwendet.
- */
+import { supabase } from "../../lib/supabase";
 
 class AccountController {
   async loginUser(req: Request, res: Response): Promise<void> {
@@ -15,7 +13,23 @@ class AccountController {
         email,
         password
       );
-      res.status(200).json({ token });
+
+      const decoded: any = jwt.decode(token);
+      const { userId, role } = decoded;
+
+      const { data: userData, error } = await supabase
+        .from("benutzer")
+        .select("benutzername")
+        .eq("benutzer_id", userId)
+        .single();
+
+      if (error || !userData) {
+        throw new Error("Benutzername konnte nicht geladen werden");
+      }
+
+      const username = userData.benutzername;
+
+      res.status(200).json({ token, username, role });
     } catch (err) {
       const msg = err instanceof Error ? err.message : ErrorMessages.UNKNOWN;
       res.status(401).json({ message: msg });
