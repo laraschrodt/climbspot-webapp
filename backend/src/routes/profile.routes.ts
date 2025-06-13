@@ -38,6 +38,12 @@ router.get(
   profileController.getReviews
 )
 
+router.get(
+  "/notifications",
+  AuthMiddleware.verifyToken,
+  profileController.getNotifications
+);
+
 const upload = multer({ storage: multer.memoryStorage() });
 router.post(
   "/upload-profile-pic",

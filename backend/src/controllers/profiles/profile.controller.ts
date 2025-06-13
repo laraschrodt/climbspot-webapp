@@ -80,20 +80,13 @@ class ProfileController {
   }
 
   async getNotifications(req: Request, res: Response): Promise<void> {
-    const mockData = [
-      {
-        id: 1,
-        message: "Du hast eine neue Nachricht",
-        date: new Date().toISOString(),
-      },
-      {
-        id: 2,
-        message: "Profil erfolgreich aktualisiert",
-        date: new Date().toISOString(),
-      },
-    ];
-
-    res.json(mockData);
+    try {
+      const notifications = await ProfileService.getNotifications();
+      res.json(notifications);
+    } catch (e) {
+      console.error("Unbekannter Fehler bei getNotifications:", e);
+      res.status(500).json({ error: "Serverfehler beim Laden der Benachrichtigungen" });
+    }
   }
 
   async changePassword(req: AuthedRequest, res: Response): Promise<void> {
