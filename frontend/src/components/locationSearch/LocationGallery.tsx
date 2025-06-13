@@ -27,7 +27,8 @@ const LocationGallery: React.FC<LocationGalleryProps> = ({ locations }) => {
             <LocationCard
               name={spot.name}
               location={`${spot.region}, ${spot.land}`}
-              difficulty={spot.schwierigkeit.toString()}
+              difficulty={(spot.schwierigkeit ?? 0).toString()}
+              // FIXME: Sternebewertungen klappen nicht
               rating={calculateAverageRating(spot.rating)}
               imageUrl={spot.picture_url ?? ""}
             />
