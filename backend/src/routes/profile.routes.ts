@@ -1,5 +1,3 @@
-// src/routes/profile.routes.ts
-
 import { Router } from "express";
 import AuthMiddleware from "../middlewares/auth.middleware";
 import multer from "multer";

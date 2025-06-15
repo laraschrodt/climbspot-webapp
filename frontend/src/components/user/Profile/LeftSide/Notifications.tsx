@@ -3,7 +3,6 @@ import { Bell } from "react-feather";
 import io from "socket.io-client";
 import axios from "axios";
 
-// Typ für die Notification
 interface Notification {
   erstellt_am: string;
   message: string | undefined;
@@ -95,14 +94,14 @@ const Notifications: React.FC = () => {
                     src={n.picture_url || "/placeholder.png"}
                     alt="Ort"
                     className="w-12 h-12 object-cover rounded-full border flex-shrink-0"
-                    style={{ aspectRatio: "1/1" }} // 1:1 Kreis bleibt garantiert
+                    style={{ aspectRatio: "1/1" }}
                   />
                   <div className="flex-1 min-w-0">
-                    {/* GANZE NACHRICHT */}
+                   
                     <div className="font-semibold text-xs break-words mb-1">
                       {n.message || n.name || "Neuer Ort"}
                     </div>
-                    {/* DATUM, hübsch gekürzt */}
+                 
                     <div className="text-xs text-gray-400">
                       {(n.date || n.erstellt_am || "").slice(0, 16).replace("T", " ")}
                     </div>

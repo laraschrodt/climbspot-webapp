@@ -12,7 +12,7 @@ function logSupabaseError(scope: string, err: PostgrestError) {
 }
 
 export async function addLocation(request: Request): Promise<{
-  ort_id: string; // <-- Damit du überall denselben Namen hast!
+  ort_id: string;
   name: string;
   region: string;
   land: string;
@@ -26,14 +26,13 @@ export async function addLocation(request: Request): Promise<{
     erstellt_am: string;
   };
 }> {
-  // Bild auslesen
+
   const file = request.file;
   if (!file) throw new Error("Image file missing");
 
   const extension = file.mimetype.split("/")[1];
   const storageName = `locations/${randomUUID()}.${extension}`;
 
-  // 1. Bild speichern in Supabase-Storage
   const { error: storageError } = await supabase.storage
     .from("location-pictures")
     .upload(storageName, file.buffer, {
@@ -42,12 +41,11 @@ export async function addLocation(request: Request): Promise<{
     });
   if (storageError) throw new Error(storageError.message);
 
-  // 2. Public-URL holen
+
   const { data: urlData } = supabase.storage
     .from("location-pictures")
     .getPublicUrl(storageName);
 
-  // 3. Ort-Datensatz vorbereiten
   const ort_id = request.body.ort_id || randomUUID();
   const record = {
     ort_id,
@@ -77,11 +75,10 @@ export async function addLocation(request: Request): Promise<{
   };
 
   try {
-    // 4. Ort speichern
+
     const { error: insertOrtErr } = await supabase.from("orte").insert(record);
     if (insertOrtErr) throw insertOrtErr;
 
-    // 5. Link zum User speichern
     const userId = (request as any).user?.userId as string | undefined;
     if (!userId) throw new Error("Missing userId in request context");
 
@@ -90,7 +87,6 @@ export async function addLocation(request: Request): Promise<{
       .insert({ benutzer_id: userId, ort_id });
     if (insertLinkErr) throw insertLinkErr;
 
-    // 6. Notification anlegen
     const notificationId = randomUUID();
     const notification = {
       id: notificationId,
@@ -105,7 +101,6 @@ export async function addLocation(request: Request): Promise<{
       .insert(notification);
     if (notifErr) throw notifErr;
 
-    // 7. Rückgabe
     return {
       ort_id,
       name: record.name,
