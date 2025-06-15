@@ -8,12 +8,13 @@ import DeleteLocationController from "../controllers/locations/delete.location.c
 
 const router = Router();
 
+
 router.get("/all", LocationController.getAllLocations);
 router.get("/popular", LocationController.getPopularLocations);
-
 router.get("/search", LocationController.searchLocations);
 
 router.get("/details/:locationId", LocationController.getLocationById);
+
 
 router.get(
   "/favorites",
@@ -30,7 +31,7 @@ router.post(
   "/favorite/:locationId",
   AuthMiddleware.verifyToken,
   FavoritesLocationController.addFavorite
-);
+); 
 router.delete(
   "/favorite/:locationId",
   AuthMiddleware.verifyToken,

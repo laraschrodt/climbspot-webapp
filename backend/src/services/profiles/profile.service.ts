@@ -1,3 +1,5 @@
+// src/services/profiles/profile.service.ts
+
 import { supabase } from "../../lib/supabase";
 import { randomUUID } from "crypto";
 import { Location } from "../../types/Location";
@@ -8,6 +10,16 @@ interface Bewertung {
 
 interface RawFavoriteRow {
   o: Location & { bewertungen?: Bewertung[] };
+}
+
+// Notification-Typ für Rückgabe
+export interface NotificationRow {
+  id: string;
+  ort_id: string;
+  title: string;
+  message: string;
+  picture_url: string;
+  erstellt_am: string;
 }
 
 /**
@@ -149,6 +161,23 @@ class ProfileService {
       throw new Error("Bewertungen konnten nicht geladen werden");
     }
     return data || [];
+  }
+
+  // === NEU: Notifications aus Datenbank holen ===
+  async getNotifications(): Promise<NotificationRow[]> {
+    const { data, error } = await supabase
+      .from("notifications")
+      .select("*")
+      .order("erstellt_am", { ascending: false })
+      .limit(20); // z.B. die 20 neuesten
+
+    if (error) {
+      console.error("Supabase-Fehler beim Laden der Notifications:", error);
+      throw new Error("Notifications konnten nicht geladen werden");
+    }
+
+    // Falls deine Notifications nullable Felder haben, passe hier an!
+    return (data ?? []) as NotificationRow[];
   }
 }
 
