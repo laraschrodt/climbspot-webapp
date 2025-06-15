@@ -130,6 +130,21 @@ export class LocationsService {
 
     return data;
   }
+
+  async updateLocationInDB(
+    locationId: string,
+    data: Partial<Location>
+  ): Promise<Location> {
+    const { data: updated, error } = await supabase
+      .from("orte")
+      .update(data)
+      .eq("ort_id", locationId)
+      .select("*")
+      .single<Location>();
+
+    if (error) throw error;
+    return updated;
+  }
 }
 
 export default new LocationsService();

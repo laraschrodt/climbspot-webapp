@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Reviews from "./LeftSide/Reviews";
 import LocationInfo from "./RightSide/LocationInfo";
 import { Location } from "../../models/Location";
 import { useUserSession } from "../../auth/UseUserSession";
+import ProtectedComponent from "../../routes/ProtectedComponent";
 
 const LocationDetails: React.FC = () => {
   const { user } = useUserSession();
@@ -80,6 +81,17 @@ const LocationDetails: React.FC = () => {
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-6 px-4 py-8">
         {/* Spalte 1 - LeftSide: Reviews und Buttons */}
         <div className="w-full md:w-1/3 space-y-6">
+          {isOwner && (
+            <ProtectedComponent roles={["user"]}>
+              <Link
+                to={`/edit-location/${locationId}`}
+                className="btn btn-secondary mr-4"
+              >
+                Bearbeiten
+              </Link>
+            </ProtectedComponent>
+          )}
+
           <div>
             {/* Reviews */}
             <Reviews />

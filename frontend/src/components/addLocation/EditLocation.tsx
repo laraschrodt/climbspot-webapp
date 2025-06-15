@@ -1,14 +1,13 @@
-import React, { useState, ChangeEvent, FormEvent } from "react";
-import { useNavigate } from "react-router-dom";
-import { v4 as uuidv4 } from "uuid";
-import LocationPicture from "./LocationPicture";
+import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useUserSession } from "../../auth/UseUserSession";
 import type { Location } from "../../models/Location";
+import LocationPicture from "../addLocation/LocationPicture";
 
-const AddLocation: React.FC = () => {
+const EditLocation: React.FC = () => {
+  const { user } = useUserSession();
   const navigate = useNavigate();
-
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState("");
+  const { locationId } = useParams<{ locationId: string }>();
 
   const [form, setForm] = useState<Partial<Location>>({
     name: "",
@@ -27,34 +26,43 @@ const AddLocation: React.FC = () => {
     kletterzeit: "00:00:00",
     kletterart: "klettern",
     kinderfreundlich: true,
+    picture_url: "",
   });
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!locationId || !user) return;
+    setLoading(true);
+    fetch(`/api/locations/details/${locationId}`, {
+      headers: { "x-user-id": user.userId },
+    })
+      .then((r) => {
+        if (!r.ok) throw new Error();
+        return r.json();
+      })
+      .then((data: Location) => {
+        setForm(data);
+        setPreviewUrl(data.picture_url ?? "");
+      })
+      .catch(() => alert("Standort konnte nicht geladen werden"))
+      .finally(() => setLoading(false));
+  }, [locationId, user]);
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
-    const target = e.target as
-      | HTMLInputElement
-      | HTMLTextAreaElement
-      | HTMLSelectElement;
-    const { name } = target;
-
-    if (
-      target instanceof HTMLInputElement &&
-      (target.type === "checkbox" || target.type === "radio")
-    ) {
-      setForm((prev) => ({ ...prev, [name]: target.checked }));
-      return;
-    }
-
-    if (
-      target instanceof HTMLInputElement &&
-      (target.type === "number" || target.type === "range")
-    ) {
-      setForm((prev) => ({ ...prev, [name]: Number(target.value) }));
-      return;
-    }
-
-    setForm((prev) => ({ ...prev, [name]: target.value }));
+    const { name, value, type, checked } = e.target as HTMLInputElement;
+    setForm((prev) => ({
+      ...prev,
+      [name]:
+        type === "radio" || type === "checkbox"
+          ? checked
+          : type === "number"
+          ? Number(value)
+          : value,
+    }));
   };
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -65,31 +73,32 @@ const AddLocation: React.FC = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const ort_id = uuidv4();
+    if (!locationId) return;
+
     const fd = new FormData();
+    fd.append("ort_id", locationId);
+    Object.entries(form).forEach(
+      ([k, v]) => v != null && fd.append(k, String(v))
+    );
     if (imageFile) fd.append("image", imageFile);
-    fd.append("ort_id", ort_id);
-    Object.entries(form).forEach(([k, v]) => fd.append(k, String(v)));
 
     const token = localStorage.getItem("token") ?? "";
-    const res = await fetch("/api/locations/add-location", {
-      method: "POST",
+    const res = await fetch(`/api/locations/edit-location/${locationId}`, {
+      method: "PUT",
       headers: { Authorization: `Bearer ${token}` },
       body: fd,
     });
 
-    if (res.ok) {
-      const { id } = await res.json();
-      navigate(`/details/${id}`);
-    } else {
-      alert("Fehler beim Speichern der Location");
-    }
+    if (res.ok) navigate(`/details/${locationId}`);
+    else alert("Fehler beim Speichern der Location");
   };
+
+  if (loading) return <div>Lädt…</div>;
 
   return (
     <section className="max-w-4xl mx-auto p-6">
       <h1 className="mb-8 mt-8 text-2xl font-bold">
-        Füge eine neue Location hinzu:
+        Bearbeite deine Location:
       </h1>
 
       <div className="flex justify-center mb-8">
@@ -107,7 +116,7 @@ const AddLocation: React.FC = () => {
           Name
           <input
             name="name"
-            value={form.name}
+            value={form.name || ""}
             onChange={handleChange}
             className="input input-bordered w-full"
             required
@@ -117,7 +126,7 @@ const AddLocation: React.FC = () => {
           Region
           <input
             name="region"
-            value={form.region}
+            value={form.region || ""}
             onChange={handleChange}
             className="input input-bordered w-full"
             required
@@ -127,7 +136,7 @@ const AddLocation: React.FC = () => {
           Land
           <input
             name="land"
-            value={form.land}
+            value={form.land || ""}
             onChange={handleChange}
             className="input input-bordered w-full"
             required
@@ -153,7 +162,7 @@ const AddLocation: React.FC = () => {
             type="number"
             name="lat"
             step="any"
-            value={form.lat}
+            value={form.lat as number}
             onChange={handleChange}
             className="input input-bordered w-full"
             required
@@ -165,7 +174,7 @@ const AddLocation: React.FC = () => {
             type="number"
             name="long"
             step="any"
-            value={form.long}
+            value={form.long as number}
             onChange={handleChange}
             className="input input-bordered w-full"
             required
@@ -175,7 +184,7 @@ const AddLocation: React.FC = () => {
           Charakter
           <textarea
             name="charakter"
-            value={form.charakter}
+            value={form.charakter || ""}
             onChange={handleChange}
             className="textarea textarea-bordered w-full"
             required
@@ -185,7 +194,7 @@ const AddLocation: React.FC = () => {
           Gebirge
           <input
             name="gebirge"
-            value={form.gebirge}
+            value={form.gebirge || ""}
             onChange={handleChange}
             className="input input-bordered w-full"
             required
@@ -195,7 +204,7 @@ const AddLocation: React.FC = () => {
           Berg
           <input
             name="berg"
-            value={form.berg}
+            value={form.berg || ""}
             onChange={handleChange}
             className="input input-bordered w-full"
             required
@@ -206,7 +215,7 @@ const AddLocation: React.FC = () => {
           <input
             type="number"
             name="hoehe_einstieg_m"
-            value={form.hoehe_einstieg_m}
+            value={form.hoehe_einstieg_m as number}
             onChange={handleChange}
             className="input input-bordered w-full"
             required
@@ -216,7 +225,7 @@ const AddLocation: React.FC = () => {
           Talort
           <input
             name="talort"
-            value={form.talort}
+            value={form.talort || ""}
             onChange={handleChange}
             className="input input-bordered w-full"
             required
@@ -226,7 +235,7 @@ const AddLocation: React.FC = () => {
           Ausrüstung
           <input
             name="ausruestung"
-            value={form.ausruestung}
+            value={form.ausruestung || ""}
             onChange={handleChange}
             className="input input-bordered w-full"
             required
@@ -237,7 +246,7 @@ const AddLocation: React.FC = () => {
           <input
             type="number"
             name="kletterlaenge_m"
-            value={form.kletterlaenge_m}
+            value={form.kletterlaenge_m as number}
             onChange={handleChange}
             className="input input-bordered w-full"
             required
@@ -249,7 +258,7 @@ const AddLocation: React.FC = () => {
             type="time"
             step={1}
             name="kletterzeit"
-            value={form.kletterzeit}
+            value={form.kletterzeit || "00:00:00"}
             onChange={handleChange}
             className="input input-bordered w-full"
             required
@@ -259,7 +268,7 @@ const AddLocation: React.FC = () => {
           Kletterart
           <select
             name="kletterart"
-            value={form.kletterart}
+            value={form.kletterart || ""}
             onChange={handleChange}
             className="select select-bordered w-full"
             required
@@ -301,4 +310,4 @@ const AddLocation: React.FC = () => {
   );
 };
 
-export default AddLocation;
+export default EditLocation;

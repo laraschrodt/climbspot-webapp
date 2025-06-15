@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import LocationsService from "../../services/locations/location.service";
 import { AuthedRequest } from "../../middlewares/auth.middleware";
 import { supabase } from "../../lib/supabase";
+import { updateLocation as updateLocationInDb } from "../../services/locations/updateLocation.service";
 
 class LocationController {
   async getLocationById(req: Request, res: Response): Promise<void> {
@@ -98,6 +99,16 @@ class LocationController {
     } catch (err) {
       console.error("Fehler beim Laden der Bewertungen:", err);
       res.status(500).json({ error: "Fehler beim Laden der Bewertungen" });
+    }
+  }
+
+  async updateLocation(req: Request, res: Response) {
+    const { locationId } = req.params;
+    try {
+      const loc = await updateLocationInDb(locationId, req);
+      res.status(200).json({ id: loc.ort_id });
+    } catch {
+      res.status(500).json({ error: "Serverfehler" });
     }
   }
 }

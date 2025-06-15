@@ -43,4 +43,11 @@ router.post(
   AddLocationController.addLocation
 );
 
+router.put(
+  "/edit-location/:locationId",
+  AuthMiddleware.verifyToken,
+  uploadMiddleware.single("image"),
+  LocationController.updateLocation
+);
+
 export default router;
