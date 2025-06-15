@@ -4,6 +4,7 @@ import LocationController from "../controllers/locations/location.controller";
 import AuthMiddleware from "../middlewares/auth.middleware";
 import uploadMiddleware from "../middlewares/upload.middlewear";
 import FavoritesLocationController from "../controllers/locations/favorites.location.controller";
+import DeleteLocationController from "../controllers/locations/delete.location.controller";
 
 const router = Router();
 
@@ -48,6 +49,12 @@ router.put(
   AuthMiddleware.verifyToken,
   uploadMiddleware.single("image"),
   LocationController.updateLocation
+);
+
+router.delete(
+  "/:locationId",
+  AuthMiddleware.verifyToken,
+  DeleteLocationController.deleteLocation
 );
 
 export default router;

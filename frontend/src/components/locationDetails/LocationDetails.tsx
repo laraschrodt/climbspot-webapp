@@ -5,6 +5,7 @@ import LocationInfo from "./RightSide/LocationInfo";
 import { Location } from "../../models/Location";
 import { useUserSession } from "../../auth/UseUserSession";
 import ProtectedComponent from "../../routes/ProtectedComponent";
+import DeleteLocationButton from "./LeftSide/DeleteLocationButton";
 
 const LocationDetails: React.FC = () => {
   const { user } = useUserSession();
@@ -83,12 +84,16 @@ const LocationDetails: React.FC = () => {
         <div className="w-full md:w-1/3 space-y-6">
           {isOwner && (
             <ProtectedComponent roles={["user"]}>
-              <Link
-                to={`/edit-location/${locationId}`}
-                className="btn btn-secondary mr-4"
-              >
-                Bearbeiten
-              </Link>
+              <div className="flex gap-4">
+                <Link
+                  to={`/edit-location/${locationId}`}
+                  className="btn btn-secondary"
+                >
+                  Bearbeiten
+                </Link>
+
+                <DeleteLocationButton locationId={locationId!} />
+              </div>
             </ProtectedComponent>
           )}
 
@@ -96,7 +101,6 @@ const LocationDetails: React.FC = () => {
             {/* Reviews */}
             <Reviews />
           </div>
-
           <div className="space-y-4">
             {/* Sterne-Bewertung */}
             {/* <StarRating rating={rating} onClick={handleStarClick} /> */}
