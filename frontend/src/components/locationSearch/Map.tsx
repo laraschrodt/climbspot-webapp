@@ -21,7 +21,7 @@ interface MapProps {
 }
 
 async function fetchLocations(): Promise<Location[]> {
-  const res = await fetch("http://localhost:3001/api/locations/all");
+  const res = await fetch("api/locations/all");
   if (!res.ok) {
     throw new Error("Fehler beim Laden der Locations");
   }
