@@ -20,9 +20,12 @@ const Login: React.FC = () => {
     setLoading(true);
 
     try {
-      const { token, username, role } = await loginApi.login(email, password);
+      const { token, username, role, userId } = await loginApi.login(
+        email,
+        password
+      );
 
-      storeLoginData({ username, role }, token);
+      storeLoginData({ username, role, userId }, token);
 
       navigate("/");
     } catch (err) {

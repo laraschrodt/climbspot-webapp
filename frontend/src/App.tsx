@@ -10,6 +10,7 @@ import LocationDetailsPage from "./pages/LocationDetailsPage";
 import AddLocationPage from "./pages/AddLocationPage";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
+import EditLocationPage from "./pages/EditLocationPage";
 
 export default function App() {
   return (
@@ -27,6 +28,13 @@ export default function App() {
         path="/add-location"
         element={
           <ProtectedRoute roles={["user"]} element={<AddLocationPage />} />
+        }
+      />
+
+      <Route
+        path="/edit-location/:locationId"
+        element={
+          <ProtectedRoute roles={["user"]} element={<EditLocationPage />} />
         }
       />
 

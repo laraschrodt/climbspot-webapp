@@ -4,6 +4,7 @@ import LocationController from "../controllers/locations/location.controller";
 import AuthMiddleware from "../middlewares/auth.middleware";
 import uploadMiddleware from "../middlewares/upload.middlewear";
 import FavoritesLocationController from "../controllers/locations/favorites.location.controller";
+import DeleteLocationController from "../controllers/locations/delete.location.controller";
 
 const router = Router();
 
@@ -11,6 +12,7 @@ const router = Router();
 router.get("/all", LocationController.getAllLocations);
 router.get("/popular", LocationController.getPopularLocations);
 router.get("/search", LocationController.searchLocations);
+
 router.get("/details/:locationId", LocationController.getLocationById);
 
 
@@ -41,6 +43,19 @@ router.post(
   AuthMiddleware.verifyToken,
   uploadMiddleware.single("image"),
   AddLocationController.addLocation
+);
+
+router.put(
+  "/edit-location/:locationId",
+  AuthMiddleware.verifyToken,
+  uploadMiddleware.single("image"),
+  LocationController.updateLocation
+);
+
+router.delete(
+  "/:locationId",
+  AuthMiddleware.verifyToken,
+  DeleteLocationController.deleteLocation
 );
 
 export default router;

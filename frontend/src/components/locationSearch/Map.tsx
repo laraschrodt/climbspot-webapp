@@ -21,7 +21,7 @@ interface MapProps {
 }
 
 async function fetchLocations(): Promise<Location[]> {
-  const res = await fetch("http://localhost:3001/api/locations/all");
+  const res = await fetch("api/locations/all");
   if (!res.ok) {
     throw new Error("Fehler beim Laden der Locations");
   }
@@ -32,9 +32,8 @@ const Map: React.FC<MapProps> = ({ filter }) => {
   const mapRef = useRef<L.Map | null>(null);
   const markersRef = useRef<L.MarkerClusterGroup | null>(null);
 
-  // Initialisiere Karte nur einmal
   useEffect(() => {
-    if (mapRef.current) return; 
+    if (mapRef.current) return;
 
     const map = L.map("map", {
       center: [51.1657, 10.4515],
@@ -52,7 +51,6 @@ const Map: React.FC<MapProps> = ({ filter }) => {
     markersRef.current = markers;
   }, []);
 
-  // Aktualisiere Marker bei Filter-Änderung
   useEffect(() => {
     const updateMarkers = async () => {
       if (!mapRef.current || !markersRef.current) return;
@@ -86,10 +84,10 @@ const Map: React.FC<MapProps> = ({ filter }) => {
         filtered.forEach((loc) => {
           const marker = L.marker([loc.lat, loc.long]).bindPopup(
             `<b>${loc.name}</b><br>` +
-            `📍 Talort: ${loc.talort}<br>` +
-            `🌍 Region: ${loc.region}<br>` +
-            `🧗‍♂️ Schwierigkeit: ${loc.schwierigkeit}<br>` +
-            `🧱 Art: ${loc.kletterart}`
+              `📍 Talort: ${loc.talort}<br>` +
+              `🌍 Region: ${loc.region}<br>` +
+              `🧗‍♂️ Schwierigkeit: ${loc.schwierigkeit}<br>` +
+              `🧱 Art: ${loc.kletterart}`
           );
           markers.addLayer(marker);
         });

@@ -46,7 +46,9 @@ export async function addLocation(request: Request): Promise<{
     .from("location-pictures")
     .getPublicUrl(storageName);
 
+
   const ort_id = request.body.ort_id || randomUUID();
+
   const record = {
     ort_id,
     name: request.body.name,

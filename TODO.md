@@ -23,6 +23,7 @@
 - [ ] Im Profil eine Seite machen in der man die Locations sieht, die man selbst hinzugefügt hat
 - [ ] Eigene Locations bearbeitbar machen
 - [ ] Admin Funktionen und Rollen einbauen (-> Gastrechte beschränken)
+- [ ] Location löschen
 - [x] jest config
 
 `Kimia`:
@@ -40,6 +41,7 @@
 `Alex`:
 
 - [ ] Interaktive Karte und gucken dass der Filter funktioniert bei der Karte
+- [ ] Fehlende Felder in DB nachtragen bei Locations (es muss alles besetzt sein)
 
 ---
 

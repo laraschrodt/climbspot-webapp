@@ -9,13 +9,14 @@ class AccountController {
     const { email, password } = req.body;
 
     try {
+      // 1) Authentifiziere und erzeuge JWT
       const token = await AccountService.authenticateUserCredentials(
         email,
         password
       );
 
       const decoded: any = jwt.decode(token);
-      const { userId, role } = decoded;
+      const { userId, role } = decoded as { userId: string; role: string };
 
       const { data: userData, error } = await supabase
         .from("benutzer")
@@ -29,7 +30,7 @@ class AccountController {
 
       const username = userData.benutzername;
 
-      res.status(200).json({ token, username, role });
+      res.status(200).json({ token, userId, username, role });
     } catch (err) {
       const msg = err instanceof Error ? err.message : ErrorMessages.UNKNOWN;
       res.status(401).json({ message: msg });

@@ -6,11 +6,12 @@ export interface LoginResponse {
   token: string;
   username: string;
   role: string;
+  userId: string;
   message?: string;
 }
 
 export class LoginApi {
-  private readonly baseUrl = "http://localhost:3001/api";
+  private readonly baseUrl = "/api";
 
   async login(email: string, password: string): Promise<LoginResponse> {
     const res = await fetch(`${this.baseUrl}/auth/login`, {
