@@ -21,7 +21,7 @@ interface MapProps {
 }
 
 async function fetchLocations(): Promise<Location[]> {
-  const res = await fetch("/api/locations/all");
+  const res = await fetch("http://localhost:3001/api/locations/all");
   if (!res.ok) {
     throw new Error("Fehler beim Laden der Locations");
   }
@@ -32,6 +32,7 @@ const Map: React.FC<MapProps> = ({ filter }) => {
   const mapRef = useRef<L.Map | null>(null);
   const markersRef = useRef<L.MarkerClusterGroup | null>(null);
 
+  // Initialisiere Karte nur einmal
   useEffect(() => {
     if (mapRef.current) return;
 
@@ -51,6 +52,7 @@ const Map: React.FC<MapProps> = ({ filter }) => {
     markersRef.current = markers;
   }, []);
 
+  // Aktualisiere Marker bei Filter-Änderung
   useEffect(() => {
     const updateMarkers = async () => {
       if (!mapRef.current || !markersRef.current) return;
