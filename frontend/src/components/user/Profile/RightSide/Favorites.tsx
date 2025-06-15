@@ -51,7 +51,7 @@ const Favorites: React.FC = () => {
 
   if (favorites.length === 0) {
     return (
-      <section className="container mx-auto p-4">
+      <section className="bg-white p-6 rounded-xl shadow-md w-full max-w-5xl ml-0 my-4">
         <h2 className="text-xl font-semibold mb-4">Favoriten</h2>
         <p className="italic text-gray-500">Keine Favoriten vorhanden.</p>
       </section>
@@ -59,14 +59,14 @@ const Favorites: React.FC = () => {
   }
 
   return (
-    <section className="container mx-auto p-4">
+<section className="container mx-auto max-w-5xl p-4">
       <h2 className="mb-8 mt-8 text-2xl font-bold">Favoriten</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {favorites.map((spot) => (
           <Link
             to={`/details/${spot.ort_id}`}
             key={spot.ort_id}
-            className="block max-w-xl mx-auto"
+            className="block"
           >
             <LocationCard
               name={spot.name}

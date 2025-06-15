@@ -28,7 +28,7 @@
 `Kimia`:
 
 - [x] Größe von Location Cards im Profil anpassen
-- [ ] Benachrichtigungen bei neuer Location
+- [x] Benachrichtigungen bei neuer Location
 
 `Nelly`:
 

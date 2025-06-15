@@ -11,31 +11,46 @@ function logSupabaseError(scope: string, err: PostgrestError) {
   console.error(" Hint   :", err.hint ?? "—");
 }
 
-export async function addLocation(request: Request): Promise<string> {
+export async function addLocation(request: Request): Promise<{
+  ort_id: string; // <-- Damit du überall denselben Namen hast!
+  name: string;
+  region: string;
+  land: string;
+  picture_url: string;
+  notification: {
+    id: string;
+    ort_id: string;
+    title: string;
+    message: string;
+    picture_url: string;
+    erstellt_am: string;
+  };
+}> {
+  // Bild auslesen
   const file = request.file;
   if (!file) throw new Error("Image file missing");
 
   const extension = file.mimetype.split("/")[1];
   const storageName = `locations/${randomUUID()}.${extension}`;
 
+  // 1. Bild speichern in Supabase-Storage
   const { error: storageError } = await supabase.storage
     .from("location-pictures")
     .upload(storageName, file.buffer, {
       contentType: file.mimetype,
       upsert: true,
     });
-
   if (storageError) throw new Error(storageError.message);
 
+  // 2. Public-URL holen
   const { data: urlData } = supabase.storage
     .from("location-pictures")
     .getPublicUrl(storageName);
 
-  /* ---------- 3. Location-Datensatz aufbauen ---------- */
-  const locationId = request.body.ort_id || randomUUID();
-
+  // 3. Ort-Datensatz vorbereiten
+  const ort_id = request.body.ort_id || randomUUID();
   const record = {
-    ort_id: locationId,
+    ort_id,
     name: request.body.name,
     region: request.body.region,
     land: request.body.land,
@@ -62,21 +77,45 @@ export async function addLocation(request: Request): Promise<string> {
   };
 
   try {
+    // 4. Ort speichern
     const { error: insertOrtErr } = await supabase.from("orte").insert(record);
     if (insertOrtErr) throw insertOrtErr;
 
+    // 5. Link zum User speichern
     const userId = (request as any).user?.userId as string | undefined;
     if (!userId) throw new Error("Missing userId in request context");
 
     const { error: insertLinkErr } = await supabase
       .from("my-locations")
-      .insert({ benutzer_id: userId, ort_id: locationId });
-
+      .insert({ benutzer_id: userId, ort_id });
     if (insertLinkErr) throw insertLinkErr;
+
+    // 6. Notification anlegen
+    const notificationId = randomUUID();
+    const notification = {
+      id: notificationId,
+      ort_id: ort_id,
+      title: "Neuer Kletterspot!",
+      message: `Der Ort "${record.name}" wurde hinzugefügt.`,
+      picture_url: record.picture_url,
+      erstellt_am: new Date().toISOString(),
+    };
+    const { error: notifErr } = await supabase
+      .from("notifications")
+      .insert(notification);
+    if (notifErr) throw notifErr;
+
+    // 7. Rückgabe
+    return {
+      ort_id,
+      name: record.name,
+      region: record.region,
+      land: record.land,
+      picture_url: record.picture_url,
+      notification,
+    };
   } catch (err) {
     logSupabaseError("addLocation", err as PostgrestError);
     throw err;
   }
-
-  return locationId;
 }

@@ -7,12 +7,13 @@ import FavoritesLocationController from "../controllers/locations/favorites.loca
 
 const router = Router();
 
+// --- Öffentliche Endpunkte ---
 router.get("/all", LocationController.getAllLocations);
 router.get("/popular", LocationController.getPopularLocations);
-
 router.get("/search", LocationController.searchLocations);
 router.get("/details/:locationId", LocationController.getLocationById);
 
+// --- Favoriten & Reviews (authentifiziert) ---
 router.get(
   "/favorites",
   AuthMiddleware.verifyToken,
@@ -24,17 +25,19 @@ router.get(
   LocationController.getUserReviews
 );
 
+// --- Favorit hinzufügen/entfernen ---
 router.post(
   "/favorite/:locationId",
   AuthMiddleware.verifyToken,
   FavoritesLocationController.addFavorite
-);
+); 
 router.delete(
   "/favorite/:locationId",
   AuthMiddleware.verifyToken,
   FavoritesLocationController.removeFavorite
 );
 
+// --- Neue Location hinzufügen (inkl. Bildupload!) ---
 router.post(
   "/add-location",
   AuthMiddleware.verifyToken,
