@@ -1,20 +1,32 @@
 import { Request, Response } from "express";
 import LocationsService from "../../services/locations/location.service";
 import { AuthedRequest } from "../../middlewares/auth.middleware";
+import { supabase } from "../../lib/supabase";
+
 class LocationController {
   async getLocationById(req: Request, res: Response): Promise<void> {
     const { locationId } = req.params;
-
+    const userId = req.header("x-user-id");
+    if (!userId) {
+      res.status(400).json({ error: "Missing x-user-id header" });
+      return;
+    }
     try {
       const location = await LocationsService.getLocationByIdFromDB(locationId);
-      if (location) {
-        res.json(location);
-      } else {
+      if (!location) {
         res.status(404).json({ error: "Standort nicht gefunden" });
+        return;
       }
-    } catch (err) {
-      console.error("Fehler bei getLocationById:", err);
-      res.status(500).json({ error: "Serverfehler beim Laden des Standorts" });
+      const { count, error } = await supabase
+        .from("my-locations")
+        .select("*", { head: true, count: "exact" })
+        .eq("ort_id", locationId)
+        .eq("benutzer_id", userId);
+      if (error) throw new Error(error.message);
+      const isOwner = (count ?? 0) > 0;
+      res.status(200).json({ ...location, isOwner });
+    } catch {
+      res.status(500).json({ error: "Serverfehler" });
     }
   }
 

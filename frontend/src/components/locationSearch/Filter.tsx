@@ -60,10 +60,8 @@ const Filter: React.FC<FilterProps> = ({ onApply }) => {
               <option value="">– egal –</option>
               <option value="klettern">klettern</option>
               <option value="klettersteig">klettersteig</option>
-              <option value="klettergarten">klettergarten</option>
             </select>
           </div>
-
           <div>
             <label className="font-semibold block mb-2">
               Schwierigkeit (max)
@@ -78,7 +76,6 @@ const Filter: React.FC<FilterProps> = ({ onApply }) => {
             />
             <div className="text-right">{maxDifficulty}</div>
           </div>
-
           <div>
             <label className="font-semibold block mb-2">Standort</label>
             <input
@@ -89,7 +86,6 @@ const Filter: React.FC<FilterProps> = ({ onApply }) => {
               onChange={(e) => setStandort(e.target.value)}
             />
           </div>
-
           <div>
             <label className="font-semibold block mb-2">
               Kletterzeit (Std.)
@@ -111,10 +107,10 @@ const Filter: React.FC<FilterProps> = ({ onApply }) => {
               className="input input-bordered w-full"
               placeholder="z. B. 30"
               value={kletterlaenge}
+              step={25}
               onChange={(e) => setKletterlaenge(Number(e.target.value))}
             />
           </div>
-
           <div>
             <label className="font-semibold block mb-2">Kinderfreundlich</label>
             <div className="flex gap-4">
@@ -144,7 +140,6 @@ const Filter: React.FC<FilterProps> = ({ onApply }) => {
               </label>
             </div>
           </div>
-
           <div className="col-span-full flex justify-end">
             <ProtectedComponent roles={["user"]}>
               <Link to="/add-location" className="btn btn-secondary mr-4">

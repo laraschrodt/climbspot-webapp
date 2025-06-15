@@ -1,11 +1,11 @@
 import React, { createContext, useState, useEffect } from "react";
 import { UserSessionStorage } from "./UserSessionStorage";
 
-type User = { username: string; role: string } | null;
+type User = { username: string; role: string; userId: string } | null;
 
 interface UserSessionType {
   user: User;
-  storeLoginData: (user: User, token: string) => void;
+  storeLoginData: (user: NonNullable<User>, token: string) => void;
   clearSession: () => void;
 }
 
@@ -25,9 +25,13 @@ export const UserSessionProvider: React.FC<{ children: React.ReactNode }> = ({
     return () => window.removeEventListener("storage", handle);
   }, []);
 
-  const storeLoginData = (u: User, token: string) => {
-    if (!u) return;
-    UserSessionStorage.saveUsernameAndTokenInStorage(token, u.username, u.role);
+  const storeLoginData = (u: NonNullable<User>, token: string) => {
+    UserSessionStorage.saveUsernameAndTokenInStorage(
+      token,
+      u.username,
+      u.role,
+      u.userId
+    );
     setUser(u);
   };
 

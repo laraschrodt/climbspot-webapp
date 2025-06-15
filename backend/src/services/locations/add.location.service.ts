@@ -31,7 +31,6 @@ export async function addLocation(request: Request): Promise<string> {
     .from("location-pictures")
     .getPublicUrl(storageName);
 
-  /* ---------- 3. Location-Datensatz aufbauen ---------- */
   const locationId = request.body.ort_id || randomUUID();
 
   const record = {
