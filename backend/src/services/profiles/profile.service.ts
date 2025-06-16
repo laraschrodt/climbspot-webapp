@@ -12,7 +12,6 @@ interface RawFavoriteRow {
   o: Location & { bewertungen?: Bewertung[] };
 }
 
-// Notification-Typ für Rückgabe
 export interface NotificationRow {
   id: string;
   ort_id: string;
@@ -145,7 +144,8 @@ class ProfileService {
   async getReviewsByUserId(userId: string) {
     const { data, error } = await supabase
       .from("bewertungen")
-      .select(`
+      .select(
+        `
         sterne,
         kommentar,
         erstellt_am,
@@ -153,7 +153,8 @@ class ProfileService {
           name,
           picture_url
         )
-      `)
+      `
+      )
       .eq("benutzer_id", userId);
 
     if (error) {
@@ -163,20 +164,18 @@ class ProfileService {
     return data || [];
   }
 
-  // === NEU: Notifications aus Datenbank holen ===
   async getNotifications(): Promise<NotificationRow[]> {
     const { data, error } = await supabase
       .from("notifications")
       .select("*")
       .order("erstellt_am", { ascending: false })
-      .limit(20); // z.B. die 20 neuesten
+      .limit(20);
 
     if (error) {
       console.error("Supabase-Fehler beim Laden der Notifications:", error);
       throw new Error("Notifications konnten nicht geladen werden");
     }
 
-    // Falls deine Notifications nullable Felder haben, passe hier an!
     return (data ?? []) as NotificationRow[];
   }
 }

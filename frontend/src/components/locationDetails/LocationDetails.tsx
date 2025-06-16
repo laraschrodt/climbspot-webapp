@@ -64,6 +64,7 @@ const LocationDetails: React.FC = () => {
   if (loading) return <div>Loading...</div>;
 
   return (
+    // FIXME: Aufteilen in Components weil das zu unübersichtlich ist
     <div>
       {/* Banner mit Bild und Text */}
       <div

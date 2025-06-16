@@ -1,4 +1,4 @@
-import EditLocation from "../components/addLocation/EditLocation";
+import EditLocation from "../components/changeLocation/EditLocation";
 import Footer from "../components/general/Footer/Footer";
 import { Navbar } from "../components/general/Navbar";
 

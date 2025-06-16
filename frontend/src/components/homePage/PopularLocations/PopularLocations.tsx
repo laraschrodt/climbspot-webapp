@@ -1,10 +1,10 @@
-// src/components/home/PopularLocations.tsx
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import LocationCard from "../../locationSearch/LocationCard";
 import axios from "axios";
 import { Location } from "../../../models/Location";
 
+// FIXME: Sterne-Rating wird nicht angezeigt (Logik aus LocationList übernehmen)
 interface PopularLocation extends Location {
   rating: number;
 }
@@ -15,7 +15,9 @@ const PopularLocations: React.FC = () => {
   useEffect(() => {
     const fetchPopular = async () => {
       try {
-        const response = await axios.get<PopularLocation[]>("/api/locations/popular");
+        const response = await axios.get<PopularLocation[]>(
+          "/api/locations/popular"
+        );
         setPopularSpots(response.data);
       } catch (err) {
         console.error("Fehler beim Laden der populären Orte:", err);

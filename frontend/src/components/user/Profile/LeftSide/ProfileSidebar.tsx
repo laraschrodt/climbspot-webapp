@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-//import axios from "axios";
 import Profilbild from "./ProfilePicture";
 import PersönlicheInfos from "./ProfileForm";
 import PasswortÄndern from "./ChangePassword";
@@ -36,8 +35,16 @@ const ProfileSidebar: React.FC<Props> = ({ formData, setFormData }) => {
 
   const saveChanges = async () => {
     try {
-      const { vorname, nachname, email, username, location, profilbild_url } = formData;
-      await ProfileApi.saveProfile({ vorname, nachname, email, username, location, profilbild_url });
+      const { vorname, nachname, email, username, location, profilbild_url } =
+        formData;
+      await ProfileApi.saveProfile({
+        vorname,
+        nachname,
+        email,
+        username,
+        location,
+        profilbild_url,
+      });
       alert("Profil erfolgreich gespeichert");
       setEditMode(false);
     } catch (error) {
@@ -64,7 +71,10 @@ const ProfileSidebar: React.FC<Props> = ({ formData, setFormData }) => {
 
   return (
     <div className="flex flex-col items-center md:items-start gap-6">
-      <Profilbild imageUrl={formData.profilbild_url} onImageChange={handleImageChange} />
+      <Profilbild
+        imageUrl={formData.profilbild_url}
+        onImageChange={handleImageChange}
+      />
       <Notifications />
       <PersönlicheInfos
         formData={formData}

@@ -20,28 +20,31 @@
 
 - [x] Neue Page um Location hinzuzufügen
 - [x] Komm in die Community Button verlinken
-- [ ] Im Profil eine Seite machen in der man die Locations sieht, die man selbst hinzugefügt hat
-- [ ] Eigene Locations bearbeitbar machen
-- [ ] Admin Funktionen und Rollen einbauen (-> Gastrechte beschränken)
-- [ ] Location löschen
+- [x] Im Profil eine Seite machen in der man die Locations sieht, die man selbst hinzugefügt hat
+- [x] Eigene Locations bearbeitbar machen
+- [x] Eigene Locations löschen
 - [x] jest config
+- [ ] Admin Funktionen und Rollen einbauen (-> Gastrechte beschränken)
+- [ ] Bug fixing
 
 `Kimia`:
 
 - [x] Größe von Location Cards im Profil anpassen
 - [x] Benachrichtigungen bei neuer Location
+- [ ] Gucken dass Notification dauerhaft gelöscht wird, wenn man auf "gesehen" klickt
 
 `Nelly`:
 
-- [ ] Gucken dass man von jeder Page aus zu Favoriten hinzufügen/entfernen kann ()
+- [ ] Gucken dass man von jeder Page aus zu Favoriten hinzufügen/entfernen kann
 - [ ] Berwertungen schreiben (Sterne-Rating und kurzer Text) und anzeigen auf LocationDetails
   - Bei jeder LocationDetail Seite gibt es über den Bewertungen einen Bereich indem man selbst ein
     Sterne-Rating abgeben kann und einen kurzen Bewertungstext schreiben kann - die eigene Bewertung ist persistiert und änderbar (so ähnlich wie das Ändern von Infos im Formular vielleicht)
 
 `Alex`:
 
-- [ ] Interaktive Karte und gucken dass der Filter funktioniert bei der Karte
+- [x] Interaktive Karte und gucken dass der Filter funktioniert bei der Karte
 - [ ] Fehlende Felder in DB nachtragen bei Locations (es muss alles besetzt sein)
+- [ ] Pins auf der Karte müssen einen irgendwie zu LocationDetails von der angeklickten Loation führen
 
 ---
 

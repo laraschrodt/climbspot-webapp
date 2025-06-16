@@ -1,4 +1,3 @@
-// src/components/user/Register.tsx
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { RegisterApi } from "../../../api/RegisterApi";
@@ -10,14 +9,14 @@ const Register: React.FC = () => {
   const [formData, setFormData] = useState({
     username: "",
     email: "",
-    password: ""
+    password: "",
   });
   const [loading, setLoading] = useState(false);
-  const [error, setError]     = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -51,11 +50,12 @@ const Register: React.FC = () => {
           </p>
 
           <form className="flex flex-col space-y-5" onSubmit={handleSubmit}>
-            {error && (
-              <p className="text-red-600 text-sm -mt-2">{error}</p>
-            )}
+            {error && <p className="text-red-600 text-sm -mt-2">{error}</p>}
             <div className="flex flex-col">
-              <label htmlFor="username" className="mb-1 text-sm font-medium text-gray-700">
+              <label
+                htmlFor="username"
+                className="mb-1 text-sm font-medium text-gray-700"
+              >
                 Benutzername
               </label>
               <input
@@ -70,7 +70,10 @@ const Register: React.FC = () => {
             </div>
 
             <div className="flex flex-col">
-              <label htmlFor="email" className="mb-1 text-sm font-medium text-gray-700">
+              <label
+                htmlFor="email"
+                className="mb-1 text-sm font-medium text-gray-700"
+              >
                 E-Mail Adresse
               </label>
               <input
@@ -85,7 +88,10 @@ const Register: React.FC = () => {
             </div>
 
             <div className="flex flex-col">
-              <label htmlFor="password" className="mb-1 text-sm font-medium text-gray-700">
+              <label
+                htmlFor="password"
+                className="mb-1 text-sm font-medium text-gray-700"
+              >
                 Passwort
               </label>
               <input

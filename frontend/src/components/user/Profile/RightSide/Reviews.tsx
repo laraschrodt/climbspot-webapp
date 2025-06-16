@@ -8,7 +8,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-// Typ der Bewertung (passt zu Backend)
 interface Review {
   sterne: number;
   kommentar: string;
@@ -44,7 +43,7 @@ const Reviews: React.FC = () => {
     return <div>Lade Bewertungen ...</div>;
   }
   return (
-<section className="bg-white p-6 rounded-xl shadow-md w-full max-w-4xl ml-0 my-4">
+    <section className="bg-white p-6 rounded-xl shadow-md w-full max-w-4xl ml-0 my-4">
       <h2 className="text-xl font-semibold mb-4">Bewertungen</h2>
       {reviews.length === 0 ? (
         <p className="text-gray-500">Keine Bewertungen vorhanden.</p>
@@ -61,7 +60,9 @@ const Reviews: React.FC = () => {
               )}
               <div>
                 <div className="flex items-center space-x-2">
-                  <h3 className="text-md font-bold">{rev.orte?.name || "Unbekannter Ort"}</h3>
+                  <h3 className="text-md font-bold">
+                    {rev.orte?.name || "Unbekannter Ort"}
+                  </h3>
                   <div className="flex">
                     {Array(rev.sterne)
                       .fill(0)
@@ -70,7 +71,8 @@ const Reviews: React.FC = () => {
                       ))}
                   </div>
                   <span className="text-sm text-gray-400 ml-2">
-                    erstellt am {new Date(rev.erstellt_am).toLocaleDateString("de-DE")}
+                    erstellt am{" "}
+                    {new Date(rev.erstellt_am).toLocaleDateString("de-DE")}
                   </span>
                 </div>
                 <p className="text-gray-700 mt-1">{rev.kommentar}</p>
@@ -80,9 +82,7 @@ const Reviews: React.FC = () => {
         </ul>
       )}
     </section>
-  );   
+  );
 };
 
 export default Reviews;
-
-
