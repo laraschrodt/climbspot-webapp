@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { supabase } from "../lib/supabase";
-import ErrorMessages from "../utils/ErrorMessages";
+import ErrorMessages from "../utils/errorMessages";
 
 /**
  * Alle Methoden in dieser Klasse werden für Registrierung und Authentifizierung verwendet.

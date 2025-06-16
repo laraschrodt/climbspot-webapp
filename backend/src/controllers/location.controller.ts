@@ -4,6 +4,7 @@ import { AuthedRequest } from "../middlewares/auth.middleware";
 import locationService from "../services/location.service";
 import ProfileService from "../services/profile.service";
 import AccountService from "../services/account.service";
+import { JwtPayload } from "jsonwebtoken";
 
 class LocationController {
   async getLocationById(req: Request, res: Response): Promise<void> {
@@ -11,11 +12,19 @@ class LocationController {
 
     try {
       const location = await LocationsService.getLocationByIdFromDB(locationId);
-      if (location) {
-        res.json(location);
-      } else {
+
+      if (!location) {
         res.status(404).json({ error: "Standort nicht gefunden" });
+        return;
       }
+
+      // Bewertungen sicher dazu holen
+      const reviews = await LocationsService.getReviewsByLocationId(locationId);
+
+      res.json({
+        ...location,
+        bewertungen: reviews,
+      });
     } catch (err) {
       console.error("Fehler bei getLocationById:", err);
       res.status(500).json({ error: "Serverfehler beim Laden des Standorts" });
@@ -118,6 +127,42 @@ class LocationController {
     } catch (err) {
       console.error("Fehler beim Entfernen des Favoriten:", err);
       res.status(500).json({ error: "Serverfehler beim Entfernen des Favoriten" });
+    }
+  }
+
+  async addReview(req: AuthedRequest, res: Response): Promise<void> {
+    const { locationId } = req.params;
+    const { sterne, kommentar } = req.body;
+
+    const userId =
+      typeof req.user === "string"
+        ? null
+        : (req.user as JwtPayload)?.userId;
+
+    // 👉 HIER LOGGEN
+    console.log("Eingehende Bewertung:", {
+      userId,
+      sterne,
+      kommentar,
+    });
+
+    if (!userId || !sterne || kommentar === undefined) {
+      res.status(400).json({ error: "Fehlende oder ungültige Felder" });
+      return;
+    }
+
+    try {
+      const result = await LocationsService.addReviewToDB({
+        ort_id: locationId,
+        benutzer_id: userId,
+        sterne,
+        kommentar,
+      });
+
+      res.status(201).json(result);
+    } catch (err) {
+      console.error("Fehler beim Speichern der Bewertung:", err);
+      res.status(500).json({ error: "Fehler beim Speichern" });
     }
   }
 }
