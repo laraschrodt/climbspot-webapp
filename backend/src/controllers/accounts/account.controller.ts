@@ -9,7 +9,6 @@ class AccountController {
     const { email, password } = req.body;
 
     try {
-      // 1) Authentifiziere und erzeuge JWT
       const token = await AccountService.authenticateUserCredentials(
         email,
         password

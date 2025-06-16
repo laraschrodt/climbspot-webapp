@@ -14,6 +14,8 @@ interface Notification {
   date: string;
 }
 
+// FIXME: Benachrichtigung laden immer neu, auch wenn man auf "gesehen" drückt
+
 const Notifications: React.FC = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [seen, setSeen] = useState<string[]>([]);
@@ -77,7 +79,7 @@ const Notifications: React.FC = () => {
         </div>
         <span>Benachrichtigungen</span>
       </div>
-  
+
       {showPopup && (
         <div className="mt-2 bg-white border rounded-xl shadow-lg p-4 max-w-xs w-full z-50">
           <h3 className="font-semibold mb-3">Neue Benachrichtigungen</h3>
@@ -97,13 +99,14 @@ const Notifications: React.FC = () => {
                     style={{ aspectRatio: "1/1" }}
                   />
                   <div className="flex-1 min-w-0">
-                   
                     <div className="font-semibold text-xs break-words mb-1">
                       {n.message || n.name || "Neuer Ort"}
                     </div>
-                 
+
                     <div className="text-xs text-gray-400">
-                      {(n.date || n.erstellt_am || "").slice(0, 16).replace("T", " ")}
+                      {(n.date || n.erstellt_am || "")
+                        .slice(0, 16)
+                        .replace("T", " ")}
                     </div>
                   </div>
                   <button
@@ -125,7 +128,6 @@ const Notifications: React.FC = () => {
       )}
     </div>
   );
-  
 };
 
 export default Notifications;

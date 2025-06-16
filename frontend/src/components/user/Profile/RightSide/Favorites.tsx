@@ -1,4 +1,3 @@
-// src/components/profile/Favorites.tsx
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import LocationCard from "../../../locationSearch/LocationCard";
@@ -59,7 +58,7 @@ const Favorites: React.FC = () => {
   }
 
   return (
-<section className="container mx-auto max-w-5xl p-4">
+    <section className="container mx-auto max-w-5xl p-4">
       <h2 className="mb-8 mt-8 text-2xl font-bold">Favoriten</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {favorites.map((spot) => (

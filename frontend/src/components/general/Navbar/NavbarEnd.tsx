@@ -2,12 +2,10 @@ import { FC, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserSession } from "../../../auth/UseUserSession";
 import axios from "axios";
-import ProfileApi from "../../../api/profileApi";
-
+import ProfileApi from "../../../api/ProfileApi";
 
 const NavbarEnd: FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  // FIXME: any weg machen weil sonst error
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const { user, clearSession } = useUserSession();
@@ -119,7 +117,11 @@ const NavbarEnd: FC = () => {
         <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
           <div className="w-6 h-6 rounded-full bg-neutral text-base-100 flex items-center justify-center overflow-hidden">
             {profileImage ? (
-              <img src={profileImage} alt="Profilbild" className="w-full h-full object-cover" />
+              <img
+                src={profileImage}
+                alt="Profilbild"
+                className="w-full h-full object-cover"
+              />
             ) : user ? (
               user.username[0].toUpperCase()
             ) : (
@@ -147,14 +149,22 @@ const NavbarEnd: FC = () => {
         >
           {!user && (
             <>
-              <li><Link to="/login">Login</Link></li>
-              <li><Link to="/register">Registrieren</Link></li>
+              <li>
+                <Link to="/login">Login</Link>
+              </li>
+              <li>
+                <Link to="/register">Registrieren</Link>
+              </li>
             </>
           )}
           {user && (
             <>
-              <li><Link to="/profile">Profil</Link></li>
-              <li><button onClick={handleLogout}>Logout</button></li>
+              <li>
+                <Link to="/profile">Profil</Link>
+              </li>
+              <li>
+                <button onClick={handleLogout}>Logout</button>
+              </li>
             </>
           )}
         </ul>
