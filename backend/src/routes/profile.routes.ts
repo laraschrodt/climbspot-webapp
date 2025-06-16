@@ -6,40 +6,24 @@ import profileController from "../controllers/profiles/profile.controller";
 
 /**
  * Alle Methoden in dieser Datei werden in der /profile Route verwendet.
- * Sie sind für das laden und aktualisieren der Profildaten zuständig.
+ * Sie sind für das Laden und Aktualisieren der Profildaten zuständig.
  **/
 
 const router = Router();
+const upload = multer({ storage: multer.memoryStorage() });
 
 router.get("/", AuthMiddleware.verifyToken, profileController.getProfileData);
-router.put(
-  "/",
-  AuthMiddleware.verifyToken,
-  profileController.updateProfileData
-);
-router.put(
-  "/password",
-  AuthMiddleware.verifyToken,
-  profileController.changePassword
-);
-router.get(
-  "/notifications",
-  AuthMiddleware.verifyToken,
-  profileController.getNotifications
-);
-router.get(
-  "/favorites",
-  AuthMiddleware.verifyToken,
-  profileController.getFavorites
-);
 
-router.get(
-  "/reviews",
-  AuthMiddleware.verifyToken,
-  profileController.getReviews
-)
+router.put("/", AuthMiddleware.verifyToken, profileController.updateProfileData);
 
-const upload = multer({ storage: multer.memoryStorage() });
+router.put("/password", AuthMiddleware.verifyToken, profileController.changePassword);
+
+router.get( "/notifications",AuthMiddleware.verifyToken,profileController.getNotifications.bind(profileController));
+
+router.get("/favorites", AuthMiddleware.verifyToken, profileController.getFavorites);
+
+router.get("/reviews", AuthMiddleware.verifyToken, profileController.getReviews);
+
 router.post(
   "/upload-profile-pic",
   AuthMiddleware.verifyToken,

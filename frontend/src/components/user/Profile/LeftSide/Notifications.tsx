@@ -1,80 +1,131 @@
 import React, { useEffect, useState } from "react";
 import { Bell } from "react-feather";
+import io from "socket.io-client";
 import axios from "axios";
 
-// TODO: Benachrichtigungen
-/**
- * Der Pfad ins backend /api/profile/notifications ist schon vorbereitet,
- * d.h. es muss nurnoch in der Servicelayer (und beim Controller) ergänzt werden.
- * => @file: services/profile.service.ts und @file: router/profile.routes.ts
-**/
-
 interface Notification {
-  id: number;
-  message: string;
+  erstellt_am: string;
+  message: string | undefined;
+  id: string;
+  name?: string;
+  region?: string;
+  land?: string;
+  picture_url?: string;
   date: string;
 }
 
 const Notifications: React.FC = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [seen, setSeen] = useState<string[]>([]);
   const [showPopup, setShowPopup] = useState(false);
-
-  const togglePopup = () => setShowPopup(!showPopup);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const socket = io("http://localhost:3001", {
+      transports: ["websocket"],
+    });
+
+    socket.on("connect", () => {
+      console.log("Frontend: Mit WebSocket verbunden!");
+    });
+
+    socket.on("new-location", (data: Notification) => {
+      setNotifications((prev) =>
+        prev.find((n) => n.id === data.id) ? prev : [data, ...prev]
+      );
+    });
+
     const fetchNotifications = async () => {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get("/api/profile/notifications", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
         });
         setNotifications(response.data);
       } catch (error) {
         console.error("Fehler beim Laden der Benachrichtigungen:", error);
+      } finally {
+        setLoading(false);
       }
     };
-
     fetchNotifications();
+
+    return () => {
+      socket.disconnect();
+    };
   }, []);
 
+  const handleSeen = (id: string) => {
+    setSeen((prev) => [...prev, id]);
+  };
+
+  const unseenNotifications = notifications.filter((n) => !seen.includes(n.id));
+
   return (
-    <div className="w-full">
+    <div className="relative w-full">
       <div
         className="flex items-center gap-2 cursor-pointer text-sm text-gray-800 hover:text-black"
-        onClick={togglePopup}
+        onClick={() => setShowPopup((val) => !val)}
       >
         <div className="relative">
           <Bell className="w-5 h-5" />
-          {notifications.length > 0 && (
+          {unseenNotifications.length > 0 && (
             <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-              {notifications.length}
+              {unseenNotifications.length}
             </span>
           )}
         </div>
         <span>Benachrichtigungen</span>
       </div>
-
+  
       {showPopup && (
-        <div className="mt-2 bg-white border rounded shadow p-4 max-w-xs w-full">
-          <h3 className="font-semibold mb-2">Neue Benachrichtigungen</h3>
-          {notifications.length > 0 ? (
-            <ul className="space-y-2">
-              {notifications.map((n) => (
-                <li key={n.id} className="text-sm text-gray-700">
-                  <p>{n.message}</p>
-                  <p className="text-xs text-gray-400">{n.date}</p>
+        <div className="mt-2 bg-white border rounded-xl shadow-lg p-4 max-w-xs w-full z-50">
+          <h3 className="font-semibold mb-3">Neue Benachrichtigungen</h3>
+          {loading ? (
+            <div className="text-sm text-gray-400">Lade ...</div>
+          ) : unseenNotifications.length > 0 ? (
+            <ul className="space-y-4">
+              {unseenNotifications.map((n) => (
+                <li
+                  key={n.id}
+                  className="flex items-center border rounded-lg p-2 shadow-sm bg-gray-50 gap-2"
+                >
+                  <img
+                    src={n.picture_url || "/placeholder.png"}
+                    alt="Ort"
+                    className="w-12 h-12 object-cover rounded-full border flex-shrink-0"
+                    style={{ aspectRatio: "1/1" }}
+                  />
+                  <div className="flex-1 min-w-0">
+                   
+                    <div className="font-semibold text-xs break-words mb-1">
+                      {n.message || n.name || "Neuer Ort"}
+                    </div>
+                 
+                    <div className="text-xs text-gray-400">
+                      {(n.date || n.erstellt_am || "").slice(0, 16).replace("T", " ")}
+                    </div>
+                  </div>
+                  <button
+                    className="btn btn-sm btn-primary ml-1"
+                    style={{ minWidth: "60px" }}
+                    onClick={() => handleSeen(n.id)}
+                  >
+                    Gesehen
+                  </button>
                 </li>
               ))}
             </ul>
           ) : (
-            <p className="text-sm text-gray-500">Keine neuen Benachrichtigungen</p>
+            <div className="text-sm text-gray-400">
+              Keine neuen Benachrichtigungen
+            </div>
           )}
         </div>
       )}
     </div>
   );
+  
 };
 
 export default Notifications;
