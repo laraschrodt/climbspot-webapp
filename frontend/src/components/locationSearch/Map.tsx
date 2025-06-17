@@ -89,7 +89,7 @@ const Map: React.FC<MapProps> = ({ filter }) => {
               `🌍 Region: ${loc.region}<br>` +
               `🧗‍♂️ Schwierigkeit: ${loc.schwierigkeit}<br>` +
               `🧱 Art: ${loc.kletterart}<br><br>` +
-              `<button onclick="window.location.href='/details/${loc.ort_id}'" style="background-color:#1e40af;color:white;padding:5px 10px;border:none;border-radius:4px;cursor:pointer;">➡ Zum Profil</button>`
+              `<button onclick="window.location.href='/details/${loc.ort_id}'" style="background-color:#16a34a;color:white;padding:5px 10px;border:none;border-radius:4px;cursor:pointer;">➡ Zum Profil</button>`
           );
 
           markers.addLayer(marker);
