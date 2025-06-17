@@ -9,7 +9,32 @@ interface UserSessionType {
   clearSession: () => void;
 }
 
+
+/**
+ * Kontext zur Verwaltung der aktuellen Benutzersitzung.
+ *
+ * Kontext:
+ * Wird in der gesamten Anwendung über einen React Context bereitgestellt, um auf
+ * Login-Zustand, Benutzerinformationen und Logout-Funktion zuzugreifen.
+ *
+ * Zusammenarbeit:
+ * - Nutzt `UserSessionStorage`, um Login-Daten im `localStorage` zu persistieren.
+ * - Ermöglicht durch `storeLoginData` und `clearSession` die zentrale Sitzungsverwaltung.
+ */
+
 export const UserSessionContext = createContext<UserSessionType>(null as never);
+
+  /**
+ * Context-Provider für `UserSessionContext`.
+ *
+ * Kontext:
+ * Umgibt z. B. die gesamte App und stellt den Login-Zustand über `user`, `storeLoginData`
+ * und `clearSession` allen Kindkomponenten zur Verfügung.
+ *
+ * Funktion:
+ * - Initial lädt der Provider die Login-Daten aus dem Storage.
+ * - Bei Änderungen im Storage (z. B. in anderem Tab) wird der Zustand aktualisiert.
+ */
 
 export const UserSessionProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
