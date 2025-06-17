@@ -4,6 +4,19 @@ import { RegisterApi } from "../../../api/RegisterApi";
 
 const registerApi = new RegisterApi();
 
+
+/**
+ * Register-Komponente
+ *
+ * Ermöglicht neuen Nutzern die Registrierung eines Kontos.
+ * Verwaltet ein lokales Formular mit Benutzername, E-Mail und Passwort.
+ * Beim Absenden werden die Daten via `RegisterApi` an das Backend gesendet.
+ * Bei Erfolg wird der Nutzer zur Login-Seite weitergeleitet.
+ *
+ * Enthält einfache Fehler- und Ladezustandsanzeige.
+ * Bestandteil des Authentifizierungs-Workflows.
+ */
+
 const Register: React.FC = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
