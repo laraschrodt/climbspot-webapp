@@ -11,6 +11,20 @@ interface Props {
   setFormData: React.Dispatch<React.SetStateAction<FormDataType>>;
 }
 
+
+/**
+ * ProfileSidebar-Komponente
+ *
+ * Linker Bereich der `ProfilePage`. Kapselt alle zentralen Funktionen rund um das Benutzerprofil:
+ * - Anzeige und Upload des Profilbilds
+ * - Anzeige und Bearbeitung der Profildaten
+ * - Passwortänderung
+ * - Anzeige von Benachrichtigungen
+ *
+ * Diese Komponente hält den lokalen UI-Zustand für Bearbeitungsmodus und Passwortfelder
+ * und koordiniert die Übergabe an API-Methoden (Profil speichern, Passwort ändern, Bild hochladen).
+ */
+
 const ProfileSidebar: React.FC<Props> = ({ formData, setFormData }) => {
   const [editMode, setEditMode] = useState(false);
   const [oldPassword, setOldPassword] = useState("");

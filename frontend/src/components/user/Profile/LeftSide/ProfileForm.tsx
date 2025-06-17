@@ -10,6 +10,19 @@ interface Props {
   saveChanges: () => void;
 }
 
+
+/**
+ * ProfileForm-Komponente
+ *
+ * Anzeige und Bearbeitung der Basis-Benutzerdaten im Profilbereich.
+ * Wird im linken Seitenteil der `ProfilePage` verwendet und ermöglicht Nutzern,
+ * ihre persönlichen Daten wie Vorname, Nachname, E-Mail etc. zu bearbeiten.
+ *
+ * Der editierbare Zustand wird über `editMode` gesteuert.
+ * Änderungen werden lokal über `handleChange` verarbeitet und bei Klick auf „Speichern“
+ * über `saveChanges` in die Anwendung zurückgegeben (z. B. API-Aufruf im Parent).
+ */
+
 const ProfileForm: React.FC<Props> = ({
   formData,
   editMode,

@@ -14,6 +14,20 @@ interface Notification {
   date: string;
 }
 
+
+/**
+ * Notifications-Komponente
+ *
+ * Zeigt ortsbezogene Benachrichtigungen im Nutzerprofil an.
+ * Baut beim Laden eine WebSocket-Verbindung zum Backend auf und empfängt neue Orte in Echtzeit.
+ * Initialer Abruf vorhandener Benachrichtigungen erfolgt via HTTP-Request.
+ *
+ * Eingebunden im Profilbereich (LeftSide), dient sie der Benachrichtigung über neue Orte,
+ * etwa durch andere Nutzer erstellte Spots oder Systemmeldungen.
+ *
+ * Die Zustände "gesehen" werden aktuell nur lokal im Frontend gespeichert.
+ */
+
 // FIXME: Benachrichtigung laden immer neu, auch wenn man auf "gesehen" drückt
 
 const Notifications: React.FC = () => {
