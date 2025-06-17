@@ -7,26 +7,31 @@ import { updateLocation as updateLocationInDb } from "../../services/locations/u
 class LocationController {
   async getLocationById(req: Request, res: Response): Promise<void> {
     const { locationId } = req.params;
-    const userId = req.header("x-user-id");
-    if (!userId) {
-      res.status(400).json({ error: "Missing x-user-id header" });
-      return;
-    }
+    const userId = req.header("x-user-id") || null; // ← kann null sein
+
     try {
       const location = await LocationsService.getLocationByIdFromDB(locationId);
       if (!location) {
         res.status(404).json({ error: "Standort nicht gefunden" });
         return;
       }
-      const { count, error } = await supabase
-        .from("my-locations")
-        .select("*", { head: true, count: "exact" })
-        .eq("ort_id", locationId)
-        .eq("benutzer_id", userId);
-      if (error) throw new Error(error.message);
-      const isOwner = (count ?? 0) > 0;
+
+      let isOwner = false;
+
+      if (userId) {
+        const { count, error } = await supabase
+          .from("my-locations")
+          .select("*", { head: true, count: "exact" })
+          .eq("ort_id", locationId)
+          .eq("benutzer_id", userId);
+
+        if (error) throw new Error(error.message);
+        isOwner = (count ?? 0) > 0;
+      }
+
       res.status(200).json({ ...location, isOwner });
-    } catch {
+    } catch (err) {
+      console.error(err);
       res.status(500).json({ error: "Serverfehler" });
     }
   }

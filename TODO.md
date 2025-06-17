@@ -25,6 +25,7 @@
 - [x] Eigene Locations löschen
 - [x] jest config
 - [ ] Admin Funktionen und Rollen einbauen (-> Gastrechte beschränken)
+- [ ] Favoriten fixen
 - [ ] Bug fixing
 
 `Kimia`:
@@ -36,13 +37,13 @@
 `Nelly`:
 
 - [ ] Gucken dass man von jeder Page aus zu Favoriten hinzufügen/entfernen kann
-- [ ] Berwertungen schreiben (Sterne-Rating und kurzer Text) und anzeigen auf LocationDetails
+- [x] Berwertungen schreiben (Sterne-Rating und kurzer Text) und anzeigen auf LocationDetails
   - Bei jeder LocationDetail Seite gibt es über den Bewertungen einen Bereich indem man selbst ein
     Sterne-Rating abgeben kann und einen kurzen Bewertungstext schreiben kann - die eigene Bewertung ist persistiert und änderbar (so ähnlich wie das Ändern von Infos im Formular vielleicht)
 
 `Alex`:
 
-- [x] Interaktive Karte und gucken dass der Filter funktioniert bei der Karte
+- [x] Interaktive Karte und gucken, dass der Filter funktioniert bei der Karte
 - [ ] Fehlende Felder in DB nachtragen bei Locations (es muss alles besetzt sein)
 - [ ] Pins auf der Karte müssen einen irgendwie zu LocationDetails von der angeklickten Loation führen
 

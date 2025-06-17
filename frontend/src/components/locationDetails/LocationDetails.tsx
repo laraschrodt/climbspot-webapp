@@ -18,12 +18,18 @@ const LocationDetails: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const headers: Record<string, string> = {};
+        if (user) {
+          headers["x-user-id"] = user.userId;
+        }
+
         const res = await fetch(`/api/locations/details/${locationId}`, {
-          headers: { "x-user-id": user!.userId },
+          headers,
         });
+
         if (!res.ok) throw new Error("Standort nicht gefunden");
+
         const data = await res.json();
-        console.log("Parsed JSON:", data);
         setLocation(data);
         setIsOwner(data.isOwner ?? false);
       } finally {
@@ -31,7 +37,7 @@ const LocationDetails: React.FC = () => {
       }
     };
 
-    if (locationId && user) fetchData();
+    if (locationId) fetchData();
   }, [locationId, user]);
 
   const handleFavoriteToggle = async () => {
