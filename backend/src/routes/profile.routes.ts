@@ -5,9 +5,16 @@ import MyLocationsProfileController from "../controllers/profiles/my.locations.p
 import profileController from "../controllers/profiles/profile.controller";
 
 /**
- * Alle Methoden in dieser Datei werden in der /profile Route verwendet.
- * Sie sind für das Laden und Aktualisieren der Profildaten zuständig.
- **/
+/**
+ * Profile-Routen
+ *
+ * Definiert Endpunkte für das Laden und Aktualisieren von Profildaten,
+ * Passwortänderungen, Benachrichtigungen, Favoriten, Bewertungen,
+ * Profilbild-Uploads und Nutzer-eigene Locations.
+ *
+ * Alle Routen sind durch `AuthMiddleware.verifyToken` geschützt.
+ * Multer wird für den Upload von Profilbildern genutzt.
+ */
 
 const router = Router();
 const upload = multer({ storage: multer.memoryStorage() });

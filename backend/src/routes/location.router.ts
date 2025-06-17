@@ -9,6 +9,19 @@ import DeleteLocationController from "../controllers/locations/delete.location.c
 const router = Router();
 
 
+
+/**
+ * Locations-Routen
+ *
+ * Definiert Endpunkte für Kletterorte, inklusive:
+ * - Abruf aller Orte, beliebter Orte, Suche und Details
+ * - Verwaltung von Favoriten (Hinzufügen/Entfernen)
+ * - Hinzufügen, Bearbeiten und Löschen von Orten
+ *
+ * Authentifizierung wird bei geschützten Routen via `AuthMiddleware.verifyToken` geprüft.
+ * Bild-Uploads werden bei Hinzufügen und Bearbeiten über `uploadMiddleware` verarbeitet.
+ */
+
 router.get("/all", LocationController.getAllLocations);
 router.get("/popular", LocationController.getPopularLocations);
 router.get("/search", LocationController.searchLocations);
