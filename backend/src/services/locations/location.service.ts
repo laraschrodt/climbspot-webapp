@@ -13,7 +13,20 @@ export interface RawFavoriteRow {
   o: Location & { bewertungen?: Bewertung[] };
 }
 
+
+/**
+ * LocationsService
+ *
+ * Bietet Methoden zum Abrufen, Suchen, Bewerten und Aktualisieren von Kletterorten.
+ */
 export class LocationsService {
+    /**
+   * Holt einen einzelnen Ort anhand der ID.
+   *
+   * @param locationId ID des Ortes
+   * @returns Promise mit Ort oder null, wenn nicht gefunden
+   * @throws Fehler bei Datenbankfehlern
+   */
   async getLocationByIdFromDB(locationId: string): Promise<Location | null> {
     const { data, error } = await supabase
       .from("orte")
@@ -27,6 +40,13 @@ export class LocationsService {
     return data ? (data as Location) : null;
   }
 
+
+      /**
+   * Holt alle verfügbaren Kletterorte.
+   *
+   * @returns Promise mit Array aller Orte
+   * @throws Fehler bei Datenbankfehlern
+   */
   async getAllLocationsFromDB(): Promise<Location[]> {
     const { data, error } = await supabase.from("orte").select("*");
 
@@ -34,6 +54,14 @@ export class LocationsService {
     return (data ?? []) as Location[];
   }
 
+
+    /**
+   * Holt die beliebtesten Kletterorte, berechnet anhand der durchschnittlichen Bewertung.
+   * Sortiert absteigend nach Rating und liefert maximal 12 Orte zurück.
+   *
+   * @returns Promise mit Array der populären Orte inklusive Bewertung
+   * @throws Fehler bei Datenbankfehlern
+   */
   async getPopularLocationsFromDB(): Promise<
     (Location & { rating: number })[]
   > {
@@ -66,6 +94,14 @@ export class LocationsService {
     return withRating.sort((a, b) => b.rating - a.rating).slice(0, 12);
   }
 
+
+    /**
+   * Sucht Orte anhand eines Suchbegriffs.
+   *
+   * @param query Suchstring
+   * @returns Promise mit Array der passenden Orte
+   * @throws Fehler bei Datenbankfehlern
+   */
   async searchLocations(query: string): Promise<Location[]> {
     const { data, error } = await supabase
       .from("orte")
@@ -79,6 +115,14 @@ export class LocationsService {
     return (data ?? []) as Location[];
   }
 
+
+    /**
+   * Holt die Favoritenorte eines bestimmten Nutzers.
+   *
+   * @param userId ID des Nutzers
+   * @returns Promise mit Array der Favoritenorte
+   * @throws Fehler bei Datenbankfehlern
+   */
   async getFavoriteLocationsFromDB(userId: string): Promise<Location[]> {
     const { data, error } = await supabase
       .from("favoriten")
@@ -106,6 +150,14 @@ export class LocationsService {
     return rows.map((row) => row.o);
   }
 
+
+    /**
+   * Holt alle Bewertungen eines Nutzers.
+   *
+   * @param userId ID des Nutzers
+   * @returns Promise mit Array der Bewertungen inklusive Ort-Infos
+   * @throws Fehler bei Datenbankfehlern
+   */
   async getUserReviewsFromDB(userId: string) {
     const { data, error } = await supabase
       .from("bewertungen")
@@ -131,6 +183,16 @@ export class LocationsService {
     return data;
   }
 
+
+  
+    /**
+   * Aktualisiert die Daten eines Ortes anhand der ID.
+   *
+   * @param locationId ID des zu aktualisierenden Ortes
+   * @param data Teilweise aktualisierte Ortsdaten
+   * @returns Promise mit den aktualisierten Ortsdaten
+   * @throws Fehler bei Datenbankfehlern
+   */
   async updateLocationInDB(
     locationId: string,
     data: Partial<Location>
