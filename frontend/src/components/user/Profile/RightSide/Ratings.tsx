@@ -1,5 +1,16 @@
 import React from "react";
 
+
+/**
+ * Review-Komponente
+ *
+ * Zeigt eine Liste von Nutzerbewertungen an, bestehend aus Standortname, Bewertung und Kommentar.
+ * Eingebunden im rechten Bereich der `ProfilePage`.
+ *
+ * Backend-Schnittstelle für Bewertungen ist noch nicht implementiert (TODO).
+ * Aktuell werden die `reviews` als Props übergeben und direkt angezeigt.
+ */
+
 // TODO: Ratings anzeigen lassen (am besten erst wenn alle normalen Locations schon implementiert sind)
 /**
  * Backend hierfür steht noch nicht.

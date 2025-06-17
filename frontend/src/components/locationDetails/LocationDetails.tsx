@@ -7,6 +7,28 @@ import { useUserSession } from "../../auth/UseUserSession";
 import ProtectedComponent from "../../routes/ProtectedComponent";
 import DeleteLocationButton from "./LeftSide/DeleteLocationButton";
 
+
+/**
+ * Detailseite für eine einzelne Kletterlocation.
+ *
+ * Kontext:
+ * Wird aufgerufen über `/details/:locationId` und zeigt umfassende Informationen
+ * zu einem spezifischen Ort an – inklusive Bildbanner, Beschreibung, Zugang, Bewertungen und Aktionen.
+ *
+ * Funktion:
+ * - Holt alle relevanten Daten zur Location über `/api/locations/details/:locationId`.
+ * - Zeigt ein großes Header-Bild mit Titel.
+ * - Zwei-Spalten-Layout:
+ *   - Links: Reviews, Favoriten-Button, ÖPNV-Link, Bearbeiten/Löschen (wenn Eigentümer).
+ *   - Rechts: Detaillierte Infos über die Location (`LocationInfo`).
+ * - Ermöglicht Favorisieren der Location (POST/DELETE `/api/locations/favorite/:locationId`).
+ *
+ * Besondere Hinweise:
+ * - Nutzt `ProtectedComponent`, um Bearbeiten/Löschen nur für den Eigentümer anzuzeigen.
+ * - Aktuell sind Bewertungen nur als Platzhalter (Mock).
+ * - Sollte langfristig in kleinere Teilkomponenten ausgelagert werden.
+ */
+
 const LocationDetails: React.FC = () => {
   const { user } = useUserSession();
   const [location, setLocation] = useState<Location | null>(null);

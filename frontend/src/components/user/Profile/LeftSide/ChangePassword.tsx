@@ -8,6 +8,18 @@ interface Props {
   changePassword: () => void;
 }
 
+
+/**
+ * ChangePassword-Komponente
+ *
+ * Eingabeformular für das Ändern des Benutzerpassworts im Profilbereich.
+ * Wird als Teil der `ProfilePage` verwendet, konkret im linken Seitenteil (`LeftSide`).
+ * Übergibt die Eingaben über Props an übergeordnete State-Handler und führt bei Klick auf den Button
+ * eine Passwortänderung über `changePassword` aus – typischerweise ein Backend-Call.
+ *
+ * Diese Komponente enthält keinerlei eigene Logik oder State, sondern ist rein präsentationsbezogen.
+ */
+
 const ChangePassword: React.FC<Props> = ({
   oldPassword,
   newPassword,

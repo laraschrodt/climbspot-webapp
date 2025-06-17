@@ -3,6 +3,13 @@ import { randomUUID } from "crypto";
 import { supabase } from "../../lib/supabase";
 import type { PostgrestError } from "@supabase/supabase-js";
 
+
+/**
+ * Gibt Supabase-Fehler strukturiert in der Konsole aus.
+ *
+ * @param scope Kontext der Fehlermeldung (z.B. Funktionsname)
+ * @param err PostgrestError-Objekt mit Fehlerdetails von Supabase
+ */
 function logSupabaseError(scope: string, err: PostgrestError) {
   console.error(`[${scope}] Supabase-Fehler`);
   console.error(" Code   :", err.code ?? "—");
@@ -11,6 +18,20 @@ function logSupabaseError(scope: string, err: PostgrestError) {
   console.error(" Hint   :", err.hint ?? "—");
 }
 
+
+
+/**
+ * Fügt einen neuen Kletterort hinzu und speichert das Bild in Supabase Storage.
+ * 
+ * - Lädt das Bild hoch und generiert eine öffentliche URL.
+ * - Legt einen neuen Datensatz in der "orte"-Tabelle an.
+ * - Verknüpft den Ort mit dem aktuell eingeloggten Nutzer in "my-locations".
+ * - Erstellt eine Benachrichtigung für den neuen Ort.
+ *
+ * @param request Express Request mit Bilddatei und Ort-Daten im Body
+ * @returns Promise mit Objekt, das neue Ort-Details und Benachrichtigung enthält
+ * @throws Fehler bei fehlendem Bild, Speicher- oder Datenbankfehlern
+ */
 export async function addLocation(request: Request): Promise<{
   ort_id: string;
   name: string;

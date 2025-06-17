@@ -4,6 +4,18 @@ import ProfileSidebar from "./LeftSide/ProfileSidebar";
 import ProfileDetails from "./RightSide/ProfileDetails";
 import backgroundImage from "../../../assets/images/profilBackground.jpg";
 
+
+/**
+ * Profile-Komponente
+ *
+ * Oberkomponente für den gesamten Nutzerprofilbereich.
+ * Lädt die Profildaten (Basisinformationen, Favoriten, Bewertungen) vom Backend.
+ * Verteilt die Daten an die linken (ProfileSidebar) und rechten (ProfileDetails) Unterkomponenten.
+ *
+ * Enthält zudem einen optischen Begrüßungsbereich mit Hintergrundbild und Nutzername.
+ * Organisiert das Grid-Layout für das Profil.
+ */
+
 const Profile: React.FC = () => {
   const [formData, setFormData] = useState({
     vorname: "",

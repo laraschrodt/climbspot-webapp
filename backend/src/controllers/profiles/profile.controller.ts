@@ -4,10 +4,19 @@ import ProfileService from "../../services/profiles/profile.service";
 import AccountService from "../../services/accounts/account.service";
 
 /**
- * Alle Methoden in dieser Datei werden in der /profile Route verwendet.
- * Sie sind für das Laden und Aktualisieren der Profildaten zuständig.
+ * ProfileController
+ *
+ * Verarbeitet alle Anfragen, die unter der `/profile`-Route laufen.
+ * Verantwortlich für das Laden, Aktualisieren und Verwalten von Profildaten,
+ * Profilbildern, Benachrichtigungen, Favoriten, Bewertungen sowie Passwortänderungen.
  */
 class ProfileController {
+    /**
+   * Liefert Profildaten des aktuell eingeloggten Nutzers zurück.
+   *
+   * @param req Authentifizierter Request mit Nutzerinformationen
+   * @param res Response mit den Profildaten oder Fehlerstatus
+   */
   async getProfileData(req: AuthedRequest, res: Response): Promise<void> {
     try {
       const userId = (req.user as { userId: string })?.userId;
@@ -23,6 +32,16 @@ class ProfileController {
     }
   }
 
+
+      /**
+   * Aktualisiert die Profildaten des Nutzers.
+   *
+   * Erwartet im Body: vorname, nachname, email, username, location.
+   * Liefert eine Erfolgsmeldung oder Fehler zurück.
+   *
+   * @param req Authentifizierter Request mit Nutzerdaten im Body
+   * @param res Response mit Statusmeldung
+   */
   async updateProfileData(req: AuthedRequest, res: Response): Promise<void> {
     try {
       const userId = (req.user as { userId: string })?.userId;
@@ -48,6 +67,15 @@ class ProfileController {
     }
   }
 
+
+      /**
+   * Lädt ein neues Profilbild hoch und speichert es.
+   *
+   * Erwartet eine Datei im Request (z.B. via Multer Middleware).
+   *
+   * @param req Authentifizierter Request mit Datei
+   * @param res Response mit URL zum gespeicherten Bild oder Fehler
+   */
   async uploadProfileImage(req: AuthedRequest, res: Response): Promise<void> {
     try {
       const userId = (req.user as { userId: string })?.userId;
@@ -65,6 +93,13 @@ class ProfileController {
     }
   }
 
+
+      /**
+   * Liefert alle Benachrichtigungen.
+   *
+   * @param req Request-Objekt
+   * @param res Response mit Liste der Benachrichtigungen oder Fehler
+   */
   async getNotifications(req: Request, res: Response): Promise<void> {
     try {
       const notifications = await ProfileService.getNotifications();
@@ -74,6 +109,15 @@ class ProfileController {
     }
   }
 
+
+      /**
+   * Ändert das Passwort des Nutzers.
+   *
+   * Erwartet im Body: oldPassword, newPassword.
+   *
+   * @param req Authentifizierter Request mit alten und neuen Passwort
+   * @param res Response mit Statusmeldung oder Fehler
+   */
   async changePassword(req: AuthedRequest, res: Response): Promise<void> {
     try {
       const userId = (req.user as { userId: string })?.userId;
@@ -92,6 +136,13 @@ class ProfileController {
     }
   }
 
+
+      /**
+   * Liefert Favoriten des Nutzers.
+   *
+   * @param req Authentifizierter Request mit Nutzerinfo
+   * @param res Response mit Favoriten oder Fehler
+   */
   async getFavorites(req: AuthedRequest, res: Response): Promise<void> {
     try {
       const userId = (req.user as { userId: string })?.userId;
@@ -107,6 +158,13 @@ class ProfileController {
     }
   }
 
+
+    /**
+   * Liefert Bewertungen des Nutzers.
+   *
+   * @param req Authentifizierter Request mit Nutzerinfo
+   * @param res Response mit Bewertungen oder Fehler
+   */
   async getReviews(req: AuthedRequest, res: Response): Promise<void> {
     const userId =
       req.user && typeof req.user === "object" && "userId" in req.user

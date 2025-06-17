@@ -1,5 +1,22 @@
 import React from "react";
 
+
+
+/**
+ * Komponente zur Anzeige von Nutzerbewertungen für eine Location.
+ *
+ * Kontext:
+ * Wird typischerweise in der Detailansicht einer Location angezeigt,
+ * um Feedback und Kommentare von Nutzern sichtbar zu machen.
+ *
+ * Funktion:
+ * - Zeigt eine Liste von statischen Beispielbewertungen (Mock-Daten).
+ * - Jede Bewertung enthält Autor, Datum und Text.
+ * - Falls keine Bewertungen vorhanden sind, wird eine entsprechende Meldung angezeigt.
+ *
+ * Hinweis:
+ * Aktuell werden keine echten Bewertungen geladen; dies ist ein Platzhalter.
+ */
 const Reviews: React.FC = () => {
   const mockReviews = [
     {

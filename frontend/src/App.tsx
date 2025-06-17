@@ -12,6 +12,18 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
 import EditLocationPage from "./pages/EditLocationPage";
 
+
+/**
+ * App-Komponente
+ *
+ * Definiert das Routing der Anwendung mittels React Router.
+ * Enthält öffentliche und geschützte Routen.
+ *
+ * Geschützte Routen sind mit `ProtectedRoute` umschlossen und erfordern entsprechende Nutzerrollen.
+ *
+ * 404-Route fängt alle unbekannten Pfade ab und zeigt eine Fehlermeldung.
+ */
+
 export default function App() {
   return (
     <Routes>

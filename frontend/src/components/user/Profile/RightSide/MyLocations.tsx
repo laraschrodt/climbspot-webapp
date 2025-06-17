@@ -9,6 +9,18 @@ interface MyLocation extends Location {
   bewertungen?: { sterne: number }[];
 }
 
+/**
+ * MyLocations-Komponente
+ *
+ * Zeigt alle Orte an, die vom aktuell eingeloggten Nutzer selbst erstellt wurden.
+ * Eingebunden im rechten Bereich der `ProfilePage`.
+ *
+ * Die Komponente lädt die Daten bei Initialisierung vom Server und zeigt sie in einer Grid-Ansicht.
+ * Jede Location wird mit einer `LocationCard` dargestellt und ist zur Detailseite verlinkt.
+ *
+ * Bewertungsdurchschnitt wird lokal aus den abgegebenen Einzelbewertungen berechnet.
+ */
+
 const MyLocations: React.FC = () => {
   const { user } = useUserSession();
   const [locations, setLocations] = useState<MyLocation[]>([]);
