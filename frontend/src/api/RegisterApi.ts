@@ -1,5 +1,9 @@
 import { User } from "../models/User";
 
+/**
+ * Antwortstruktur des Backends nach erfolgreicher Registrierung.
+ * Optional können auch Profildaten enthalten sein.
+ */
 export interface RegisterResponse {
   benutzer_id: string;
   vorname?: string;
@@ -10,8 +14,25 @@ export interface RegisterResponse {
   location?: string;
 }
 
+/**
+ * API-Klasse zur Registrierung neuer Benutzer.
+ *
+ * Kontext:
+ * Wird z. B. in der Register-Komponente verwendet, um neue Benutzer
+ * über das Backend anzulegen. Bei Erfolg wird direkt ein `User`-Objekt erzeugt.
+ */
+
 export class RegisterApi {
   private readonly baseUrl = "/api";
+
+  /**
+   * Sendet Benutzerdaten an das Backend zur Registrierung.
+   * @param username Gewünschter Benutzername
+   * @param email E-Mail-Adresse
+   * @param password Gewähltes Passwort
+   * @returns Ein neues `User`-Objekt mit den vom Server gelieferten Daten
+   * @throws Fehler mit Nachricht bei fehlgeschlagener Registrierung
+   */
 
   async register(
     username: string,
