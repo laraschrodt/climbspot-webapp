@@ -290,6 +290,7 @@ const EditLocation: React.FC = () => {
             />
             <span className="ml-2">Ja</span>
           </label>
+          // FIXME: Ja/Nein Button klappt nicht
           <label className="label cursor-pointer">
             <input
               type="radio"
