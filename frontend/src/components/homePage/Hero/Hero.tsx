@@ -1,6 +1,19 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+
+/**
+ * Hero-Komponente für die Startseite.
+ *
+ * Kontext:
+ * Wird auf der Startseite angezeigt und dient als einladender Einstieg
+ * in die Anwendung, mit einem großen Bild, einem Slogan und einer Handlungsaufforderung.
+ *
+ * Funktion:
+ * - Zeigt einen Hintergrund mit Overlay.
+ * - Enthält Überschrift, Beschreibung und einen Button mit Link zur Login-Seite.
+ * - Ziel ist es, Nutzer zur Interaktion und Anmeldung zu motivieren.
+ */
 const Hero: React.FC = () => {
   return (
     <div
