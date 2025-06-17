@@ -3,7 +3,7 @@ import Profilbild from "./ProfilePicture";
 import PersönlicheInfos from "./ProfileForm";
 import PasswortÄndern from "./ChangePassword";
 import { FormDataType } from "./types";
-import ProfileApi from "../../../../api/ProfileApi";
+import ProfileApi from "../../../../api/profileApi";
 import Notifications from "./Notifications";
 
 interface Props {
