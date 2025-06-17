@@ -4,7 +4,27 @@ import { AuthedRequest } from "../../middlewares/auth.middleware";
 import { supabase } from "../../lib/supabase";
 import { updateLocation as updateLocationInDb } from "../../services/locations/updateLocation.service";
 
+
+/**
+ * LocationController
+ *
+ * Verwaltet alle Endpunkte rund um Kletterorte:
+ * - Einzelne Orte abfragen und prüfen, ob der Nutzer Eigentümer ist
+ * - Alle Orte laden
+ * - Beliebte Orte laden
+ * - Suche nach Orten
+ * - Favoriten des Nutzers laden
+ * - Bewertungen des Nutzers laden
+ * - Ort aktualisieren
+ */
 class LocationController {
+    /**
+   * Holt einen Ort anhand der ID.
+   * Prüft optional, ob der anfragende Nutzer Eigentümer des Ortes ist.
+   *
+   * @param req Express Request mit `locationId` als URL-Parameter und optional Header `x-user-id`
+   * @param res Express Response mit Ort-Details und `isOwner`-Flag
+   */
   async getLocationById(req: Request, res: Response): Promise<void> {
     const { locationId } = req.params;
     const userId = req.header("x-user-id") || null; // ← kann null sein
@@ -36,6 +56,13 @@ class LocationController {
     }
   }
 
+
+      /**
+   * Holt alle Kletterorte aus der Datenbank.
+   *
+   * @param req Express Request
+   * @param res Express Response mit Liste aller Orte
+   */
   async getAllLocations(req: Request, res: Response): Promise<void> {
     try {
       const locations = await LocationsService.getAllLocationsFromDB();
@@ -46,6 +73,13 @@ class LocationController {
     }
   }
 
+
+      /**
+   * Holt beliebte Kletterorte aus der Datenbank.
+   *
+   * @param req Express Request
+   * @param res Express Response mit Liste der beliebten Orte
+   */
   async getPopularLocations(req: Request, res: Response): Promise<void> {
     try {
       const popular = await LocationsService.getPopularLocationsFromDB();
@@ -56,6 +90,13 @@ class LocationController {
     }
   }
 
+
+      /**
+   * Sucht Orte anhand eines Suchbegriffs (`query`).
+   *
+   * @param req Express Request mit `query` als Query-Parameter
+   * @param res Express Response mit Suchergebnissen oder Fehler bei fehlendem Parameter
+   */
   async searchLocations(req: Request, res: Response): Promise<void> {
     const query = req.query.query as string;
 
@@ -73,6 +114,13 @@ class LocationController {
     }
   }
 
+
+      /**
+   * Holt die Favoritenorte des aktuell eingeloggten Nutzers.
+   *
+   * @param req Authentifizierter Request mit Nutzerinformationen
+   * @param res Express Response mit Liste der Favoriten oder Fehler
+   */
   async getFavorites(req: AuthedRequest, res: Response): Promise<void> {
     try {
       const userId = (req.user as { userId: string }).userId;
@@ -90,6 +138,13 @@ class LocationController {
     }
   }
 
+
+      /**
+   * Holt alle Bewertungen, die der Nutzer abgegeben hat.
+   *
+   * @param req Authentifizierter Request mit Nutzerinformationen
+   * @param res Express Response mit Liste der Bewertungen oder Fehler
+   */
   async getUserReviews(req: AuthedRequest, res: Response): Promise<void> {
     try {
       const userId = (req.user as { userId: string })?.userId;
@@ -107,6 +162,13 @@ class LocationController {
     }
   }
 
+
+      /**
+   * Aktualisiert einen bestehenden Ort.
+   *
+   * @param req Express Request mit `locationId` als URL-Parameter und neuen Daten im Body
+   * @param res Express Response mit der ID des aktualisierten Ortes oder Fehler
+   */
   async updateLocation(req: Request, res: Response) {
     const { locationId } = req.params;
     try {
