@@ -2,6 +2,11 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import ProtectedComponent from "../../routes/ProtectedComponent";
 
+/**
+ * Datenstruktur zur Beschreibung aller möglichen Filterkriterien.
+ * Wird beim Absenden des Formulars übergeben.
+ */
+
 export interface FilterCriteria {
   kletterart: string;
   maxDifficulty: number;
@@ -11,19 +16,51 @@ export interface FilterCriteria {
   kinderfreundlich: boolean | null;
 }
 
+/**
+ * Props für die Filter-Komponente.
+ * Erwartet eine Callback-Funktion, die mit den aktuellen Filterwerten aufgerufen wird.
+ */
+
 interface FilterProps {
   onApply: (criteria: FilterCriteria) => void;
 }
 
+
+/**
+ * Diese Komponente stellt ein responsives Filterformular dar.
+ *
+ * Hauptfunktion:
+ * - Nutzer können nach Kletterart, Schwierigkeitsgrad, Standort, Zeit, Länge und Kinderfreundlichkeit filtern.
+ * - Nach Absenden werden die gewählten Filter als Objekt zurückgegeben.
+ *
+ * Integration:
+ * - Die Komponente wird z. B. in der Karten- oder Listenseite verwendet.
+ * - Das `onApply`-Callback erlaubt die Weitergabe der Filter an die Parent-Komponente (z. B. zum Filtern von Locations).
+ */
+
+
 const Filter: React.FC<FilterProps> = ({ onApply }) => {
+  // Sichtbarkeit des Filters (auf- und zuklappbar)
   const [open, setOpen] = useState(true);
+  // Kletterart (z. B. "klettern" oder "klettersteig")
   const [kletterart, setKletterart] = useState("");
+  // Maximal erlaubter Schwierigkeitsgrad (1–10)
   const [maxDifficulty, setMaxDifficulty] = useState(10);
+  // Freitextfeld für Standort (Land, Region …)
   const [standort, setStandort] = useState("");
+  // Geschätzte Kletterzeit in Stunden
   const [kletterzeit, setKletterzeit] = useState(0);
+  // Gesamtlänge der Route in Metern
   const [kletterlaenge, setKletterlaenge] = useState(0);
+  // Kinderfreundlichkeit: "ja", "nein" oder null (egal)
   const [kinder, setKinder] = useState<string | null>(null);
 
+/**
+ * Behandelt das Absenden des Filterformulars.
+ *
+ * - Verhindert die Standard-Formularaktion.
+ * - Ruft die `onApply`-Callbackfunktion mit den aktuellen Filterwerten auf.
+ */
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onApply({
