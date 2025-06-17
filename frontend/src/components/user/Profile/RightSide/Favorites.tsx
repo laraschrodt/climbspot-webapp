@@ -8,6 +8,18 @@ interface FavoriteLocation extends Location {
   rating?: { sterne: number }[];
 }
 
+
+/**
+ * Favorites-Komponente
+ *
+ * Zeigt alle vom Nutzer gespeicherten Favoritenorte an.
+ * Wird im rechten Bereich der `ProfilePage` eingebunden.
+ *
+ * Lädt die Favoritenliste nach dem Initial-Render vom Server
+ * (basierend auf dem eingeloggten Nutzer) und zeigt die Orte in einer Grid-Darstellung.
+ * Jeder Ort wird über eine `LocationCard` visualisiert und verlinkt zur Detailseite.
+ */
+
 const Favorites: React.FC = () => {
   const [favorites, setFavorites] = useState<FavoriteLocation[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
