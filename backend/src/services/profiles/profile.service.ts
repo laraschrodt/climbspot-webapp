@@ -22,10 +22,20 @@ export interface NotificationRow {
 }
 
 /**
- * Alle Methoden in dieser Klasse werden in der /profile Route verwendet.
- * Sie sind für das Laden und Aktualisieren der Profildaten zuständig.
+ * ProfileService
+ *
+ * Bietet Methoden zum Laden und Aktualisieren von Profildaten,
+ * zum Upload von Profilbildern, zum Abrufen von Favoriten,
+ * Bewertungen und Benachrichtigungen für Nutzer.
  */
 class ProfileService {
+    /**
+   * Holt Profildaten eines Nutzers anhand der Nutzer-ID.
+   *
+   * @param userId ID des Nutzers
+   * @returns Promise mit den Profildaten
+   * @throws Fehler bei Datenbankfehlern oder falls Profil nicht gefunden wird
+   */
   async getProfileDataByUserId(userId: string) {
     const { data, error } = await supabase
       .from("benutzer")
@@ -51,6 +61,20 @@ class ProfileService {
     };
   }
 
+
+  
+  /**
+   * Aktualisiert die Profildaten eines Nutzers.
+   *
+   * @param userId ID des Nutzers
+   * @param vorname Neuer Vorname
+   * @param nachname Neuer Nachname
+   * @param email Neue Email-Adresse
+   * @param username Neuer Benutzername
+   * @param location Neuer Standort
+   * @returns Erfolgsmeldung
+   * @throws Fehler bei Datenbankproblemen
+   */
   async updateProfileInDatabase(
     userId: string,
     {
@@ -85,6 +109,16 @@ class ProfileService {
     return { success: true };
   }
 
+
+    /**
+   * Lädt ein Profilbild in den Supabase-Storage hoch
+   * und aktualisiert die URL in der Benutzertabelle.
+   *
+   * @param userId ID des Nutzers
+   * @param file Bilddatei
+   * @returns URL des hochgeladenen Profilbilds
+   * @throws Fehler bei Upload- oder Datenbankproblemen
+   */
   async uploadProfileImageToDatabase(
     userId: string,
     file: Express.Multer.File
@@ -114,6 +148,14 @@ class ProfileService {
     return publicUrl;
   }
 
+
+    /**
+   * Holt alle Favoriten eines Nutzers.
+   *
+   * @param userId ID des Nutzers
+   * @returns Promise mit Array der Favoritenorte
+   * @throws Fehler bei Datenbankfehlern
+   */
   async getFavoriteLocationsFromDB(userId: string): Promise<Location[]> {
     const { data, error } = await supabase
       .from("favoriten")
@@ -141,6 +183,14 @@ class ProfileService {
     return rows.map((row) => row.o);
   }
 
+
+    /**
+   * Holt alle Bewertungen eines Nutzers.
+   *
+   * @param userId ID des Nutzers
+   * @returns Promise mit Array der Bewertungen inklusive Ort-Infos
+   * @throws Fehler bei Datenbankfehlern
+   */
   async getReviewsByUserId(userId: string) {
     const { data, error } = await supabase
       .from("bewertungen")
@@ -164,6 +214,13 @@ class ProfileService {
     return data || [];
   }
 
+
+    /**
+   * Holt die letzten 20 Benachrichtigungen, sortiert nach Erstellungsdatum.
+   *
+   * @returns Promise mit Array der Notifications
+   * @throws Fehler bei Datenbankfehlern
+   */
   async getNotifications(): Promise<NotificationRow[]> {
     const { data, error } = await supabase
       .from("notifications")
