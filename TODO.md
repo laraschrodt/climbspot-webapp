@@ -45,7 +45,7 @@
 
 - [x] Interaktive Karte und gucken, dass der Filter funktioniert bei der Karte
 - [ ] Fehlende Felder in DB nachtragen bei Locations (es muss alles besetzt sein)
-- [ ] Pins auf der Karte müssen einen irgendwie zu LocationDetails von der angeklickten Loation führen
+- [X] Pins auf der Karte müssen einen irgendwie zu LocationDetails von der angeklickten Loation führen
 
 ---
 
@@ -57,8 +57,8 @@
 - [ ] Bewertung schreiben (`Kimia`)
 - [ ] Location favorisieren (`Lara`)
 - [ ] Admin-Funktionen (`Lara`)
-- [ ] Suchfunktion im Header (`Alex`)
-- [ ] Filterfunktion bei Karte und Liste (`Alex`)
+- [X] Suchfunktion im Header (`Alex`)
+- [X] Filterfunktion bei Karte und Liste (`Alex`)
 - [ ] Nahverkehrsintegration (`Nelly`)
 - [ ] Interaktive Karte (`Lara`)
 - [ ] Benachrichtigungen (`Kimia`)

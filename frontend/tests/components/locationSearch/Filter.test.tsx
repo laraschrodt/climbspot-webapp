@@ -1,4 +1,3 @@
-// 👇 Mock für useUserSession
 jest.mock("../../../src/auth/UseUserSession", () => ({
   useUserSession: () => ({
     user: { username: "TestUser", role: "user" },
@@ -6,7 +5,6 @@ jest.mock("../../../src/auth/UseUserSession", () => ({
   }),
 }));
 
-// 👇 Imports
 import { render, screen, fireEvent } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import Filter from "../../../src/components/locationSearch/Filter";
@@ -28,7 +26,7 @@ describe("Filter-Komponente", () => {
       target: { value: "klettern" },
     });
 
-    // Schwierigkeit (Slider)
+    // Schwierigkeit 
     const rangeInput = screen.getByRole("slider");
     fireEvent.change(rangeInput, { target: { value: "7" } });
 
