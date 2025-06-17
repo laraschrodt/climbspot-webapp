@@ -4,8 +4,26 @@ import { useUserSession } from "../../../auth/UseUserSession";
 import axios from "axios";
 import ProfileApi from "../../../api/profileApi";
 
+
+/**
+ * Rechter Bereich der Navigationsleiste.
+ *
+ * Kontext:
+ * Wird im `Navbar` als rechter Abschnitt verwendet.
+ * Zeigt Suchfunktion, Profilbild und Dropdown-Menü.
+ *
+ * Funktion:
+ * - Dynamische Suche nach Locations über eine API mit Vorschlagsliste.
+ * - Anzeige des Benutzerprofilbildes (falls vorhanden), sonst Initialbuchstabe.
+ * - Dropdown-Menü für Login/Logout/Profil, abhängig vom Login-Zustand.
+ */
+
 const NavbarEnd: FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  /** 
+ * Suchbegriff für die dynamische Location-Suche.
+ * Wird verwendet, um während der Eingabe API-Anfragen zu triggern.
+ */
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const { user, clearSession } = useUserSession();
@@ -36,6 +54,11 @@ const NavbarEnd: FC = () => {
 
     return () => clearTimeout(delayDebounceFn);
   }, [searchTerm]);
+  /**
+ * Effekt-Hook für die Vorschlagssuche.
+ * Führt bei jeder Änderung des Suchbegriffs eine API-Abfrage aus,
+ * um passende Locations zu laden. Verwendet Debounce (300 ms).
+ */
 
   useEffect(() => {
     const fetchProfileImage = async () => {
