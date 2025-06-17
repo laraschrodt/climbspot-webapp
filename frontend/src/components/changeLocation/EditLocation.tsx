@@ -4,6 +4,22 @@ import { useUserSession } from "../../auth/UseUserSession";
 import type { Location } from "../../models/Location";
 import LocationPicture from "../addLocation/LocationPicture";
 
+
+/**
+ * Seite zur Bearbeitung einer bestehenden Kletterlocation.
+ *
+ * Kontext:
+ * Diese Komponente wird verwendet, wenn ein eingeloggter Benutzer eine eigene Location
+ * überarbeiten möchte. Die Location wird anhand ihrer ID aus der URL geladen.
+ *
+ * Funktion:
+ * - Lädt beim Rendern die Location-Daten über `/api/locations/details/:id`.
+ * - Zeigt ein vorbefülltes Formular zur Bearbeitung aller Location-Daten.
+ * - Ermöglicht optional das Hochladen eines neuen Bildes.
+ * - Sendet beim Absenden die aktualisierten Daten als `FormData` an `/api/locations/edit-location/:id`.
+ * - Leitet bei Erfolg zur aktualisierten Detailseite weiter.
+ */
+
 const EditLocation: React.FC = () => {
   const { user } = useUserSession();
   const navigate = useNavigate();
