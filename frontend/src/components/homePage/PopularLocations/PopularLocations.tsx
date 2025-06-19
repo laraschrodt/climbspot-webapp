@@ -4,8 +4,6 @@ import LocationCard from "../../locationSearch/LocationCard";
 import axios from "axios";
 import { Location } from "../../../models/Location";
 
-
-
 /**
  * Erweiterung des `Location`-Modells um ein `rating`-Feld.
  * Wird verwendet für die Anzeige populärer Orte.
@@ -15,11 +13,7 @@ interface PopularLocation extends Location {
   rating: number;
 }
 
-
-
 /**
- * Komponente zur Anzeige beliebter Kletterorte auf der Startseite.
- *
  * Kontext:
  * Wird im `HomePage`-Layout verwendet, um Nutzern beliebte Locations
  * zu präsentieren und sie zur Erkundung anzuregen.
