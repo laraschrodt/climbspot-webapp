@@ -32,9 +32,36 @@ const LocationDetails: React.FC = () => {
           const msg = await res.text();
           throw new Error(msg || "Standort nicht gefunden");
         }
+
         const data = await res.json();
         setLocation(data);
         setAllReviews(data.bewertungen || []);
+
+        const token = localStorage.getItem("token");
+        if (token) {
+          try {
+            const decoded: any = JSON.parse(atob(token.split(".")[1]));
+            const userId = decoded.userId;
+
+            // Bewertung des Users setzen
+            const existingReview = data.bewertungen?.find(
+              (r: Review) => r.benutzer_id === userId
+            );
+            if (existingReview) {
+              setUserReview(existingReview);
+              setReviewText(existingReview.kommentar);
+              setReviewStars(existingReview.sterne);
+            }
+
+            // Favoritenstatus prüfen
+            const favorisiertVon = data.favorisiert_von || [];
+            const istFavorit = favorisiertVon.includes(userId);
+            setIsFavorited(istFavorit);
+
+          } catch (error) {
+            console.warn("Token konnte nicht dekodiert werden:", error);
+          }
+        }
       } catch (err) {
         console.error("Fehler beim Laden des Standorts:", err);
         setLocation(null);
@@ -56,7 +83,7 @@ const LocationDetails: React.FC = () => {
     }
 
     try {
-      const res = await fetch(`http://localhost:3001/api/locations/favorite/${locationId}`, {
+      const res = await fetch(`/api/locations/favorite/${locationId}`, {
         method: isFavorited ? 'DELETE' : 'POST',
         headers: {
           'Content-Type': 'application/json',

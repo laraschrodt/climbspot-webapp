@@ -5,6 +5,7 @@ import locationService from "../services/location.service";
 import ProfileService from "../services/profile.service";
 import AccountService from "../services/account.service";
 import { JwtPayload } from "jsonwebtoken";
+import { supabase } from "../lib/supabase";
 
 class LocationController {
   async getLocationById(req: Request, res: Response): Promise<void> {
@@ -18,12 +19,26 @@ class LocationController {
         return;
       }
 
-      // Bewertungen sicher dazu holen
+      // Bewertungen laden
       const reviews = await LocationsService.getReviewsByLocationId(locationId);
 
+      // Favorisierungen laden
+      const { data: favoriten, error: favError } = await supabase
+        .from("favoriten")
+        .select("benutzer_id")
+        .eq("ort_id", locationId);
+
+      if (favError) {
+        console.error("Fehler beim Laden der Favoriten:", favError);
+      }
+
+      const favorisiert_von = favoriten?.map((f) => f.benutzer_id) || [];
+
+      // Alles gemeinsam senden
       res.json({
         ...location,
         bewertungen: reviews,
+        favorisiert_von, // ← neu im Response
       });
     } catch (err) {
       console.error("Fehler bei getLocationById:", err);
@@ -146,7 +161,7 @@ class LocationController {
       kommentar,
     });
 
-    if (!userId || !sterne || kommentar === undefined) {
+    if (!userId || !sterne == undefined|| kommentar === undefined) {
       res.status(400).json({ error: "Fehlende oder ungültige Felder" });
       return;
     }

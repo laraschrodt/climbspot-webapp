@@ -128,13 +128,38 @@ class LocationsService {
   }
 
   async addFavorite(userId: string, locationId: string): Promise<void> {
-    const { error } = await supabase
-      .from("favoriten") 
-      .insert([{benutzer_id: userId, ort_id: locationId }]);
+    console.log(">>> addFavorite called with:");
+    console.log("User ID:", userId);
+    console.log("Location ID:", locationId);
 
-    if (error) {
-      throw new Error(`Fehler beim Hinzufügen des Favoriten: ${error.message}`);
+    // Prüfen, ob Favorit bereits existiert
+    const { data: existing, error: checkError } = await supabase
+      .from("favoriten")
+      .select("id")
+      .eq("benutzer_id", userId)
+      .eq("ort_id", locationId);
+
+    if (checkError) {
+      console.error("Fehler beim Favoriten-Check:", checkError.message);
+      throw new Error("Fehler beim Favoriten-Check");
     }
+
+    if (existing && existing.length > 0) {
+      console.log("Favorit bereits vorhanden – kein Insert notwendig.");
+      return;
+    }
+
+    // Nur einfügen, wenn noch nicht vorhanden
+    const { error: insertError } = await supabase
+      .from("favoriten")
+      .insert([{ benutzer_id: userId, ort_id: locationId }]);
+
+    if (insertError) {
+      console.error("Fehler beim Insert:", insertError.message);
+      throw new Error("Fehler beim Hinzufügen des Favoriten");
+    }
+
+    console.log("Favorit erfolgreich hinzugefügt.");
   }
 
   async removeFavorite(userId: string, locationId: string): Promise<void> {
@@ -156,9 +181,9 @@ class LocationsService {
       .order("erstellt_am", { ascending: false });
 
     if (error) {
-      console.error("Fehler beim Laden der Bewertungen:", error);
-      throw new Error("Bewertungen konnten nicht geladen werden.");
-    }
+    console.error("Fehler beim Laden der Bewertungen:", error);
+    throw new Error("Bewertungen konnten nicht geladen werden.");
+  }
 
     return data;
   }

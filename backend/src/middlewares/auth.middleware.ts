@@ -8,6 +8,8 @@ export interface AuthedRequest extends Request {
 
 class AuthMiddleware {
   verifyToken(req: AuthedRequest, res: Response, next: NextFunction): void {
+    console.log("🛡 verifyToken wurde aufgerufen!"); // DEBUG: Middleware aktiv
+
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -19,6 +21,7 @@ class AuthMiddleware {
 
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET || "defaultSecret");
+
       req.user = decoded;
       next();
     } catch (err) {
