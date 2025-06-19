@@ -7,7 +7,6 @@ import { useUserSession } from "../../auth/UseUserSession";
 import ProtectedComponent from "../../routes/ProtectedComponent";
 import DeleteLocationButton from "./LeftSide/DeleteLocationButton";
 
-
 /**
  * Detailseite für eine einzelne Kletterlocation.
  *
@@ -112,7 +111,7 @@ const LocationDetails: React.FC = () => {
         {/* Spalte 1 - LeftSide: Reviews und Buttons */}
         <div className="w-full md:w-1/3 space-y-6">
           {isOwner && (
-            <ProtectedComponent roles={["user"]}>
+            <ProtectedComponent roles={["user", "admin"]}>
               <div className="flex gap-4">
                 <Link
                   to={`/edit-location/${locationId}`}

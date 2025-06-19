@@ -25,7 +25,6 @@ interface FilterProps {
   onApply: (criteria: FilterCriteria) => void;
 }
 
-
 /**
  * Diese Komponente stellt ein responsives Filterformular dar.
  *
@@ -34,15 +33,14 @@ interface FilterProps {
  * - Nach Absenden werden die gewählten Filter als Objekt zurückgegeben.
  *
  * Integration:
- * - Die Komponente wird z. B. in der Karten- oder Listenseite verwendet.
- * - Das `onApply`-Callback erlaubt die Weitergabe der Filter an die Parent-Komponente (z. B. zum Filtern von Locations).
+ * - Die Komponente wird z.B. in der Karten- oder Listenseite verwendet.
+ * - Das `onApply`-Callback erlaubt die Weitergabe der Filter an die Parent-Komponente (z.B. zum Filtern von Locations).
  */
-
 
 const Filter: React.FC<FilterProps> = ({ onApply }) => {
   // Sichtbarkeit des Filters (auf- und zuklappbar)
   const [open, setOpen] = useState(true);
-  // Kletterart (z. B. "klettern" oder "klettersteig")
+  // Kletterart (z.B. "klettern" oder "klettersteig")
   const [kletterart, setKletterart] = useState("");
   // Maximal erlaubter Schwierigkeitsgrad (1–10)
   const [maxDifficulty, setMaxDifficulty] = useState(10);
@@ -55,12 +53,12 @@ const Filter: React.FC<FilterProps> = ({ onApply }) => {
   // Kinderfreundlichkeit: "ja", "nein" oder null (egal)
   const [kinder, setKinder] = useState<string | null>(null);
 
-/**
- * Behandelt das Absenden des Filterformulars.
- *
- * - Verhindert die Standard-Formularaktion.
- * - Ruft die `onApply`-Callbackfunktion mit den aktuellen Filterwerten auf.
- */
+  /**
+   * Behandelt das Absenden des Filterformulars.
+   *
+   * - Verhindert die Standard-Formularaktion.
+   * - Ruft die `onApply`-Callbackfunktion mit den aktuellen Filterwerten auf.
+   */
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onApply({
@@ -178,7 +176,7 @@ const Filter: React.FC<FilterProps> = ({ onApply }) => {
             </div>
           </div>
           <div className="col-span-full flex justify-end">
-            <ProtectedComponent roles={["user"]}>
+            <ProtectedComponent roles={["user", "admin"]}>
               <Link to="/add-location" className="btn btn-secondary mr-4">
                 Neue Location hinzufügen
               </Link>

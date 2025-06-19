@@ -6,7 +6,6 @@ import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import { FilterCriteria } from "./Filter";
 
-
 /**
  * Datenmodell für eine einfache Location mit Koordinaten,
  * das in der Karte verwendet wird.
@@ -65,7 +64,7 @@ const Map: React.FC<MapProps> = ({ filter }) => {
   const mapRef = useRef<L.Map | null>(null);
   const markersRef = useRef<L.MarkerClusterGroup | null>(null);
 
-      // Initialisiere die Karte (einmalig)
+  // Initialisiere die Karte (einmalig)
   useEffect(() => {
     if (mapRef.current) return;
 
@@ -85,7 +84,7 @@ const Map: React.FC<MapProps> = ({ filter }) => {
     markersRef.current = markers;
   }, []);
 
-    // Aktualisiere Marker bei Filteränderung
+  // Aktualisiere Marker bei Filteränderung
   useEffect(() => {
     const updateMarkers = async () => {
       if (!mapRef.current || !markersRef.current) return;
@@ -123,7 +122,7 @@ const Map: React.FC<MapProps> = ({ filter }) => {
               `🌍 Region: ${loc.region}<br>` +
               `🧗‍♂️ Schwierigkeit: ${loc.schwierigkeit}<br>` +
               `🧱 Art: ${loc.kletterart}<br><br>` +
-              `<button onclick="window.location.href='/details/${loc.ort_id}'" style="background-color:#16a34a;color:white;padding:5px 10px;border:none;border-radius:4px;cursor:pointer;">➡ Zum Profil</button>`
+              `<button onclick="window.location.href='/details/${loc.ort_id}'" style="background-color:#16a34a;color:white;padding:5px 10px;border:none;border-radius:4px;cursor:pointer;">➡ Details zur Location</button>`
           );
 
           markers.addLayer(marker);

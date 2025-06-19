@@ -4,7 +4,6 @@ import { useUserSession } from "../../auth/UseUserSession";
 import type { Location } from "../../models/Location";
 import LocationPicture from "../addLocation/LocationPicture";
 
-
 /**
  * Seite zur Bearbeitung einer bestehenden Kletterlocation.
  *
@@ -306,7 +305,7 @@ const EditLocation: React.FC = () => {
             />
             <span className="ml-2">Ja</span>
           </label>
-          // FIXME: Ja/Nein Button klappt nicht
+          {/* FIXME: Ja/Nein Button klappt nicht */}
           <label className="label cursor-pointer">
             <input
               type="radio"
