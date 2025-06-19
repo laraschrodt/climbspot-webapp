@@ -26,7 +26,7 @@ describe("Filter-Komponente", () => {
       target: { value: "klettern" },
     });
 
-    // Schwierigkeit 
+    // Schwierigkeit
     const rangeInput = screen.getByRole("slider");
     fireEvent.change(rangeInput, { target: { value: "7" } });
 
@@ -35,11 +35,11 @@ describe("Filter-Komponente", () => {
     fireEvent.change(standortInput, { target: { value: "Bayern" } });
 
     // Kletterzeit
-    const zeitInput = screen.getByPlaceholderText("z. B. 2");
+    const zeitInput = screen.getByPlaceholderText("z.B. 2");
     fireEvent.change(zeitInput, { target: { value: "3" } });
 
     // Kletterlänge
-    const laengeInput = screen.getByPlaceholderText("z. B. 30");
+    const laengeInput = screen.getByPlaceholderText("z.B. 30");
     fireEvent.change(laengeInput, { target: { value: "25" } });
 
     // Kinderfreundlich: Ja
@@ -81,12 +81,12 @@ describe("Filter-Komponente", () => {
     });
 
     // Kletterzeit
-    fireEvent.change(screen.getByPlaceholderText("z. B. 2"), {
+    fireEvent.change(screen.getByPlaceholderText("z.B. 2"), {
       target: { value: "2" },
     });
 
     // Kletterlänge
-    fireEvent.change(screen.getByPlaceholderText("z. B. 30"), {
+    fireEvent.change(screen.getByPlaceholderText("z.B. 30"), {
       target: { value: "20" },
     });
 
