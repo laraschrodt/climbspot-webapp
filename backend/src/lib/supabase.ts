@@ -2,6 +2,13 @@ import { createClient } from "@supabase/supabase-js";
 import "dotenv/config";
 import type { PostgrestError } from "@supabase/supabase-js";
 
+<<<<<<< HEAD
+=======
+// .env-Datei aus dem backend-Verzeichnis laden
+dotenv.config({
+path: path.resolve(__dirname, "../../.env")
+});
+>>>>>>> 3c90f8b (Bewertungen implementiert)
 
 /**
  * Supabase-Client-Instanz
@@ -14,6 +21,7 @@ export const supabase = createClient(
   process.env.SUPABASE_SERVICE_KEY as string
 );
 
+<<<<<<< HEAD
 
 /**
  * logSupabaseError
@@ -32,3 +40,18 @@ export function logSupabaseError(scope: string, err: PostgrestError) {
   console.error(" Details:", err.details ?? "—");
   console.error(" Hint   :", err.hint ?? "—");
 }
+=======
+// Optional: Debug-Ausgabe nur in Entwicklung
+if (process.env.NODE_ENV !== "production") {
+console.log("✔ SUPABASE_URL:", supabaseUrl);
+console.log("✔ SUPABASE_SERVICE_KEY:", supabaseKey?.substring(0, 20) + "...");
+}
+
+// Sicherheits-Check: Fehler werfen, wenn Variablen fehlen
+if (!supabaseUrl || !supabaseKey) {
+throw new Error("❌ Supabase-Konfiguration fehlt in .env");
+}
+
+// Supabase-Client erstellen
+export const supabase = createClient(supabaseUrl, supabaseKey);
+>>>>>>> 3c90f8b (Bewertungen implementiert)
