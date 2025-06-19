@@ -14,6 +14,13 @@
 - [ ] Pages auf Handy-Ansicht anpassen
 - [ ] Funktionen/Components verkleinern und auseinander ziehen (ein usecase pro Datei - wie in Software Eng. besproche)
 
+## Erledigen vor Abgabe
+
+- [ ] CI Test Pipeline
+- [ ] Deployment mit Render.com
+- [ ] Alle Funktionen nochmal durchgehen und testen
+- [ ] TODO.md entfernen
+
 ## 🧪 Testen
 
 ### Javadoc Dokumentation schreiben im Code (`Alex`)
@@ -36,7 +43,7 @@
 - [x] jest config
 - [x] Admins können alle Locations verwalten
 - [x] Gastrechte beschränken
-- [ ] Admins können andere Admins erstellen
+- [x] Admins können andere Admins erstellen
 - [x] Admins können alle Benutzer verwalten
 
 `Kimia`:
@@ -71,7 +78,7 @@
 - [x] Suchfunktion im Header (`Alex`)
 - [x] Filterfunktion bei Karte und Liste (`Alex`)
 - [ ] Nahverkehrsintegration (`Nelly`)
-- [ ] Interaktive Karte (`Lara`)
+- [x] Interaktive Karte (`Lara`)
 - [ ] Benachrichtigungen (`Kimia`)
 
 > Tests kommen in den `tests`-Ordner jeweils im Frontend und im Backend.<br>
