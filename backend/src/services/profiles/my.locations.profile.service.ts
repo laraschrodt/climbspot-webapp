@@ -4,15 +4,12 @@ interface RawLocationRow {
   o: Location & { bewertungen?: { sterne: number }[] };
 }
 
-
 /**
- * MyLocationsProfileService
- *
  * Bietet Methoden zum Abrufen der vom Nutzer selbst angelegten Kletterorte,
  * inklusive der Bewertungen der Orte.
  */
 class MyLocationsProfileService {
-    /**
+  /**
    * Holt alle Kletterorte, die einem bestimmten Nutzer zugeordnet sind.
    *
    * @param userId ID des Nutzers

@@ -2,14 +2,11 @@ import FavoritesLocationService from "../../services/locations/favorites.locatio
 import { Response } from "express";
 import { AuthedRequest } from "../../middlewares/auth.middleware";
 
-
 /**
- * FavoritesLocationController
- *
  * Steuert das Hinzufügen und Entfernen von Favoritenorten für authentifizierte Nutzer.
  */
 class FavoritesLocationController {
-    /**
+  /**
    * Fügt einen Ort als Favorit für den aktuell eingeloggten Nutzer hinzu.
    * Die Nutzer-ID wird aus dem Authentifizierungs-Request (`AuthedRequest`) entnommen.
    * Die Ort-ID wird aus den URL-Parametern gelesen.
@@ -31,7 +28,7 @@ class FavoritesLocationController {
         .json({ error: "Serverfehler beim Hinzufügen des Favoriten" });
     }
   }
-    /**
+  /**
    * Entfernt einen Ort aus den Favoriten des aktuell eingeloggten Nutzers.
    * Nutzer- und Ort-ID wie bei `addFavorite`.
    *

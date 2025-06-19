@@ -1,14 +1,11 @@
 import { Request, Response } from "express";
 import MyLocationsProfileService from "../../services/profiles/my.locations.profile.service";
 
-
 /**
- * MyLocationsProfileController
- *
  * Verwaltet die Abfrage der vom aktuell eingeloggten Nutzer selbst erstellten Kletterorte.
  */
 class MyLocationsProfileController {
-    /**
+  /**
    * Holt alle Locations, die der Nutzer selbst erstellt hat.
    *
    * @param req Express Request, Nutzer-ID wird aus `req.user` gelesen (authentifiziert)

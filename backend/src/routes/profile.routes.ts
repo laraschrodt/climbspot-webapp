@@ -5,9 +5,6 @@ import MyLocationsProfileController from "../controllers/profiles/my.locations.p
 import profileController from "../controllers/profiles/profile.controller";
 
 /**
-/**
- * Profile-Routen
- *
  * Definiert Endpunkte für das Laden und Aktualisieren von Profildaten,
  * Passwortänderungen, Benachrichtigungen, Favoriten, Bewertungen,
  * Profilbild-Uploads und Nutzer-eigene Locations.
@@ -21,15 +18,35 @@ const upload = multer({ storage: multer.memoryStorage() });
 
 router.get("/", AuthMiddleware.verifyToken, profileController.getProfileData);
 
-router.put("/", AuthMiddleware.verifyToken, profileController.updateProfileData);
+router.put(
+  "/",
+  AuthMiddleware.verifyToken,
+  profileController.updateProfileData
+);
 
-router.put("/password", AuthMiddleware.verifyToken, profileController.changePassword);
+router.put(
+  "/password",
+  AuthMiddleware.verifyToken,
+  profileController.changePassword
+);
 
-router.get( "/notifications",AuthMiddleware.verifyToken,profileController.getNotifications.bind(profileController));
+router.get(
+  "/notifications",
+  AuthMiddleware.verifyToken,
+  profileController.getNotifications.bind(profileController)
+);
 
-router.get("/favorites", AuthMiddleware.verifyToken, profileController.getFavorites);
+router.get(
+  "/favorites",
+  AuthMiddleware.verifyToken,
+  profileController.getFavorites
+);
 
-router.get("/reviews", AuthMiddleware.verifyToken, profileController.getReviews);
+router.get(
+  "/reviews",
+  AuthMiddleware.verifyToken,
+  profileController.getReviews
+);
 
 router.post(
   "/upload-profile-pic",

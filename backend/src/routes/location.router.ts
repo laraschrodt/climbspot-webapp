@@ -8,11 +8,7 @@ import DeleteLocationController from "../controllers/locations/delete.location.c
 
 const router = Router();
 
-
-
 /**
- * Locations-Routen
- *
  * Definiert Endpunkte für Kletterorte, inklusive:
  * - Abruf aller Orte, beliebter Orte, Suche und Details
  * - Verwaltung von Favoriten (Hinzufügen/Entfernen)
@@ -27,7 +23,6 @@ router.get("/popular", LocationController.getPopularLocations);
 router.get("/search", LocationController.searchLocations);
 
 router.get("/details/:locationId", LocationController.getLocationById);
-
 
 router.get(
   "/favorites",
@@ -44,7 +39,7 @@ router.post(
   "/favorite/:locationId",
   AuthMiddleware.verifyToken,
   FavoritesLocationController.addFavorite
-); 
+);
 router.delete(
   "/favorite/:locationId",
   AuthMiddleware.verifyToken,

@@ -5,8 +5,6 @@ import { supabase } from "../../lib/supabase";
 import { updateLocation as updateLocationInDb } from "../../services/locations/updateLocation.service";
 
 /**
- * LocationController
- *
  * Verwaltet alle Endpunkte rund um Kletterorte:
  * - Einzelne Orte abfragen und prüfen, ob der Nutzer Eigentümer ist
  * - Alle Orte laden

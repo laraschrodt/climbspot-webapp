@@ -4,14 +4,12 @@ import ProfileService from "../../services/profiles/profile.service";
 import AccountService from "../../services/accounts/account.service";
 
 /**
- * ProfileController
- *
  * Verarbeitet alle Anfragen, die unter der `/profile`-Route laufen.
  * Verantwortlich für das Laden, Aktualisieren und Verwalten von Profildaten,
  * Profilbildern, Benachrichtigungen, Favoriten, Bewertungen sowie Passwortänderungen.
  */
 class ProfileController {
-    /**
+  /**
    * Liefert Profildaten des aktuell eingeloggten Nutzers zurück.
    *
    * @param req Authentifizierter Request mit Nutzerinformationen
@@ -32,8 +30,7 @@ class ProfileController {
     }
   }
 
-
-      /**
+  /**
    * Aktualisiert die Profildaten des Nutzers.
    *
    * Erwartet im Body: vorname, nachname, email, username, location.
@@ -47,7 +44,14 @@ class ProfileController {
       const userId = (req.user as { userId: string })?.userId;
       const { vorname, nachname, email, username, location } = req.body;
 
-      if (!userId || !vorname || !nachname || !email || !username || !location) {
+      if (
+        !userId ||
+        !vorname ||
+        !nachname ||
+        !email ||
+        !username ||
+        !location
+      ) {
         res.status(400).json({ error: "All fields are required" });
         return;
       }
@@ -67,8 +71,7 @@ class ProfileController {
     }
   }
 
-
-      /**
+  /**
    * Lädt ein neues Profilbild hoch und speichert es.
    *
    * Erwartet eine Datei im Request (z.B. via Multer Middleware).
@@ -85,7 +88,10 @@ class ProfileController {
         return;
       }
 
-      const imageUrl = await ProfileService.uploadProfileImageToDatabase(userId, req.file);
+      const imageUrl = await ProfileService.uploadProfileImageToDatabase(
+        userId,
+        req.file
+      );
       res.json({ url: imageUrl });
     } catch (error) {
       console.error("Upload-Fehler:", error);
@@ -93,8 +99,7 @@ class ProfileController {
     }
   }
 
-
-      /**
+  /**
    * Liefert alle Benachrichtigungen.
    *
    * @param req Request-Objekt
@@ -109,8 +114,7 @@ class ProfileController {
     }
   }
 
-
-      /**
+  /**
    * Ändert das Passwort des Nutzers.
    *
    * Erwartet im Body: oldPassword, newPassword.
@@ -128,7 +132,11 @@ class ProfileController {
         return;
       }
 
-      await AccountService.changePasswordInDatabase(userId, oldPassword, newPassword);
+      await AccountService.changePasswordInDatabase(
+        userId,
+        oldPassword,
+        newPassword
+      );
       res.json({ message: "Password updated successfully" });
     } catch (err) {
       console.error("Password update error:", err);
@@ -136,8 +144,7 @@ class ProfileController {
     }
   }
 
-
-      /**
+  /**
    * Liefert Favoriten des Nutzers.
    *
    * @param req Authentifizierter Request mit Nutzerinfo
@@ -158,8 +165,7 @@ class ProfileController {
     }
   }
 
-
-    /**
+  /**
    * Liefert Bewertungen des Nutzers.
    *
    * @param req Authentifizierter Request mit Nutzerinfo
@@ -181,7 +187,9 @@ class ProfileController {
       res.json(reviews);
     } catch (error) {
       console.error("Fehler beim Laden der Bewertungen:", error);
-      res.status(500).json({ error: "Serverfehler beim Laden der Bewertungen" });
+      res
+        .status(500)
+        .json({ error: "Serverfehler beim Laden der Bewertungen" });
     }
   }
 }
