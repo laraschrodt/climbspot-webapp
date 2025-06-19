@@ -4,7 +4,6 @@ import AccountService from "../../services/accounts/account.service";
 import ErrorMessages from "../../utils/ErrorMessages";
 import { supabase } from "../../lib/supabase";
 
-
 /**
  * AccountController
  *
@@ -17,7 +16,7 @@ import { supabase } from "../../lib/supabase";
  */
 
 class AccountController {
-    /**
+  /**
    * Authentifiziert einen Nutzer mit Email und Passwort.
    * Bei Erfolg wird ein JWT erstellt und zusammen mit Nutzer-ID, Rolle und Benutzername zurückgegeben.
    * Bei Fehler erfolgt ein 401 Unauthorized mit Fehlermeldung.
@@ -56,8 +55,7 @@ class AccountController {
     }
   }
 
-
-    /**
+  /**
    * Registriert einen neuen Nutzer mit Email, Passwort und Benutzername.
    * Bei Erfolg wird das Ergebnis mit Status 201 Created zurückgegeben.
    * Bei Fehler erfolgt ein 400 Bad Request mit Fehlermeldung.
@@ -65,15 +63,16 @@ class AccountController {
    * @param req Express Request-Objekt mit `email`, `password` und `username` im Body.
    * @param res Express Response-Objekt mit JSON-Antwort.
    */
-  
+
   async registerUser(req: Request, res: Response): Promise<void> {
-    const { email, password, username } = req.body;
+    const { email, password, username, rolle } = req.body;
 
     try {
       const result = await AccountService.createUserAccount(
         email,
         password,
-        username
+        username,
+        rolle
       );
       res.status(201).json(result);
     } catch (err) {

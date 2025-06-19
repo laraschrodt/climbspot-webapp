@@ -1,11 +1,9 @@
 /**
- * Reviews-Komponente
- *
  * Lädt und zeigt die Bewertungen des aktuell eingeloggten Nutzers an.
  * Jede Bewertung enthält eine Sternebewertung, einen Kommentar sowie Angaben zum bewerteten Ort.
- * 
+ *
  * Die Daten werden beim Initial-Render vom Backend geladen.
- * 
+ *
  * Eingebunden im rechten Bereich der `ProfilePage`.
  * Backend-Endpunkt ist noch in Planung (siehe TODO).
  */

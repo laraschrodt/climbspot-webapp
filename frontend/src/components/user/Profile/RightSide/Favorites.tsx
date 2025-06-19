@@ -8,10 +8,7 @@ interface FavoriteLocation extends Location {
   rating?: { sterne: number }[];
 }
 
-
 /**
- * Favorites-Komponente
- *
  * Zeigt alle vom Nutzer gespeicherten Favoritenorte an.
  * Wird im rechten Bereich der `ProfilePage` eingebunden.
  *

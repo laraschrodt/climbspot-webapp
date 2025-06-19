@@ -5,6 +5,7 @@ export class User {
     public email: string,
     public username: string,
     public profilbild_url: string,
-    public location: string
+    public location: string,
+    public role: string
   ) {}
 }
