@@ -73,6 +73,8 @@ describe("addLocation Service", () => {
       },
     } as unknown as Request & { file: Express.Multer.File; body: FakeBody };
 
+    (fakeRequest as any).user = { userId: "provided-uuid" };
+
     const result = await addLocation(fakeRequest);
 
     expect(supabase.storage.from).toHaveBeenCalledWith("location-pictures");
@@ -84,7 +86,7 @@ describe("addLocation Service", () => {
       { contentType: "image/png", upsert: true }
     );
 
-    expect(result).toBe("provided-uuid");
+    expect((result as any).ort_id).toBe("provided-uuid");
   });
 
   it("wirft Fehler, wenn keine Datei vorhanden ist", async () => {
