@@ -19,4 +19,6 @@ export interface Location {
   kletterzeit?: string;
   kletterart?: string;
   kinderfreundlich?: boolean;
+
+  isOwner?: boolean;
 }

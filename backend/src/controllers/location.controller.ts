@@ -1,8 +1,7 @@
 import { Request, Response } from "express";
-import LocationsService from "../services/location.service";
+import LocationsService from "../services/locations/location.service";
 import { AuthedRequest } from "../middlewares/auth.middleware";
-import locationService from "../services/location.service";
-import ProfileService from "../services/profile.service";
+import ProfileService from "../services/profiles/profile.service";
 import AccountService from "../services/account.service";
 import { JwtPayload } from "jsonwebtoken";
 import { supabase } from "../lib/supabase";
@@ -109,7 +108,7 @@ class LocationController {
         return;
       }
   
-      const reviews = await ProfileService.getUserReviewsFromDB(userId);
+      const reviews = await ProfileService.getReviewsByUserId(userId);
       res.json(reviews);
     } catch (err) {
       console.error("Fehler beim Laden der Bewertungen:", err);
@@ -117,12 +116,17 @@ class LocationController {
     }
   }
 
-  async addFavorite(req: AuthedRequest, res: Response): Promise<void> {
+  async addReviewToDB(req: AuthedRequest, res: Response): Promise<void> {
     try {
       const userId = (req.user as { userId: string })?.userId;
       const locationId = req.params.locationId;
 
-      await locationService.addFavorite(userId, locationId);
+      await LocationsService.addReviewToDB({
+        ort_id: locationId,
+        benutzer_id: userId,
+        sterne: 5,
+        kommentar: "Super Ort!"
+      });
       res.status(200).json({ message: "Favorit hinzugefügt" });
     } catch (err) {
       console.error("Fehler beim Hinzufügen des Favoriten:", err);
@@ -137,7 +141,7 @@ class LocationController {
 
       console.log("Füge Favorit hinzu:", userId, locationId);
 
-      await locationService.removeFavorite(userId, locationId);
+      await LocationsService.removeFavorite(userId, locationId);
       res.status(200).json({ message: "Favorit entfernt" });
     } catch (err) {
       console.error("Fehler beim Entfernen des Favoriten:", err);
@@ -154,7 +158,6 @@ class LocationController {
         ? null
         : (req.user as JwtPayload)?.userId;
 
-    // 👉 HIER LOGGEN
     console.log("Eingehende Bewertung:", {
       userId,
       sterne,

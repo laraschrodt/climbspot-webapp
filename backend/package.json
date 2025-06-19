@@ -1,5 +1,17 @@
 {
   "name": "climbspot-backend",
   "private": true,
-  "type": "commonjs"
+  "type": "commonjs",
+  "scripts": {
+    "test": "jest"
+  },
+  "dependencies": {
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "@types/socket.io": "^3.0.1",
+    "@types/uuid": "^10.0.0"
+  }
 }

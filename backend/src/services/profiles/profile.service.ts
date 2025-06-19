@@ -1,6 +1,8 @@
-import { supabase } from "../lib/supabase";
+// src/services/profiles/profile.service.ts
+
+import { supabase } from "../../lib/supabase";
 import { randomUUID } from "crypto";
-import { Location } from "../types/Location";
+import { Location } from "../../types/Location";
 
 interface Bewertung {
   sterne: number;
@@ -10,16 +12,34 @@ interface RawFavoriteRow {
   o: Location & { bewertungen?: Bewertung[] };
 }
 
+export interface NotificationRow {
+  id: string;
+  ort_id: string;
+  title: string;
+  message: string;
+  picture_url: string;
+  erstellt_am: string;
+}
+
 /**
- * Alle Methoden in dieser Klasse werden in der /profile Route verwendet.
- * Sie sind für das Laden und Aktualisieren der Profildaten zuständig.
+ * Bietet Methoden zum Laden und Aktualisieren von Profildaten,
+ * zum Upload von Profilbildern, zum Abrufen von Favoriten,
+ * Bewertungen und Benachrichtigungen für Nutzer.
  */
 class ProfileService {
-  
+  /**
+   * Holt Profildaten eines Nutzers anhand der Nutzer-ID.
+   *
+   * @param userId ID des Nutzers
+   * @returns Promise mit den Profildaten
+   * @throws Fehler bei Datenbankfehlern oder falls Profil nicht gefunden wird
+   */
   async getProfileDataByUserId(userId: string) {
     const { data, error } = await supabase
       .from("benutzer")
-      .select("vorname, nachname, email, benutzername, stadt, passwort_hash, profilbild_url")
+      .select(
+        "vorname, nachname, email, benutzername, stadt, passwort_hash, profilbild_url"
+      )
       .eq("benutzer_id", userId)
       .single();
 
@@ -39,6 +59,18 @@ class ProfileService {
     };
   }
 
+  /**
+   * Aktualisiert die Profildaten eines Nutzers.
+   *
+   * @param userId ID des Nutzers
+   * @param vorname Neuer Vorname
+   * @param nachname Neuer Nachname
+   * @param email Neue Email-Adresse
+   * @param username Neuer Benutzername
+   * @param location Neuer Standort
+   * @returns Erfolgsmeldung
+   * @throws Fehler bei Datenbankproblemen
+   */
   async updateProfileInDatabase(
     userId: string,
     {
@@ -73,7 +105,19 @@ class ProfileService {
     return { success: true };
   }
 
-  async uploadProfileImageToDatabase(userId: string, file: Express.Multer.File) {
+  /**
+   * Lädt ein Profilbild in den Supabase-Storage hoch
+   * und aktualisiert die URL in der Benutzertabelle.
+   *
+   * @param userId ID des Nutzers
+   * @param file Bilddatei
+   * @returns URL des hochgeladenen Profilbilds
+   * @throws Fehler bei Upload- oder Datenbankproblemen
+   */
+  async uploadProfileImageToDatabase(
+    userId: string,
+    file: Express.Multer.File
+  ) {
     const fileName = `profile-pictures/${userId}-${randomUUID()}.jpg`;
 
     const { error: uploadError } = await supabase.storage
@@ -99,10 +143,18 @@ class ProfileService {
     return publicUrl;
   }
 
+  /**
+   * Holt alle Favoriten eines Nutzers.
+   *
+   * @param userId ID des Nutzers
+   * @returns Promise mit Array der Favoritenorte
+   * @throws Fehler bei Datenbankfehlern
+   */
   async getFavoriteLocationsFromDB(userId: string): Promise<Location[]> {
     const { data, error } = await supabase
       .from("favoriten")
-      .select(`
+      .select(
+        `
         o:orte (
           ort_id,
           name,
@@ -112,7 +164,8 @@ class ProfileService {
           picture_url,
           bewertungen ( sterne )
         )
-      `)
+      `
+      )
       .eq("benutzer_id", userId);
 
     if (error) {
@@ -124,10 +177,18 @@ class ProfileService {
     return rows.map((row) => row.o);
   }
 
-  async getUserReviewsFromDB(userId: string) {
+  /**
+   * Holt alle Bewertungen eines Nutzers.
+   *
+   * @param userId ID des Nutzers
+   * @returns Promise mit Array der Bewertungen inklusive Ort-Infos
+   * @throws Fehler bei Datenbankfehlern
+   */
+  async getReviewsByUserId(userId: string) {
     const { data, error } = await supabase
       .from("bewertungen")
-      .select(`
+      .select(
+        `
         sterne,
         kommentar,
         erstellt_am,
@@ -135,31 +196,36 @@ class ProfileService {
           name,
           picture_url
         )
-      `)
-      .eq("benutzer_id", userId)
-      .order("erstellt_am", { ascending: false });
-  
+      `
+      )
+      .eq("benutzer_id", userId);
+
     if (error) {
-      console.error("Fehler beim Laden der Bewertungen:", error);
-      throw new Error("Bewertungen konnten nicht geladen werden.");
+      console.error("Supabase-Fehler beim Laden der Bewertungen:", error);
+      throw new Error("Bewertungen konnten nicht geladen werden");
     }
-  
-    return data;
+    return data || [];
   }
 
-  async getNotificationsByUserId(userId: string) {
+  /**
+   * Holt die letzten 20 Benachrichtigungen, sortiert nach Erstellungsdatum.
+   *
+   * @returns Promise mit Array der Notifications
+   * @throws Fehler bei Datenbankfehlern
+   */
+  async getNotifications(): Promise<NotificationRow[]> {
     const { data, error } = await supabase
-      .from("benachrichtigungen")
-      .select("id, message, erstellt_am")
-      .eq("benutzer_id", userId)
-      .order("erstellt_am", { ascending: false });
-  
+      .from("notifications")
+      .select("*")
+      .order("erstellt_am", { ascending: false })
+      .limit(20);
+
     if (error) {
-      console.error("Fehler beim Laden der Benachrichtigungen:", error);
-      throw new Error("Konnte Benachrichtigungen nicht laden");
+      console.error("Supabase-Fehler beim Laden der Notifications:", error);
+      throw new Error("Notifications konnten nicht geladen werden");
     }
-  
-    return data;
+
+    return (data ?? []) as NotificationRow[];
   }
 }
 

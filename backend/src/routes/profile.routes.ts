@@ -1,23 +1,64 @@
 import { Router } from "express";
 import AuthMiddleware from "../middlewares/auth.middleware";
-import profileController from "../controllers/profile.controller";
 import multer from "multer";
+import MyLocationsProfileController from "../controllers/profiles/my.locations.profile.controller";
+import profileController from "../controllers/profiles/profile.controller";
 
 /**
- * Alle Methoden in dieser Datei werden in der /profile Route verwendet.
- * Sie sind für das laden und aktualisieren der Profildaten zuständig.
-**/
+ * Definiert Endpunkte für das Laden und Aktualisieren von Profildaten,
+ * Passwortänderungen, Benachrichtigungen, Favoriten, Bewertungen,
+ * Profilbild-Uploads und Nutzer-eigene Locations.
+ *
+ * Alle Routen sind durch `AuthMiddleware.verifyToken` geschützt.
+ * Multer wird für den Upload von Profilbildern genutzt.
+ */
 
 const router = Router();
+const upload = multer({ storage: multer.memoryStorage() });
 
 router.get("/", AuthMiddleware.verifyToken, profileController.getProfileData);
-router.put("/", AuthMiddleware.verifyToken, profileController.updateProfileData);
-router.put("/password", AuthMiddleware.verifyToken, profileController.changePassword);
-router.get("/locations", AuthMiddleware.verifyToken, profileController.getNotifications);
-router.get("/favorites", AuthMiddleware.verifyToken, profileController.getFavorites);
-router.get("/reviews", AuthMiddleware.verifyToken, profileController.getUserReviews);
 
-const upload = multer({ storage: multer.memoryStorage() });
-router.post("/upload-image", AuthMiddleware.verifyToken, upload.single("file"), profileController.uploadProfileImage);
+router.put(
+  "/",
+  AuthMiddleware.verifyToken,
+  profileController.updateProfileData
+);
+
+router.put(
+  "/password",
+  AuthMiddleware.verifyToken,
+  profileController.changePassword
+);
+
+router.get(
+  "/notifications",
+  AuthMiddleware.verifyToken,
+  profileController.getNotifications.bind(profileController)
+);
+
+router.get(
+  "/favorites",
+  AuthMiddleware.verifyToken,
+  profileController.getFavorites
+);
+
+router.get(
+  "/reviews",
+  AuthMiddleware.verifyToken,
+  profileController.getReviews
+);
+
+router.post(
+  "/upload-profile-pic",
+  AuthMiddleware.verifyToken,
+  upload.single("file"),
+  profileController.uploadProfileImage
+);
+
+router.get(
+  "/get-my-locations",
+  AuthMiddleware.verifyToken,
+  MyLocationsProfileController.getMyLocations
+);
 
 export default router;

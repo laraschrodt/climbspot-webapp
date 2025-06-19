@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import AccountService from "../services/account.service";
-import ErrorMessages from "../utils/errorMessages";
+import ErrorMessages from "../utils/ErrorMessages";
 
 /**
  * Alle Methoden in dieser Datei werden in der Registrierung und Authentifizierung verwendet.

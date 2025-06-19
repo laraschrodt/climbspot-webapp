@@ -1,19 +1,29 @@
-import { supabase } from "../lib/supabase";
-import { Location } from "../types/Location";
+import { supabase } from "../../lib/supabase";
+import { Location } from "../../types/Location";
 
 interface Bewertung {
   sterne: number;
 }
 
-interface RawLocation extends Location {
+export interface RawLocation extends Location {
   bewertungen?: Bewertung[];
 }
 
-interface RawFavoriteRow {
+export interface RawFavoriteRow {
   o: Location & { bewertungen?: Bewertung[] };
 }
 
-class LocationsService {
+/**
+ * Bietet Methoden zum Abrufen, Suchen, Bewerten und Aktualisieren von Kletterorten.
+ */
+export class LocationsService {
+  /**
+   * Holt einen einzelnen Ort anhand der ID.
+   *
+   * @param locationId ID des Ortes
+   * @returns Promise mit Ort oder null, wenn nicht gefunden
+   * @throws Fehler bei Datenbankfehlern
+   */
   async getLocationByIdFromDB(locationId: string): Promise<Location | null> {
     const { data, error } = await supabase
       .from("orte")
@@ -27,6 +37,12 @@ class LocationsService {
     return data ? (data as Location) : null;
   }
 
+  /**
+   * Holt alle verfügbaren Kletterorte.
+   *
+   * @returns Promise mit Array aller Orte
+   * @throws Fehler bei Datenbankfehlern
+   */
   async getAllLocationsFromDB(): Promise<Location[]> {
     const { data, error } = await supabase.from("orte").select("*");
 
@@ -34,6 +50,13 @@ class LocationsService {
     return (data ?? []) as Location[];
   }
 
+  /**
+   * Holt die beliebtesten Kletterorte, berechnet anhand der durchschnittlichen Bewertung.
+   * Sortiert absteigend nach Rating und liefert maximal 12 Orte zurück.
+   *
+   * @returns Promise mit Array der populären Orte inklusive Bewertung
+   * @throws Fehler bei Datenbankfehlern
+   */
   async getPopularLocationsFromDB(): Promise<
     (Location & { rating: number })[]
   > {
@@ -66,6 +89,13 @@ class LocationsService {
     return withRating.sort((a, b) => b.rating - a.rating).slice(0, 12);
   }
 
+  /**
+   * Sucht Orte anhand eines Suchbegriffs.
+   *
+   * @param query Suchstring
+   * @returns Promise mit Array der passenden Orte
+   * @throws Fehler bei Datenbankfehlern
+   */
   async searchLocations(query: string): Promise<Location[]> {
     const { data, error } = await supabase
       .from("orte")
@@ -79,10 +109,18 @@ class LocationsService {
     return (data ?? []) as Location[];
   }
 
+  /**
+   * Holt die Favoritenorte eines bestimmten Nutzers.
+   *
+   * @param userId ID des Nutzers
+   * @returns Promise mit Array der Favoritenorte
+   * @throws Fehler bei Datenbankfehlern
+   */
   async getFavoriteLocationsFromDB(userId: string): Promise<Location[]> {
     const { data, error } = await supabase
       .from("favoriten")
-      .select(`
+      .select(
+        `
         o:orte (
           ort_id,
           name,
@@ -92,22 +130,31 @@ class LocationsService {
           picture_url,
           bewertungen ( sterne )
         )
-      `)
+      `
+      )
       .eq("benutzer_id", userId);
-  
+
     if (error) {
       console.error("Supabase-Fehler beim Laden der Favoriten:", error);
       throw new Error("Favoriten nicht gefunden");
     }
-  
+
     const rows = (data ?? []) as unknown as RawFavoriteRow[];
     return rows.map((row) => row.o);
   }
-  
+
+  /**
+   * Holt alle Bewertungen eines Nutzers.
+   *
+   * @param userId ID des Nutzers
+   * @returns Promise mit Array der Bewertungen inklusive Ort-Infos
+   * @throws Fehler bei Datenbankfehlern
+   */
   async getUserReviewsFromDB(userId: string) {
     const { data, error } = await supabase
       .from("bewertungen")
-      .select(`
+      .select(
+        `
         sterne,
         kommentar,
         erstellt_am,
@@ -115,62 +162,40 @@ class LocationsService {
           name,
           picture_url
         )
-      `)
+      `
+      )
       .eq("benutzer_id", userId)
       .order("erstellt_am", { ascending: false });
-    
+
     if (error) {
       console.error("Fehler beim Laden der Bewertungen:", error);
       throw new Error("Bewertungen konnten nicht geladen werden.");
     }
-    
+
     return data;
   }
 
-  async addFavorite(userId: string, locationId: string): Promise<void> {
-    console.log(">>> addFavorite called with:");
-    console.log("User ID:", userId);
-    console.log("Location ID:", locationId);
+  /**
+   * Aktualisiert die Daten eines Ortes anhand der ID.
+   *
+   * @param locationId ID des zu aktualisierenden Ortes
+   * @param data Teilweise aktualisierte Ortsdaten
+   * @returns Promise mit den aktualisierten Ortsdaten
+   * @throws Fehler bei Datenbankfehlern
+   */
+  async updateLocationInDB(
+    locationId: string,
+    data: Partial<Location>
+  ): Promise<Location> {
+    const { data: updated, error } = await supabase
+      .from("orte")
+      .update(data)
+      .eq("ort_id", locationId)
+      .select("*")
+      .single<Location>();
 
-    // Prüfen, ob Favorit bereits existiert
-    const { data: existing, error: checkError } = await supabase
-      .from("favoriten")
-      .select("id")
-      .eq("benutzer_id", userId)
-      .eq("ort_id", locationId);
-
-    if (checkError) {
-      console.error("Fehler beim Favoriten-Check:", checkError.message);
-      throw new Error("Fehler beim Favoriten-Check");
-    }
-
-    if (existing && existing.length > 0) {
-      console.log("Favorit bereits vorhanden – kein Insert notwendig.");
-      return;
-    }
-
-    // Nur einfügen, wenn noch nicht vorhanden
-    const { error: insertError } = await supabase
-      .from("favoriten")
-      .insert([{ benutzer_id: userId, ort_id: locationId }]);
-
-    if (insertError) {
-      console.error("Fehler beim Insert:", insertError.message);
-      throw new Error("Fehler beim Hinzufügen des Favoriten");
-    }
-
-    console.log("Favorit erfolgreich hinzugefügt.");
-  }
-
-  async removeFavorite(userId: string, locationId: string): Promise<void> {
-    const { error } = await supabase
-      .from("favoriten") 
-      .delete()
-      .match({benutzer_id: userId, ort_id: locationId });
-
-    if (error) {
-      throw new Error(`Fehler beim Entfernen des Favoriten: ${error.message}`);
-    }
+    if (error) throw error;
+    return updated;
   }
 
   async getReviewsByLocationId(locationId: string) {
@@ -206,6 +231,19 @@ class LocationsService {
     }
 
     return data;
+  }
+
+  async removeFavorite(userId: string, locationId: string): Promise<void> {
+    const { error } = await supabase
+      .from("favoriten")
+      .delete()
+      .eq("benutzer_id", userId)
+      .eq("ort_id", locationId);
+
+    if (error) {
+      console.error("Fehler beim Entfernen des Favoriten:", error);
+      throw new Error("Favorit konnte nicht entfernt werden.");
+    }
   }
 }
 

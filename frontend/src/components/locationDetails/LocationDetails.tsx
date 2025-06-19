@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import Reviews from './LeftSide/Reviews';
-import LocationInfo from './RightSide/LocationInfo';
-import { Location } from '../../models/Location';
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import Reviews from "./LeftSide/Reviews";
+import LocationInfo from "./RightSide/LocationInfo";
+import { Location } from "../../models/Location";
+import { useUserSession } from "../../auth/UseUserSession";
+import ProtectedComponent from "../../routes/ProtectedComponent";
+import DeleteLocationButton from "./LeftSide/DeleteLocationButton";
 
 type Review = {
   id: string;
@@ -13,7 +16,29 @@ type Review = {
   erstellt_am: string;
 };
 
+/**
+ * Detailseite für eine einzelne Kletterlocation.
+ *
+ * Kontext:
+ * Wird aufgerufen über `/details/:locationId` und zeigt umfassende Informationen
+ * zu einem spezifischen Ort an – inklusive Bildbanner, Beschreibung, Zugang, Bewertungen und Aktionen.
+ *
+ * Funktion:
+ * - Holt alle relevanten Daten zur Location über `/api/locations/details/:locationId`.
+ * - Zeigt ein großes Header-Bild mit Titel.
+ * - Zwei-Spalten-Layout:
+ *   - Links: Reviews, Favoriten-Button, ÖPNV-Link, Bearbeiten/Löschen (wenn Eigentümer).
+ *   - Rechts: Detaillierte Infos über die Location (`LocationInfo`).
+ * - Ermöglicht Favorisieren der Location (POST/DELETE `/api/locations/favorite/:locationId`).
+ *
+ * Besondere Hinweise:
+ * - Nutzt `ProtectedComponent`, um Bearbeiten/Löschen nur für den Eigentümer anzuzeigen.
+ * - Aktuell sind Bewertungen nur als Platzhalter (Mock).
+ * - Sollte langfristig in kleinere Teilkomponenten ausgelagert werden.
+ */
+
 const LocationDetails: React.FC = () => {
+  const { user } = useUserSession();
   const [location, setLocation] = useState<Location | null>(null);
   const [loading, setLoading] = useState(true);
   const [isFavorited, setIsFavorited] = useState(false);
@@ -22,58 +47,32 @@ const LocationDetails: React.FC = () => {
   const [reviewText, setReviewText] = useState("");
   const [reviewStars, setReviewStars] = useState(0);
   const { locationId } = useParams<{ locationId: string }>();
-  console.log("Frontend: locationId =", locationId);
+  const [isOwner, setIsOwner] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch(`/api/locations/details/${locationId}`);
-        if (!res.ok) {
-          const msg = await res.text();
-          throw new Error(msg || "Standort nicht gefunden");
+        const headers: Record<string, string> = {};
+        if (user) {
+          headers["x-user-id"] = user.userId;
         }
+
+        const res = await fetch(`/api/locations/details/${locationId}`, {
+          headers,
+        });
+
+        if (!res.ok) throw new Error("Standort nicht gefunden");
 
         const data = await res.json();
         setLocation(data);
-        setAllReviews(data.bewertungen || []);
-
-        const token = localStorage.getItem("token");
-        if (token) {
-          try {
-            const decoded: any = JSON.parse(atob(token.split(".")[1]));
-            const userId = decoded.userId;
-
-            // Bewertung des Users setzen
-            const existingReview = data.bewertungen?.find(
-              (r: Review) => r.benutzer_id === userId
-            );
-            if (existingReview) {
-              setUserReview(existingReview);
-              setReviewText(existingReview.kommentar);
-              setReviewStars(existingReview.sterne);
-            }
-
-            // Favoritenstatus prüfen
-            const favorisiertVon = data.favorisiert_von || [];
-            const istFavorit = favorisiertVon.includes(userId);
-            setIsFavorited(istFavorit);
-
-          } catch (error) {
-            console.warn("Token konnte nicht dekodiert werden:", error);
-          }
-        }
-      } catch (err) {
-        console.error("Fehler beim Laden des Standorts:", err);
-        setLocation(null);
+        setIsOwner(data.isOwner ?? false);
       } finally {
         setLoading(false);
       }
     };
 
-    if (locationId) {
-      fetchData();
-    }
-  }, [locationId]);
+    if (locationId) fetchData();
+  }, [locationId, user]);
 
   const handleFavoriteToggle = async () => {
     const token = localStorage.getItem("token");
@@ -84,10 +83,10 @@ const LocationDetails: React.FC = () => {
 
     try {
       const res = await fetch(`/api/locations/favorite/${locationId}`, {
-        method: isFavorited ? 'DELETE' : 'POST',
+        method: isFavorited ? "DELETE" : "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -98,7 +97,7 @@ const LocationDetails: React.FC = () => {
         console.error("Fehler beim Aktualisieren des Favoritenstatus:", text);
       }
     } catch (error) {
-      console.error('Fehler:', error);
+      console.error("Fehler:", error);
     }
   };
 
@@ -148,6 +147,7 @@ const LocationDetails: React.FC = () => {
   if (loading) return <div>Loading...</div>;
 
   return (
+    // FIXME: Aufteilen in Components weil das zu unübersichtlich ist
     <div>
       {/* Banner mit Bild und Text */}
       <div
@@ -156,7 +156,8 @@ const LocationDetails: React.FC = () => {
       >
         <h1 className="text-4xl font-bold">{location?.name}</h1>
         <p className="text-lg max-w-xl px-4">
-          Erfahre mehr über diesen Kletterspot – Bewertungen, Beschreibung und Besonderheiten.
+          Erfahre mehr über diesen Kletterspot – Bewertungen, Beschreibung und
+          Besonderheiten.
         </p>
       </div>
 
@@ -164,58 +165,36 @@ const LocationDetails: React.FC = () => {
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-6 px-4 py-8">
         {/* Linke Spalte */}
         <div className="w-full md:w-1/3 space-y-6">
-          {/* Bewertungen */}
-          <div className="bg-white border rounded shadow p-4 max-h-64 overflow-y-auto">
-            <h2 className="text-lg font-semibold mb-2">Bewertungen</h2>
-            {allReviews.length > 0 ? (
-              allReviews.map((review) => (
-                <div key={review.id} className="border-b py-2">
-                  <div>
-                    {[...Array(review.sterne)].map((_, i) => (
-                      <span key={i} style={{ color: "gold" }}>★</span>
-                    ))}
-                  </div>
-                  <p className="text-sm italic">{review.kommentar}</p>
-                </div>
-              ))
-            ) : (
-              <p className="text-sm text-gray-500">Noch keine Bewertungen.</p>
-            )}
-          </div>
-
-          {/* Eigene Bewertung */}
-          <div className="bg-white border rounded shadow p-4">
-            <h3 className="text-lg font-semibold mb-2">Deine Bewertung</h3>
-            <div className="mb-2">
-              {[1, 2, 3, 4, 5].map((star) => (
-                <span
-                  key={star}
-                  onClick={() => setReviewStars(star)}
-                  style={{ cursor: "pointer", color: star <= reviewStars ? "gold" : "gray", fontSize: "20px" }}
+          {isOwner && (
+            <ProtectedComponent roles={["user", "admin"]}>
+              <div className="flex gap-4">
+                <Link
+                  to={`/edit-location/${locationId}`}
+                  className="btn btn-secondary"
                 >
-                  ★
-                </span>
-              ))}
-            </div>
-            <textarea
-              className="w-full p-2 border rounded"
-              rows={3}
-              placeholder="Was möchtest du sagen?"
-              value={reviewText}
-              onChange={(e) => setReviewText(e.target.value)}
-            />
-            <button
-              className="mt-2 px-4 py-2 bg-green-600 text-white rounded"
-              onClick={handleReviewSubmit}
-            >
-              {userReview ? "Bewertung aktualisieren" : "Bewertung abgeben"}
-            </button>
-          </div>
+                  Bearbeiten
+                </Link>
 
-          {/* Buttons */}
+                <DeleteLocationButton locationId={locationId!} />
+              </div>
+            </ProtectedComponent>
+          )}
+
+          <div>
+            {/* Reviews */}
+            <Reviews />
+          </div>
           <div className="space-y-4">
-            <button onClick={handleFavoriteToggle} className="w-full btn btn-primary">
-              {isFavorited ? 'Vom Favoriten entfernen' : 'Zu Favoriten hinzufügen'}
+            {/* Sterne-Bewertung */}
+            {/* <StarRating rating={rating} onClick={handleStarClick} /> */}
+            {/* Favoriten-Button */}
+            <button
+              onClick={handleFavoriteToggle}
+              className="w-full btn btn-primary"
+            >
+              {isFavorited
+                ? "Vom Favoriten entfernen"
+                : "Zu Favoriten hinzufügen"}
             </button>
             {location?.lat && location?.long && (
               <button

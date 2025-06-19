@@ -1,4 +1,11 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import ProtectedComponent from "../../routes/ProtectedComponent";
+
+/**
+ * Datenstruktur zur Beschreibung aller möglichen Filterkriterien.
+ * Wird beim Absenden des Formulars übergeben.
+ */
 
 export interface FilterCriteria {
   kletterart: string;
@@ -9,19 +16,49 @@ export interface FilterCriteria {
   kinderfreundlich: boolean | null;
 }
 
+/**
+ * Props für die Filter-Komponente.
+ * Erwartet eine Callback-Funktion, die mit den aktuellen Filterwerten aufgerufen wird.
+ */
+
 interface FilterProps {
   onApply: (criteria: FilterCriteria) => void;
 }
 
+/**
+ * Diese Komponente stellt ein responsives Filterformular dar.
+ *
+ * Hauptfunktion:
+ * - Nutzer können nach Kletterart, Schwierigkeitsgrad, Standort, Zeit, Länge und Kinderfreundlichkeit filtern.
+ * - Nach Absenden werden die gewählten Filter als Objekt zurückgegeben.
+ *
+ * Integration:
+ * - Die Komponente wird z.B. in der Karten- oder Listenseite verwendet.
+ * - Das `onApply`-Callback erlaubt die Weitergabe der Filter an die Parent-Komponente (z.B. zum Filtern von Locations).
+ */
+
 const Filter: React.FC<FilterProps> = ({ onApply }) => {
+  // Sichtbarkeit des Filters (auf- und zuklappbar)
   const [open, setOpen] = useState(true);
+  // Kletterart (z.B. "klettern" oder "klettersteig")
   const [kletterart, setKletterart] = useState("");
+  // Maximal erlaubter Schwierigkeitsgrad (1–10)
   const [maxDifficulty, setMaxDifficulty] = useState(10);
+  // Freitextfeld für Standort (Land, Region …)
   const [standort, setStandort] = useState("");
+  // Geschätzte Kletterzeit in Stunden
   const [kletterzeit, setKletterzeit] = useState(0);
+  // Gesamtlänge der Route in Metern
   const [kletterlaenge, setKletterlaenge] = useState(0);
+  // Kinderfreundlichkeit: "ja", "nein" oder null (egal)
   const [kinder, setKinder] = useState<string | null>(null);
 
+  /**
+   * Behandelt das Absenden des Filterformulars.
+   *
+   * - Verhindert die Standard-Formularaktion.
+   * - Ruft die `onApply`-Callbackfunktion mit den aktuellen Filterwerten auf.
+   */
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onApply({
@@ -58,10 +95,8 @@ const Filter: React.FC<FilterProps> = ({ onApply }) => {
               <option value="">– egal –</option>
               <option value="klettern">klettern</option>
               <option value="klettersteig">klettersteig</option>
-              <option value="klettergarten">klettergarten</option>
             </select>
           </div>
-
           <div>
             <label className="font-semibold block mb-2">
               Schwierigkeit (max)
@@ -76,7 +111,6 @@ const Filter: React.FC<FilterProps> = ({ onApply }) => {
             />
             <div className="text-right">{maxDifficulty}</div>
           </div>
-
           <div>
             <label className="font-semibold block mb-2">Standort</label>
             <input
@@ -87,7 +121,6 @@ const Filter: React.FC<FilterProps> = ({ onApply }) => {
               onChange={(e) => setStandort(e.target.value)}
             />
           </div>
-
           <div>
             <label className="font-semibold block mb-2">
               Kletterzeit (Std.)
@@ -109,10 +142,10 @@ const Filter: React.FC<FilterProps> = ({ onApply }) => {
               className="input input-bordered w-full"
               placeholder="z. B. 30"
               value={kletterlaenge}
+              step={25}
               onChange={(e) => setKletterlaenge(Number(e.target.value))}
             />
           </div>
-
           <div>
             <label className="font-semibold block mb-2">Kinderfreundlich</label>
             <div className="flex gap-4">
@@ -130,20 +163,14 @@ const Filter: React.FC<FilterProps> = ({ onApply }) => {
                   </span>
                 </label>
               ))}
-              <label className="label cursor-pointer">
-                <input
-                  type="radio"
-                  name="kinder"
-                  className="radio"
-                  checked={kinder === null}
-                  onChange={() => setKinder(null)}
-                />
-                <span className="ml-2">egal</span>
-              </label>
             </div>
           </div>
-
           <div className="col-span-full flex justify-end">
+            <ProtectedComponent roles={["user", "admin"]}>
+              <Link to="/add-location" className="btn btn-secondary mr-4">
+                Neue Location hinzufügen
+              </Link>
+            </ProtectedComponent>
             <button type="submit" className="btn btn-primary px-8">
               Filter anwenden
             </button>

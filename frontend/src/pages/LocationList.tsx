@@ -3,9 +3,21 @@ import axios from "axios";
 import { Navbar } from "../components/general/Navbar";
 import Footer from "../components/general/Footer/Footer";
 import Filter, { FilterCriteria } from "../components/locationSearch/Filter";
-import AddLocation from "../components/locationSearch/AddLocation";
 import LocationGallery from "../components/locationSearch/LocationGallery";
 import { Location } from "../models/Location";
+
+
+/**
+ * LocationList-Komponente
+ *
+ * Zeigt eine Liste aller Kletterorte mit Filterfunktion an.
+ * Lädt alle Orte beim Initial-Render vom Backend und ermöglicht Nutzern,
+ * die Liste durch verschiedene Kriterien wie Kletterart, Schwierigkeit,
+ * Standort, Kletterzeit und weitere Attribute einzuschränken.
+ *
+ * Besteht aus globaler Navigationsleiste, Filterkomponente, Galerie der Orte und Footer.
+ * Die Filterlogik wird lokal verwaltet und filtert die geladenen Daten.
+ */
 
 const LocationList: React.FC = () => {
   const [allLocations, setAllLocations] = useState<Location[]>([]);
@@ -77,7 +89,6 @@ const LocationList: React.FC = () => {
       <Navbar />
       <div className="flex flex-1">
         <Filter onApply={handleFilter} />
-        <AddLocation />
       </div>
       <LocationGallery locations={filteredLocations} />
       <Footer />

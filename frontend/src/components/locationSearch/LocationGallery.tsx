@@ -7,6 +7,25 @@ interface LocationGalleryProps {
   locations: Location[];
 }
 
+
+/**
+ * Komponente zur Darstellung einer Galerie von Kletterlocations.
+ *
+ * Kontext:
+ * Wird typischerweise auf der Übersichtsseite verwendet, um mehrere Locations
+ * visuell als Karten (`LocationCard`) anzuzeigen.
+ *
+ * Funktion:
+ * - Erwartet ein Array von `Location`-Objekten.
+ * - Für jede Location wird eine klickbare `LocationCard` erzeugt, die zur Detailseite führt.
+ * - Bewertungsdurchschnitt wird aus den Sternbewertungen berechnet (sofern vorhanden).
+ * - Layout ist als responsives Grid umgesetzt.
+ *
+ * Hinweise:
+ * - Bei fehlenden Bildern wird ein leerer String verwendet.
+ * - Wenn keine Bewertungen vorliegen, wird 0 angezeigt.
+ */
+
 const LocationGallery: React.FC<LocationGalleryProps> = ({ locations }) => {
   const calculateAverageRating = (bewertungen: { sterne: number }[] = []) => {
     if (bewertungen.length === 0) return 0;
@@ -27,8 +46,14 @@ const LocationGallery: React.FC<LocationGalleryProps> = ({ locations }) => {
             <LocationCard
               name={spot.name}
               location={`${spot.region}, ${spot.land}`}
+<<<<<<< HEAD
               difficulty={spot.schwierigkeit?.toString() ?? "?"}
               rating={calculateAverageRating(spot.bewertungen)}
+=======
+              difficulty={(spot.schwierigkeit ?? 0).toString()}
+              // FIXME: Sternebewertungen klappen nicht
+              rating={calculateAverageRating(spot.rating)}
+>>>>>>> origin/main
               imageUrl={spot.picture_url ?? ""}
             />
           </Link>

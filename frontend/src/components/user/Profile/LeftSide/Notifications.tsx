@@ -1,111 +1,143 @@
 import React, { useEffect, useState } from "react";
-import { Bell, Info } from "react-feather";
+import { Bell } from "react-feather";
+import io from "socket.io-client";
 import axios from "axios";
 
 interface Notification {
-  id: number;
-  message: string;
-  erstellt_am: string; 
-}
-
-interface MappedNotification {
-  id: number;
-  message: string;
+  erstellt_am: string;
+  message: string | undefined;
+  id: string;
+  name?: string;
+  region?: string;
+  land?: string;
+  picture_url?: string;
   date: string;
 }
 
-const Notifications: React.FC = () => {
-  const [notifications, setNotifications] = useState<MappedNotification[]>([]);
-  const [showPopup, setShowPopup] = useState(false);
-  const [hasUnread, setHasUnread] = useState(true);
 
-  const togglePopup = () => {
-    setShowPopup(!showPopup);
-    if (!showPopup) {
-      setHasUnread(false); // Als gelesen markieren
-    }
-  };
+/**
+ * Notifications-Komponente
+ *
+ * Zeigt ortsbezogene Benachrichtigungen im Nutzerprofil an.
+ * Baut beim Laden eine WebSocket-Verbindung zum Backend auf und empfängt neue Orte in Echtzeit.
+ * Initialer Abruf vorhandener Benachrichtigungen erfolgt via HTTP-Request.
+ *
+ * Eingebunden im Profilbereich (LeftSide), dient sie der Benachrichtigung über neue Orte,
+ * etwa durch andere Nutzer erstellte Spots oder Systemmeldungen.
+ *
+ * Die Zustände "gesehen" werden aktuell nur lokal im Frontend gespeichert.
+ */
+
+// FIXME: Benachrichtigung laden immer neu, auch wenn man auf "gesehen" drückt
+
+const Notifications: React.FC = () => {
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [seen, setSeen] = useState<string[]>([]);
+  const [showPopup, setShowPopup] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const socket = io("http://localhost:3001", {
+      transports: ["websocket"],
+    });
+
+    socket.on("connect", () => {
+      console.log("Frontend: Mit WebSocket verbunden!");
+    });
+
+    socket.on("new-location", (data: Notification) => {
+      setNotifications((prev) =>
+        prev.find((n) => n.id === data.id) ? prev : [data, ...prev]
+      );
+    });
+
     const fetchNotifications = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get<Notification[]>("/api/profile/notifications", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+        const response = await axios.get("/api/profile/notifications", {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
         });
-
-        const mapped: MappedNotification[] = response.data.map((n) => ({
-          id: n.id,
-          message: n.message,
-          date: new Date(n.erstellt_am).toLocaleString("de-DE", {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
-        }));
-
-        setNotifications(mapped);
+        setNotifications(response.data);
       } catch (error) {
         console.error("Fehler beim Laden der Benachrichtigungen:", error);
+      } finally {
+        setLoading(false);
       }
     };
-
     fetchNotifications();
+
+    return () => {
+      socket.disconnect();
+    };
   }, []);
 
+  const handleSeen = (id: string) => {
+    setSeen((prev) => [...prev, id]);
+  };
+
+  const unseenNotifications = notifications.filter((n) => !seen.includes(n.id));
+
   return (
-    <div className="w-full relative">
+    <div className="relative w-full">
       <div
-        className="flex items-center gap-2 cursor-pointer text-sm text-gray-700 hover:text-gray-900 transition"
-        onClick={togglePopup}
+        className="flex items-center gap-2 cursor-pointer text-sm text-gray-800 hover:text-black"
+        onClick={() => setShowPopup((val) => !val)}
       >
         <div className="relative">
           <Bell className="w-5 h-5" />
-          {hasUnread && notifications.length > 0 && (
-            <span className="absolute -top-2 -right-2 bg-red-600 text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center shadow-md animate-pulse">
-              {notifications.length}
+          {unseenNotifications.length > 0 && (
+            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+              {unseenNotifications.length}
             </span>
           )}
         </div>
-        <span className="font-medium">Benachrichtigungen</span>
+        <span>Benachrichtigungen</span>
       </div>
 
       {showPopup && (
-        <div className="absolute z-40 right-0 mt-3 w-96 max-h-96 overflow-y-auto bg-white border border-gray-200 rounded-xl shadow-xl animate-fadeIn">
-          <div className="px-5 py-4 border-b bg-gradient-to-r from-gray-100 to-white rounded-t-xl">
-            <h2 className="text-lg font-semibold text-gray-800">Benachrichtigungen</h2>
-          </div>
-
-          <div className="divide-y divide-gray-100">
-            {notifications.length > 0 ? (
-              notifications.map((n) => (
-                <div
+        <div className="mt-2 bg-white border rounded-xl shadow-lg p-4 max-w-xs w-full z-50">
+          <h3 className="font-semibold mb-3">Neue Benachrichtigungen</h3>
+          {loading ? (
+            <div className="text-sm text-gray-400">Lade ...</div>
+          ) : unseenNotifications.length > 0 ? (
+            <ul className="space-y-4">
+              {unseenNotifications.map((n) => (
+                <li
                   key={n.id}
-                  className="flex items-start gap-3 p-4 hover:bg-gray-50 transition"
+                  className="flex items-center border rounded-lg p-2 shadow-sm bg-gray-50 gap-2"
                 >
-                  <div className="pt-1">
-                    <Info className="w-4 h-4 text-blue-400" />
+                  <img
+                    src={n.picture_url || "/placeholder.png"}
+                    alt="Ort"
+                    className="w-12 h-12 object-cover rounded-full border flex-shrink-0"
+                    style={{ aspectRatio: "1/1" }}
+                  />
+                  <div className="flex-1 min-w-0">
+                    <div className="font-semibold text-xs break-words mb-1">
+                      {n.message || n.name || "Neuer Ort"}
+                    </div>
+
+                    <div className="text-xs text-gray-400">
+                      {(n.date || n.erstellt_am || "")
+                        .slice(0, 16)
+                        .replace("T", " ")}
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-sm text-gray-800 font-medium">
-                      {n.message}
-                    </p>
-                    <p className="text-xs text-gray-500 mt-1 italic">
-                      📅 {n.date}
-                    </p>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <div className="p-4 text-sm text-gray-500 italic">
-                Keine neuen Benachrichtigungen
-              </div>
-            )}
-          </div>
+                  <button
+                    className="btn btn-sm btn-primary ml-1"
+                    style={{ minWidth: "60px" }}
+                    onClick={() => handleSeen(n.id)}
+                  >
+                    Gesehen
+                  </button>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className="text-sm text-gray-400">
+              Keine neuen Benachrichtigungen
+            </div>
+          )}
         </div>
       )}
     </div>
