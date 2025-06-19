@@ -8,7 +8,6 @@ interface Props {
   changePassword: () => void;
 }
 
-
 /**
  * ChangePassword-Komponente
  *
@@ -50,7 +49,7 @@ const ChangePassword: React.FC<Props> = ({
       </div>
       <button
         onClick={changePassword}
-        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        className="bg-green-800 text-white px-4 py-2 rounded hover:bg-green-700"
       >
         Passwort ändern
       </button>
