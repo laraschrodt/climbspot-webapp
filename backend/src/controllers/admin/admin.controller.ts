@@ -11,6 +11,17 @@ class AdminController {
       res.status(500).json({ error: "Serverfehler" });
     }
   }
+
+  static async deleteUser(req: Request, res: Response): Promise<void> {
+    const userId = req.params.id;
+    try {
+      await AdminService.deleteUserFromDB(userId);
+      res.status(204).end();
+    } catch (err: any) {
+      console.error(err);
+      res.status(500).json({ error: "Löschen fehlgeschlagen" });
+    }
+  }
 }
 
 export default AdminController;

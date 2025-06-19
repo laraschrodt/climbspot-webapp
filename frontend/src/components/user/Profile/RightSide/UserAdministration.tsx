@@ -30,9 +30,19 @@ const UserAdministration: React.FC = () => {
     console.log("Edit user", userId);
   };
 
-  const handleDelete = (userId: string) => {
-    if (window.confirm("Möchtest du diesen Benutzer wirklich löschen?")) {
-      console.log("Delete user", userId);
+  const handleDeleteUser = async (userId: string) => {
+    if (!window.confirm("Möchtest du diesen Benutzer wirklich löschen?"))
+      return;
+
+    try {
+      const token = localStorage.getItem("token");
+      await fetch(`/api/admin/users/${userId}`, {
+        method: "DELETE",
+        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+      });
+      setUsers((prev) => prev.filter((u) => u.id !== userId));
+    } catch (err) {
+      console.error("Delete failed", err);
     }
   };
 
@@ -69,7 +79,7 @@ const UserAdministration: React.FC = () => {
                       <Edit2 size={18} />
                     </button>
                     <button
-                      onClick={() => handleDelete(user.id)}
+                      onClick={() => handleDeleteUser(user.id)}
                       className="p-1 hover:bg-gray-200 rounded"
                     >
                       <Trash2 size={18} />
