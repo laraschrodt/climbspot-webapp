@@ -4,7 +4,6 @@ import { RegisterApi } from "../../../api/RegisterApi";
 
 const registerApi = new RegisterApi();
 
-
 /**
  * Register-Komponente
  *

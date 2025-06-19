@@ -1,9 +1,5 @@
 import { User } from "../models/User";
 
-/**
- * Antwortstruktur des Backends nach erfolgreicher Registrierung.
- * Optional können auch Profildaten enthalten sein.
- */
 export interface RegisterResponse {
   benutzer_id: string;
   vorname?: string;
@@ -12,15 +8,8 @@ export interface RegisterResponse {
   benutzername: string;
   profilbild_url?: string;
   location?: string;
+  rolle: string;
 }
-
-/**
- * API-Klasse zur Registrierung neuer Benutzer.
- *
- * Kontext:
- * Wird z. B. in der Register-Komponente verwendet, um neue Benutzer
- * über das Backend anzulegen. Bei Erfolg wird direkt ein `User`-Objekt erzeugt.
- */
 
 export class RegisterApi {
   private readonly baseUrl = "/api";
@@ -30,19 +19,19 @@ export class RegisterApi {
    * @param username Gewünschter Benutzername
    * @param email E-Mail-Adresse
    * @param password Gewähltes Passwort
+   * @param rolle Rolle des neuen Nutzers ("user" oder "admin")
    * @returns Ein neues `User`-Objekt mit den vom Server gelieferten Daten
-   * @throws Fehler mit Nachricht bei fehlgeschlagener Registrierung
    */
-
   async register(
     username: string,
     email: string,
-    password: string
+    password: string,
+    rolle: string = "user"
   ): Promise<User> {
-    const res = await fetch(`${this.baseUrl}/auth/register`, {
+    const res = await fetch(`api/auth/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, email, password }),
+      body: JSON.stringify({ username, email, password, rolle }),
     });
 
     const data = (await res.json()) as RegisterResponse & { message?: string };
@@ -52,12 +41,13 @@ export class RegisterApi {
     }
 
     return new User(
-      data.vorname    || "",
-      data.nachname   || "",
+      data.vorname || "",
+      data.nachname || "",
       data.email,
       data.benutzername,
       data.profilbild_url || "",
-      data.location      || ""
+      data.location || "",
+      data.rolle
     );
   }
 }

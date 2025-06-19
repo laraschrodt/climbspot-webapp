@@ -3,7 +3,6 @@ import jwt from "jsonwebtoken";
 import { supabase } from "../../lib/supabase";
 import ErrorMessages from "../../utils/ErrorMessages";
 
-
 /**
  * AccountService
  *
@@ -13,7 +12,7 @@ import ErrorMessages from "../../utils/ErrorMessages";
  * - Passwortänderungen
  */
 class AccountService {
-    /**
+  /**
    * Authentifiziert einen Nutzer anhand von Email und Passwort.
    * Prüft, ob der Nutzer existiert und das Passwort korrekt ist.
    * Bei Erfolg wird ein JWT mit Nutzer-ID und Rolle zurückgegeben.
@@ -50,7 +49,7 @@ class AccountService {
     );
   }
 
-    /**
+  /**
    * Erstellt einen neuen Nutzeraccount mit Email, Passwort und Benutzernamen.
    * Prüft vorab, ob die Email bereits existiert.
    * Hasht das Passwort vor dem Speichern.
@@ -65,7 +64,8 @@ class AccountService {
   async createUserAccount(
     email: string,
     password: string,
-    benutzername: string
+    benutzername: string,
+    rolle: string
   ): Promise<{ benutzer_id: string; email: string; benutzername: string }> {
     const hashed = await bcrypt.hash(password, 10);
 
@@ -82,6 +82,7 @@ class AccountService {
         email,
         passwort_hash: hashed,
         benutzername,
+        rolle,
       })
       .select()
       .single();
@@ -91,10 +92,7 @@ class AccountService {
     return data;
   }
 
-
-
-
-    /**
+  /**
    * Ändert das Passwort eines Nutzers.
    * Verifiziert zuerst das alte Passwort, bevor das neue gespeichert wird.
    *
