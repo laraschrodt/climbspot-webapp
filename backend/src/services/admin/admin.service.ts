@@ -1,12 +1,5 @@
 import { supabase } from "../../lib/supabase";
 
-export interface UserRow {
-  benutzer_id: string;
-  email: string;
-  vorname: string;
-  nachname: string;
-}
-
 export interface UserDto {
   id: string;
   email: string;
@@ -30,6 +23,15 @@ class AdminService {
       vorname: u.vorname,
       nachname: u.nachname,
     }));
+  }
+
+  static async deleteUserFromDB(userId: string): Promise<void> {
+    const { error } = await supabase
+      .from("benutzer")
+      .delete()
+      .eq("benutzer_id", userId);
+
+    if (error) throw new Error(error.message);
   }
 }
 
