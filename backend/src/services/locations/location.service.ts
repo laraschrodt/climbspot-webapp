@@ -13,14 +13,11 @@ export interface RawFavoriteRow {
   o: Location & { bewertungen?: Bewertung[] };
 }
 
-
 /**
- * LocationsService
- *
  * Bietet Methoden zum Abrufen, Suchen, Bewerten und Aktualisieren von Kletterorten.
  */
 export class LocationsService {
-    /**
+  /**
    * Holt einen einzelnen Ort anhand der ID.
    *
    * @param locationId ID des Ortes
@@ -40,8 +37,7 @@ export class LocationsService {
     return data ? (data as Location) : null;
   }
 
-
-      /**
+  /**
    * Holt alle verfügbaren Kletterorte.
    *
    * @returns Promise mit Array aller Orte
@@ -54,8 +50,7 @@ export class LocationsService {
     return (data ?? []) as Location[];
   }
 
-
-    /**
+  /**
    * Holt die beliebtesten Kletterorte, berechnet anhand der durchschnittlichen Bewertung.
    * Sortiert absteigend nach Rating und liefert maximal 12 Orte zurück.
    *
@@ -94,8 +89,7 @@ export class LocationsService {
     return withRating.sort((a, b) => b.rating - a.rating).slice(0, 12);
   }
 
-
-    /**
+  /**
    * Sucht Orte anhand eines Suchbegriffs.
    *
    * @param query Suchstring
@@ -115,8 +109,7 @@ export class LocationsService {
     return (data ?? []) as Location[];
   }
 
-
-    /**
+  /**
    * Holt die Favoritenorte eines bestimmten Nutzers.
    *
    * @param userId ID des Nutzers
@@ -150,8 +143,7 @@ export class LocationsService {
     return rows.map((row) => row.o);
   }
 
-
-    /**
+  /**
    * Holt alle Bewertungen eines Nutzers.
    *
    * @param userId ID des Nutzers
@@ -183,9 +175,7 @@ export class LocationsService {
     return data;
   }
 
-
-  
-    /**
+  /**
    * Aktualisiert die Daten eines Ortes anhand der ID.
    *
    * @param locationId ID des zu aktualisierenden Ortes

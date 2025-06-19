@@ -1,14 +1,11 @@
 import { Request, Response } from "express";
 import DeleteLocationService from "../../services/locations/delete.location.service";
 
-
 /**
- * DeleteLocationController
- *
  * Verantwortlich für das Löschen von Kletterorten aus der Datenbank.
  */
 class DeleteLocationController {
-    /**
+  /**
    * Löscht einen Kletterort anhand der übergebenen `locationId` aus der URL-Parameter.
    * Bei Erfolg wird HTTP-Status 204 (No Content) zurückgegeben.
    * Bei Fehlern wird ein 500-Fehler mit allgemeiner Fehlermeldung gesendet.

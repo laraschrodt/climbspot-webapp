@@ -37,8 +37,7 @@
 - [x] Admins können alle Locations verwalten
 - [x] Gastrechte beschränken
 - [ ] Admins können andere Admins erstellen
-- [ ] Admins können alle Benutzer verwalten
-- [ ] Bug fixing
+- [x] Admins können alle Benutzer verwalten
 
 `Kimia`:
 

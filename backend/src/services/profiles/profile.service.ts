@@ -22,14 +22,12 @@ export interface NotificationRow {
 }
 
 /**
- * ProfileService
- *
  * Bietet Methoden zum Laden und Aktualisieren von Profildaten,
  * zum Upload von Profilbildern, zum Abrufen von Favoriten,
  * Bewertungen und Benachrichtigungen für Nutzer.
  */
 class ProfileService {
-    /**
+  /**
    * Holt Profildaten eines Nutzers anhand der Nutzer-ID.
    *
    * @param userId ID des Nutzers
@@ -61,8 +59,6 @@ class ProfileService {
     };
   }
 
-
-  
   /**
    * Aktualisiert die Profildaten eines Nutzers.
    *
@@ -109,8 +105,7 @@ class ProfileService {
     return { success: true };
   }
 
-
-    /**
+  /**
    * Lädt ein Profilbild in den Supabase-Storage hoch
    * und aktualisiert die URL in der Benutzertabelle.
    *
@@ -148,8 +143,7 @@ class ProfileService {
     return publicUrl;
   }
 
-
-    /**
+  /**
    * Holt alle Favoriten eines Nutzers.
    *
    * @param userId ID des Nutzers
@@ -183,8 +177,7 @@ class ProfileService {
     return rows.map((row) => row.o);
   }
 
-
-    /**
+  /**
    * Holt alle Bewertungen eines Nutzers.
    *
    * @param userId ID des Nutzers
@@ -214,8 +207,7 @@ class ProfileService {
     return data || [];
   }
 
-
-    /**
+  /**
    * Holt die letzten 20 Benachrichtigungen, sortiert nach Erstellungsdatum.
    *
    * @returns Promise mit Array der Notifications

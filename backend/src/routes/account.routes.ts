@@ -4,8 +4,6 @@ import AccountController from "../controllers/accounts/account.controller";
 const router = Router();
 
 /**
- * Account-Routen
- *
  * Definiert Endpunkte für Nutzer-Authentifizierung und Registrierung:
  * - POST /login: Nutzer-Login
  * - POST /register: Nutzer-Registrierung
