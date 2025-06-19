@@ -6,7 +6,13 @@ import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import { FilterCriteria } from "./Filter";
 
+/**
+ * Datenmodell für eine einfache Location mit Koordinaten,
+ * das in der Karte verwendet wird.
+ */
+
 type Location = {
+  ort_id: string;
   name: string;
   talort: string;
   region: string;
@@ -16,11 +22,21 @@ type Location = {
   schwierigkeit: string;
 };
 
+/**
+ * Props für die Map-Komponente.
+ * @property filter - Aktive Filterkriterien (optional), um die angezeigten Marker einzuschränken.
+ */
+
 interface MapProps {
   filter: FilterCriteria | null;
 }
 
-async function fetchLocations(): Promise<Location[]> {
+/**
+ * Lädt alle Locations vom Server.
+ * Wird intern für das Rendering der Marker verwendet.
+ */
+
+export async function fetchLocations(): Promise<Location[]> {
   const res = await fetch("api/locations/all");
   if (!res.ok) {
     throw new Error("Fehler beim Laden der Locations");
@@ -28,10 +44,27 @@ async function fetchLocations(): Promise<Location[]> {
   return res.json();
 }
 
+/**
+ * Interaktive Leaflet-Karte zur Darstellung von Kletterspots.
+ *
+ * Kontext:
+ * Wird auf der Kartenübersichtsseite verwendet, um Spots geographisch anzuzeigen.
+ *
+ * Funktion:
+ * - Initialisiert Leaflet mit MarkerCluster-Plugin.
+ * - Holt alle Locations per API und filtert sie ggf. nach übergebenen Kriterien.
+ * - Zeigt für jede Location einen Marker mit Popup und Direktlink zur Detailansicht.
+ *
+ * Hinweise:
+ * - Marker und Karte werden per `useRef` persistent verwaltet.
+ * - Bei Änderung des Filters wird das Markerset neu aufgebaut.
+ */
+
 const Map: React.FC<MapProps> = ({ filter }) => {
   const mapRef = useRef<L.Map | null>(null);
   const markersRef = useRef<L.MarkerClusterGroup | null>(null);
 
+  // Initialisiere die Karte (einmalig)
   useEffect(() => {
     if (mapRef.current) return;
 
@@ -87,8 +120,10 @@ const Map: React.FC<MapProps> = ({ filter }) => {
               `📍 Talort: ${loc.talort}<br>` +
               `🌍 Region: ${loc.region}<br>` +
               `🧗‍♂️ Schwierigkeit: ${loc.schwierigkeit}<br>` +
-              `🧱 Art: ${loc.kletterart}`
+              `🧱 Art: ${loc.kletterart}<br><br>` +
+              `<button onclick="window.location.href='/details/${loc.ort_id}'" style="background-color:#16a34a;color:white;padding:5px 10px;border:none;border-radius:4px;cursor:pointer;">➡ Details zur Location</button>`
           );
+
           markers.addLayer(marker);
         });
       } catch (error) {

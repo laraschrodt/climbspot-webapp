@@ -9,6 +9,18 @@ interface MyLocation extends Location {
   bewertungen?: { sterne: number }[];
 }
 
+/**
+ * MyLocations-Komponente
+ *
+ * Zeigt alle Orte an, die vom aktuell eingeloggten Nutzer selbst erstellt wurden.
+ * Eingebunden im rechten Bereich der `ProfilePage`.
+ *
+ * Die Komponente lädt die Daten bei Initialisierung vom Server und zeigt sie in einer Grid-Ansicht.
+ * Jede Location wird mit einer `LocationCard` dargestellt und ist zur Detailseite verlinkt.
+ *
+ * Bewertungsdurchschnitt wird lokal aus den abgegebenen Einzelbewertungen berechnet.
+ */
+
 const MyLocations: React.FC = () => {
   const { user } = useUserSession();
   const [locations, setLocations] = useState<MyLocation[]>([]);
@@ -60,7 +72,7 @@ const MyLocations: React.FC = () => {
 
   if (locations.length === 0) {
     return (
-      <section className="container mx-auto p-4">
+      <section className="bg-white p-6 rounded-xl shadow-md w-full max-w-4xl ml-0 my-4">
         <h2 className="text-xl font-semibold mb-4">Meine Locations</h2>
         <p className="italic text-gray-500">
           Du hast noch keine Locations angelegt.
@@ -70,9 +82,9 @@ const MyLocations: React.FC = () => {
   }
 
   return (
-    <section className="container mx-auto p-4">
+<section className="container mx-auto max-w-5xl p-4">
       <h2 className="mb-8 mt-8 text-2xl font-bold">Meine Locations</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {locations.map((loc) => (
           <Link
             to={`/details/${loc.ort_id}`}

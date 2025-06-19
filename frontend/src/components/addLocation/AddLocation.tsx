@@ -4,6 +4,21 @@ import { v4 as uuidv4 } from "uuid";
 import LocationPicture from "./LocationPicture";
 import type { Location } from "../../models/Location";
 
+/**
+ * Seite zur Erstellung einer neuen Kletterlocation.
+ *
+ * Kontext:
+ * Diese Komponente wird gerendert, wenn ein eingeloggter Benutzer eine neue
+ * Location hinzufügen möchte. Sie bietet ein Formular zur Eingabe aller relevanten
+ * Daten inklusive Upload eines Bildes.
+ *
+ * Funktion:
+ * - Validiert Benutzereingaben lokal.
+ * - Bereitet ein `FormData`-Objekt inklusive Bild-Upload vor.
+ * - Sendet die Daten via `POST` an den geschützten API-Endpunkt `/api/locations/add-location`.
+ * - Leitet bei Erfolg zur Detailseite der neuen Location weiter.
+ */
+
 const AddLocation: React.FC = () => {
   const navigate = useNavigate();
 
@@ -40,8 +55,17 @@ const AddLocation: React.FC = () => {
 
     if (
       target instanceof HTMLInputElement &&
-      (target.type === "checkbox" || target.type === "radio")
+      target.type === "radio" &&
+      name === "kinderfreundlich"
     ) {
+      setForm((prev) => ({
+        ...prev,
+        kinderfreundlich: target.value === "true",
+      }));
+      return;
+    }
+
+    if (target instanceof HTMLInputElement && target.type === "checkbox") {
       setForm((prev) => ({ ...prev, [name]: target.checked }));
       return;
     }
@@ -269,11 +293,13 @@ const AddLocation: React.FC = () => {
             <option value="klettersteig">klettersteig</option>
           </select>
         </label>
+
         <div className="flex items-center gap-4">
           <label className="label cursor-pointer">
             <input
               type="radio"
               name="kinderfreundlich"
+              value="true"
               className="radio radio-primary"
               checked={form.kinderfreundlich === true}
               onChange={handleChange}
@@ -281,10 +307,12 @@ const AddLocation: React.FC = () => {
             />
             <span className="ml-2">Ja</span>
           </label>
+
           <label className="label cursor-pointer">
             <input
               type="radio"
               name="kinderfreundlich"
+              value="false"
               className="radio radio-primary"
               checked={form.kinderfreundlich === false}
               onChange={handleChange}
@@ -293,6 +321,7 @@ const AddLocation: React.FC = () => {
             <span className="ml-2">Nein</span>
           </label>
         </div>
+
         <button type="submit" className="btn btn-primary sm:col-span-2">
           Speichern
         </button>

@@ -6,6 +6,19 @@ import Filter, { FilterCriteria } from "../components/locationSearch/Filter";
 import LocationGallery from "../components/locationSearch/LocationGallery";
 import { Location } from "../models/Location";
 
+
+/**
+ * LocationList-Komponente
+ *
+ * Zeigt eine Liste aller Kletterorte mit Filterfunktion an.
+ * Lädt alle Orte beim Initial-Render vom Backend und ermöglicht Nutzern,
+ * die Liste durch verschiedene Kriterien wie Kletterart, Schwierigkeit,
+ * Standort, Kletterzeit und weitere Attribute einzuschränken.
+ *
+ * Besteht aus globaler Navigationsleiste, Filterkomponente, Galerie der Orte und Footer.
+ * Die Filterlogik wird lokal verwaltet und filtert die geladenen Daten.
+ */
+
 const LocationList: React.FC = () => {
   const [allLocations, setAllLocations] = useState<Location[]>([]);
   const [filteredLocations, setFilteredLocations] = useState<Location[]>([]);

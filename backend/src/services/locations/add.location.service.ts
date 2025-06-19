@@ -3,6 +3,13 @@ import { randomUUID } from "crypto";
 import { supabase } from "../../lib/supabase";
 import type { PostgrestError } from "@supabase/supabase-js";
 
+
+/**
+ * Gibt Supabase-Fehler strukturiert in der Konsole aus.
+ *
+ * @param scope Kontext der Fehlermeldung (z.B. Funktionsname)
+ * @param err PostgrestError-Objekt mit Fehlerdetails von Supabase
+ */
 function logSupabaseError(scope: string, err: PostgrestError) {
   console.error(`[${scope}] Supabase-Fehler`);
   console.error(" Code   :", err.code ?? "—");
@@ -11,7 +18,36 @@ function logSupabaseError(scope: string, err: PostgrestError) {
   console.error(" Hint   :", err.hint ?? "—");
 }
 
-export async function addLocation(request: Request): Promise<string> {
+
+
+/**
+ * Fügt einen neuen Kletterort hinzu und speichert das Bild in Supabase Storage.
+ * 
+ * - Lädt das Bild hoch und generiert eine öffentliche URL.
+ * - Legt einen neuen Datensatz in der "orte"-Tabelle an.
+ * - Verknüpft den Ort mit dem aktuell eingeloggten Nutzer in "my-locations".
+ * - Erstellt eine Benachrichtigung für den neuen Ort.
+ *
+ * @param request Express Request mit Bilddatei und Ort-Daten im Body
+ * @returns Promise mit Objekt, das neue Ort-Details und Benachrichtigung enthält
+ * @throws Fehler bei fehlendem Bild, Speicher- oder Datenbankfehlern
+ */
+export async function addLocation(request: Request): Promise<{
+  ort_id: string;
+  name: string;
+  region: string;
+  land: string;
+  picture_url: string;
+  notification: {
+    id: string;
+    ort_id: string;
+    title: string;
+    message: string;
+    picture_url: string;
+    erstellt_am: string;
+  };
+}> {
+
   const file = request.file;
   if (!file) throw new Error("Image file missing");
 
@@ -24,17 +60,18 @@ export async function addLocation(request: Request): Promise<string> {
       contentType: file.mimetype,
       upsert: true,
     });
-
   if (storageError) throw new Error(storageError.message);
+
 
   const { data: urlData } = supabase.storage
     .from("location-pictures")
     .getPublicUrl(storageName);
 
-  const locationId = request.body.ort_id || randomUUID();
+
+  const ort_id = request.body.ort_id || randomUUID();
 
   const record = {
-    ort_id: locationId,
+    ort_id,
     name: request.body.name,
     region: request.body.region,
     land: request.body.land,
@@ -61,6 +98,7 @@ export async function addLocation(request: Request): Promise<string> {
   };
 
   try {
+
     const { error: insertOrtErr } = await supabase.from("orte").insert(record);
     if (insertOrtErr) throw insertOrtErr;
 
@@ -69,13 +107,33 @@ export async function addLocation(request: Request): Promise<string> {
 
     const { error: insertLinkErr } = await supabase
       .from("my-locations")
-      .insert({ benutzer_id: userId, ort_id: locationId });
-
+      .insert({ benutzer_id: userId, ort_id });
     if (insertLinkErr) throw insertLinkErr;
+
+    const notificationId = randomUUID();
+    const notification = {
+      id: notificationId,
+      ort_id: ort_id,
+      title: "Neuer Kletterspot!",
+      message: `Der Ort "${record.name}" wurde hinzugefügt.`,
+      picture_url: record.picture_url,
+      erstellt_am: new Date().toISOString(),
+    };
+    const { error: notifErr } = await supabase
+      .from("notifications")
+      .insert(notification);
+    if (notifErr) throw notifErr;
+
+    return {
+      ort_id,
+      name: record.name,
+      region: record.region,
+      land: record.land,
+      picture_url: record.picture_url,
+      notification,
+    };
   } catch (err) {
     logSupabaseError("addLocation", err as PostgrestError);
     throw err;
   }
-
-  return locationId;
 }

@@ -10,6 +10,18 @@ interface Props {
   saveChanges: () => void;
 }
 
+/**
+ * ProfileForm-Komponente
+ *
+ * Anzeige und Bearbeitung der Basis-Benutzerdaten im Profilbereich.
+ * Wird im linken Seitenteil der `ProfilePage` verwendet und ermöglicht Nutzern,
+ * ihre persönlichen Daten wie Vorname, Nachname, E-Mail etc. zu bearbeiten.
+ *
+ * Der editierbare Zustand wird über `editMode` gesteuert.
+ * Änderungen werden lokal über `handleChange` verarbeitet und bei Klick auf „Speichern“
+ * über `saveChanges` in die Anwendung zurückgegeben (z.B. API-Aufruf im Parent).
+ */
+
 const ProfileForm: React.FC<Props> = ({
   formData,
   editMode,
@@ -22,7 +34,7 @@ const ProfileForm: React.FC<Props> = ({
       <h2 className="text-xl font-semibold">Persönliche Informationen</h2>
       <button
         onClick={toggleEditMode}
-        className="text-blue-600 flex items-center gap-1 text-sm"
+        className="text-green-600 flex items-center gap-1 text-sm"
       >
         <Edit2 size={14} />
         {editMode ? "Abbrechen" : "Bearbeiten"}
@@ -52,18 +64,28 @@ const ProfileForm: React.FC<Props> = ({
 
         <button
           onClick={saveChanges}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          className="bg-green-800 text-white px-4 py-2 rounded hover:bg-green-700"
         >
           Speichern
         </button>
       </div>
     ) : (
       <div className="space-y-2 text-gray-700">
-        <p><strong>Vorname:</strong> {formData.vorname}</p>
-        <p><strong>Nachname:</strong> {formData.nachname}</p>
-        <p><strong>E-Mail:</strong> {formData.email}</p>
-        <p><strong>Benutzername:</strong> {formData.username}</p>
-        <p><strong>Standort:</strong> {formData.location}</p>
+        <p>
+          <strong>Vorname:</strong> {formData.vorname}
+        </p>
+        <p>
+          <strong>Nachname:</strong> {formData.nachname}
+        </p>
+        <p>
+          <strong>E-Mail:</strong> {formData.email}
+        </p>
+        <p>
+          <strong>Benutzername:</strong> {formData.username}
+        </p>
+        <p>
+          <strong>Standort:</strong> {formData.location}
+        </p>
       </div>
     )}
   </section>

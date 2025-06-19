@@ -5,9 +5,22 @@ import AccessInfo from "./LocationInfo/AccessInfo";
 import SpecialNotes from "./LocationInfo/SpecialNotes";
 
 interface Props {
+    /** Location-Objekt mit allen Details, die angezeigt werden sollen */
   location: Location;
 }
 
+
+/**
+ * Komponente zur Darstellung umfassender Informationen einer Location.
+ *
+ * Kontext:
+ * Wird typischerweise in der rechten Seitenleiste der Location-Detailseite
+ * verwendet, um die verschiedenen Informationsbereiche übersichtlich anzuzeigen.
+ *
+ * Funktion:
+ * - Bindet die Unterkomponenten `Description`, `AccessInfo` und `SpecialNotes` ein.
+ * - Stellt diese in einem responsiven Layout dar.
+ */
 const LocationInfo: React.FC<Props> = ({ location }) => {
   return (
     <div className="container mx-auto p-4">

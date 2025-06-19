@@ -4,12 +4,30 @@ import AccountService from "../../services/accounts/account.service";
 import ErrorMessages from "../../utils/ErrorMessages";
 import { supabase } from "../../lib/supabase";
 
+/**
+ * AccountController
+ *
+ * Verantwortlich für die Authentifizierungs-Endpunkte:
+ * - loginUser: Authentifiziert Nutzer per Email und Passwort, erstellt JWT und liefert Nutzerdaten zurück.
+ * - registerUser: Legt neue Nutzeraccounts mit Email, Passwort und Username an.
+ *
+ * Nutzt `AccountService` für Geschäftslogik und `supabase` für Datenbankzugriffe.
+ * Fehler werden abgefangen und mit passenden HTTP-Statuscodes und Nachrichten zurückgegeben.
+ */
+
 class AccountController {
+  /**
+   * Authentifiziert einen Nutzer mit Email und Passwort.
+   * Bei Erfolg wird ein JWT erstellt und zusammen mit Nutzer-ID, Rolle und Benutzername zurückgegeben.
+   * Bei Fehler erfolgt ein 401 Unauthorized mit Fehlermeldung.
+   *
+   * @param req Express Request-Objekt mit `email` und `password` im Body.
+   * @param res Express Response-Objekt mit JSON-Antwort.
+   */
   async loginUser(req: Request, res: Response): Promise<void> {
     const { email, password } = req.body;
 
     try {
-      // 1) Authentifiziere und erzeuge JWT
       const token = await AccountService.authenticateUserCredentials(
         email,
         password
@@ -37,14 +55,24 @@ class AccountController {
     }
   }
 
+  /**
+   * Registriert einen neuen Nutzer mit Email, Passwort und Benutzername.
+   * Bei Erfolg wird das Ergebnis mit Status 201 Created zurückgegeben.
+   * Bei Fehler erfolgt ein 400 Bad Request mit Fehlermeldung.
+   *
+   * @param req Express Request-Objekt mit `email`, `password` und `username` im Body.
+   * @param res Express Response-Objekt mit JSON-Antwort.
+   */
+
   async registerUser(req: Request, res: Response): Promise<void> {
-    const { email, password, username } = req.body;
+    const { email, password, username, rolle } = req.body;
 
     try {
       const result = await AccountService.createUserAccount(
         email,
         password,
-        username
+        username,
+        rolle
       );
       res.status(201).json(result);
     } catch (err) {

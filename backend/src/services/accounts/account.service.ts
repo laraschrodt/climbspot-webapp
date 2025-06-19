@@ -3,7 +3,25 @@ import jwt from "jsonwebtoken";
 import { supabase } from "../../lib/supabase";
 import ErrorMessages from "../../utils/ErrorMessages";
 
+/**
+ * AccountService
+ *
+ * Behandelt die Geschäftslogik rund um Nutzer-Accounts:
+ * - Authentifizierung von Nutzeranmeldedaten
+ * - Erstellung neuer Nutzeraccounts
+ * - Passwortänderungen
+ */
 class AccountService {
+  /**
+   * Authentifiziert einen Nutzer anhand von Email und Passwort.
+   * Prüft, ob der Nutzer existiert und das Passwort korrekt ist.
+   * Bei Erfolg wird ein JWT mit Nutzer-ID und Rolle zurückgegeben.
+   *
+   * @param email Email des Nutzers
+   * @param password Klartext-Passwort zur Verifikation
+   * @returns JWT-Token als String
+   * @throws Fehler, wenn Nutzer nicht gefunden oder Passwort falsch ist
+   */
   async authenticateUserCredentials(
     email: string,
     password: string
@@ -31,10 +49,23 @@ class AccountService {
     );
   }
 
+  /**
+   * Erstellt einen neuen Nutzeraccount mit Email, Passwort und Benutzernamen.
+   * Prüft vorab, ob die Email bereits existiert.
+   * Hasht das Passwort vor dem Speichern.
+   *
+   * @param email Email-Adresse des neuen Nutzers
+   * @param password Klartext-Passwort
+   * @param benutzername Gewünschter Benutzername
+   * @returns Daten des neu erstellten Nutzers
+   * @throws Fehler, wenn Email bereits existiert oder Einfügen fehlschlägt
+   */
+
   async createUserAccount(
     email: string,
     password: string,
-    benutzername: string
+    benutzername: string,
+    rolle: string
   ): Promise<{ benutzer_id: string; email: string; benutzername: string }> {
     const hashed = await bcrypt.hash(password, 10);
 
@@ -51,6 +82,7 @@ class AccountService {
         email,
         passwort_hash: hashed,
         benutzername,
+        rolle,
       })
       .select()
       .single();
@@ -60,6 +92,16 @@ class AccountService {
     return data;
   }
 
+  /**
+   * Ändert das Passwort eines Nutzers.
+   * Verifiziert zuerst das alte Passwort, bevor das neue gespeichert wird.
+   *
+   * @param userId Nutzer-ID, dessen Passwort geändert wird
+   * @param oldPassword Aktuelles Klartext-Passwort
+   * @param newPassword Neues Klartext-Passwort
+   * @returns Objekt mit Erfolgsmeldung
+   * @throws Fehler bei Nutzer nicht gefunden, falschem alten Passwort oder Update-Fehler
+   */
   async changePasswordInDatabase(
     userId: string,
     oldPassword: string,

@@ -1,16 +1,29 @@
 import React, { useState } from "react";
-//import axios from "axios";
 import Profilbild from "./ProfilePicture";
 import PersönlicheInfos from "./ProfileForm";
 import PasswortÄndern from "./ChangePassword";
 import { FormDataType } from "./types";
-import ProfileApi from "../../../../api/ProfileApi";
+import ProfileApi from "../../../../api/profileApi";
 import Notifications from "./Notifications";
 
 interface Props {
   formData: FormDataType;
   setFormData: React.Dispatch<React.SetStateAction<FormDataType>>;
 }
+
+
+/**
+ * ProfileSidebar-Komponente
+ *
+ * Linker Bereich der `ProfilePage`. Kapselt alle zentralen Funktionen rund um das Benutzerprofil:
+ * - Anzeige und Upload des Profilbilds
+ * - Anzeige und Bearbeitung der Profildaten
+ * - Passwortänderung
+ * - Anzeige von Benachrichtigungen
+ *
+ * Diese Komponente hält den lokalen UI-Zustand für Bearbeitungsmodus und Passwortfelder
+ * und koordiniert die Übergabe an API-Methoden (Profil speichern, Passwort ändern, Bild hochladen).
+ */
 
 const ProfileSidebar: React.FC<Props> = ({ formData, setFormData }) => {
   const [editMode, setEditMode] = useState(false);
@@ -36,8 +49,16 @@ const ProfileSidebar: React.FC<Props> = ({ formData, setFormData }) => {
 
   const saveChanges = async () => {
     try {
-      const { vorname, nachname, email, username, location, profilbild_url } = formData;
-      await ProfileApi.saveProfile({ vorname, nachname, email, username, location, profilbild_url });
+      const { vorname, nachname, email, username, location, profilbild_url } =
+        formData;
+      await ProfileApi.saveProfile({
+        vorname,
+        nachname,
+        email,
+        username,
+        location,
+        profilbild_url,
+      });
       alert("Profil erfolgreich gespeichert");
       setEditMode(false);
     } catch (error) {
@@ -64,7 +85,10 @@ const ProfileSidebar: React.FC<Props> = ({ formData, setFormData }) => {
 
   return (
     <div className="flex flex-col items-center md:items-start gap-6">
-      <Profilbild imageUrl={formData.profilbild_url} onImageChange={handleImageChange} />
+      <Profilbild
+        imageUrl={formData.profilbild_url}
+        onImageChange={handleImageChange}
+      />
       <Notifications />
       <PersönlicheInfos
         formData={formData}

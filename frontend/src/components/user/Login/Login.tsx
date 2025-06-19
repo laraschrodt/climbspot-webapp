@@ -3,6 +3,21 @@ import { Link, useNavigate } from "react-router-dom";
 import { useUserSession } from "../../../auth/UseUserSession";
 import { LoginApi } from "../../../api/LoginApi";
 
+
+
+/**
+ * Login-Komponente für die Authentifizierung.
+ *
+ * Kontext:
+ * - Wird verwendet, um Benutzer anzumelden.
+ *
+ * Funktion:
+ * - Nimmt E-Mail und Passwort entgegen.
+ * - Authentifiziert über `LoginApi`.
+ * - Speichert Sessiondaten per `useUserSession`.
+ * - Leitet bei Erfolg zur Startseite um.
+ */
+
 const loginApi = new LoginApi();
 
 const Login: React.FC = () => {
@@ -13,6 +28,11 @@ const Login: React.FC = () => {
 
   const navigate = useNavigate();
   const { storeLoginData } = useUserSession();
+
+  /**
+   * Verarbeitet das Login-Formular.
+   * Ruft die API auf und speichert bei Erfolg die Sessiondaten.
+   */
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

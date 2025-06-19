@@ -7,6 +7,27 @@ import { useUserSession } from "../../auth/UseUserSession";
 import ProtectedComponent from "../../routes/ProtectedComponent";
 import DeleteLocationButton from "./LeftSide/DeleteLocationButton";
 
+/**
+ * Detailseite für eine einzelne Kletterlocation.
+ *
+ * Kontext:
+ * Wird aufgerufen über `/details/:locationId` und zeigt umfassende Informationen
+ * zu einem spezifischen Ort an – inklusive Bildbanner, Beschreibung, Zugang, Bewertungen und Aktionen.
+ *
+ * Funktion:
+ * - Holt alle relevanten Daten zur Location über `/api/locations/details/:locationId`.
+ * - Zeigt ein großes Header-Bild mit Titel.
+ * - Zwei-Spalten-Layout:
+ *   - Links: Reviews, Favoriten-Button, ÖPNV-Link, Bearbeiten/Löschen (wenn Eigentümer).
+ *   - Rechts: Detaillierte Infos über die Location (`LocationInfo`).
+ * - Ermöglicht Favorisieren der Location (POST/DELETE `/api/locations/favorite/:locationId`).
+ *
+ * Besondere Hinweise:
+ * - Nutzt `ProtectedComponent`, um Bearbeiten/Löschen nur für den Eigentümer anzuzeigen.
+ * - Aktuell sind Bewertungen nur als Platzhalter (Mock).
+ * - Sollte langfristig in kleinere Teilkomponenten ausgelagert werden.
+ */
+
 const LocationDetails: React.FC = () => {
   const { user } = useUserSession();
   const [location, setLocation] = useState<Location | null>(null);
@@ -18,12 +39,18 @@ const LocationDetails: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const headers: Record<string, string> = {};
+        if (user) {
+          headers["x-user-id"] = user.userId;
+        }
+
         const res = await fetch(`/api/locations/details/${locationId}`, {
-          headers: { "x-user-id": user!.userId },
+          headers,
         });
+
         if (!res.ok) throw new Error("Standort nicht gefunden");
+
         const data = await res.json();
-        console.log("Parsed JSON:", data);
         setLocation(data);
         setIsOwner(data.isOwner ?? false);
       } finally {
@@ -31,7 +58,7 @@ const LocationDetails: React.FC = () => {
       }
     };
 
-    if (locationId && user) fetchData();
+    if (locationId) fetchData();
   }, [locationId, user]);
 
   const handleFavoriteToggle = async () => {
@@ -64,6 +91,7 @@ const LocationDetails: React.FC = () => {
   if (loading) return <div>Loading...</div>;
 
   return (
+    // FIXME: Aufteilen in Components weil das zu unübersichtlich ist
     <div>
       {/* Banner mit Bild und Text */}
       <div
@@ -83,7 +111,7 @@ const LocationDetails: React.FC = () => {
         {/* Spalte 1 - LeftSide: Reviews und Buttons */}
         <div className="w-full md:w-1/3 space-y-6">
           {isOwner && (
-            <ProtectedComponent roles={["user"]}>
+            <ProtectedComponent roles={["user", "admin"]}>
               <div className="flex gap-4">
                 <Link
                   to={`/edit-location/${locationId}`}

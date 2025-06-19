@@ -2,9 +2,25 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 interface Props {
+    /** ID der Location, die gelöscht werden soll */
   locationId: string;
 }
 
+
+
+/**
+ * Button-Komponente zum Löschen einer Location.
+ *
+ * Kontext:
+ * Wird z. B. in der Detailansicht einer Location verwendet,
+ * um diese dauerhaft vom Server zu entfernen.
+ *
+ * Funktion:
+ * - Fragt den Nutzer vor dem Löschen per Bestätigungsdialog.
+ * - Sendet eine DELETE-Anfrage an den API-Endpunkt `/api/locations/:locationId`.
+ * - Bei Erfolg erfolgt eine Navigation zurück zur Übersichtsseite `/locations`.
+ * - Bei Fehler wird eine Fehlermeldung angezeigt.
+ */
 const DeleteLocationButton: React.FC<Props> = ({ locationId }) => {
   const navigate = useNavigate();
 

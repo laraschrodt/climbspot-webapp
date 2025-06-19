@@ -5,9 +5,25 @@ import axios from "axios";
 import ProfileApi from "../../../api/profileApi";
 
 
+/**
+ * Rechter Bereich der Navigationsleiste.
+ *
+ * Kontext:
+ * Wird im `Navbar` als rechter Abschnitt verwendet.
+ * Zeigt Suchfunktion, Profilbild und Dropdown-Menü.
+ *
+ * Funktion:
+ * - Dynamische Suche nach Locations über eine API mit Vorschlagsliste.
+ * - Anzeige des Benutzerprofilbildes (falls vorhanden), sonst Initialbuchstabe.
+ * - Dropdown-Menü für Login/Logout/Profil, abhängig vom Login-Zustand.
+ */
+
 const NavbarEnd: FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  // FIXME: any weg machen weil sonst error
+  /** 
+ * Suchbegriff für die dynamische Location-Suche.
+ * Wird verwendet, um während der Eingabe API-Anfragen zu triggern.
+ */
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const { user, clearSession } = useUserSession();
@@ -38,6 +54,11 @@ const NavbarEnd: FC = () => {
 
     return () => clearTimeout(delayDebounceFn);
   }, [searchTerm]);
+  /**
+ * Effekt-Hook für die Vorschlagssuche.
+ * Führt bei jeder Änderung des Suchbegriffs eine API-Abfrage aus,
+ * um passende Locations zu laden. Verwendet Debounce (300 ms).
+ */
 
   useEffect(() => {
     const fetchProfileImage = async () => {
@@ -119,7 +140,11 @@ const NavbarEnd: FC = () => {
         <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
           <div className="w-6 h-6 rounded-full bg-neutral text-base-100 flex items-center justify-center overflow-hidden">
             {profileImage ? (
-              <img src={profileImage} alt="Profilbild" className="w-full h-full object-cover" />
+              <img
+                src={profileImage}
+                alt="Profilbild"
+                className="w-full h-full object-cover"
+              />
             ) : user ? (
               user.username[0].toUpperCase()
             ) : (
@@ -147,14 +172,22 @@ const NavbarEnd: FC = () => {
         >
           {!user && (
             <>
-              <li><Link to="/login">Login</Link></li>
-              <li><Link to="/register">Registrieren</Link></li>
+              <li>
+                <Link to="/login">Login</Link>
+              </li>
+              <li>
+                <Link to="/register">Registrieren</Link>
+              </li>
             </>
           )}
           {user && (
             <>
-              <li><Link to="/profile">Profil</Link></li>
-              <li><button onClick={handleLogout}>Logout</button></li>
+              <li>
+                <Link to="/profile">Profil</Link>
+              </li>
+              <li>
+                <button onClick={handleLogout}>Logout</button>
+              </li>
             </>
           )}
         </ul>

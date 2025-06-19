@@ -3,10 +3,24 @@ import { Camera } from "react-feather";
 import placeholderLocation from "../../assets/images/placeholder-location.png";
 
 interface LocationPictureProps {
+  /** Aktuelle Bild-URL oder leer für Platzhalterbild */
   imageUrl: string;
+  /** Callback, wenn der Benutzer ein neues Bild auswählt */
   onImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
+/**
+ * Komponente zur Anzeige und Auswahl eines Location-Bildes.
+ *
+ * Kontext:
+ * Wird z.B. im Formular zur Erstellung oder Bearbeitung einer Location verwendet,
+ * um ein Bild hochzuladen oder anzuzeigen.
+ *
+ * Funktion:
+ * - Zeigt entweder das gewählte Bild oder ein Platzhalterbild an.
+ * - Ermöglicht dem Benutzer die Auswahl eines neuen Bildes über eine versteckte Datei-Eingabe.
+ * - Löst bei Änderung das übergebene `onImageChange`-Event aus.
+ */
 const LocationPicture: React.FC<LocationPictureProps> = ({
   imageUrl,
   onImageChange,
