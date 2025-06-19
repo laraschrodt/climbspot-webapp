@@ -6,7 +6,6 @@
 
 ## Bugs
 
-- [ ] Wenn man ein neues Profil macht klappt das Übertragen von Daten wie Vorname/Nachname etc. ins Backend nicht (nur veränderrn klappt)
 - [ ] Sterne-Bewertungen in PopularLocations auf der Homepage werden nicht angezeigt
 - [ ] Ja/Nein Radiobutton bei "Kinderfreundlich?" im Formular zum Erstellen und Ändern einer Location funktioniert nicht
 - [ ] Benachrichtigung laden immer neu, auch wenn man auf "gesehen" drückt
@@ -74,7 +73,7 @@
 - [ ] Location hinzufügen (`Nelly`)
 - [ ] Bewertung schreiben (`Kimia`)
 - [ ] Location favorisieren (`Lara`)
-- [ ] Admin-Funktionen (`Lara`)
+- [x] Admin-Funktionen (`Lara`)
 - [x] Suchfunktion im Header (`Alex`)
 - [x] Filterfunktion bei Karte und Liste (`Alex`)
 - [ ] Nahverkehrsintegration (`Nelly`)

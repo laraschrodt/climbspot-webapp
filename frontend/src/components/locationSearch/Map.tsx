@@ -36,7 +36,7 @@ interface MapProps {
  * Wird intern für das Rendering der Marker verwendet.
  */
 
-async function fetchLocations(): Promise<Location[]> {
+export async function fetchLocations(): Promise<Location[]> {
   const res = await fetch("api/locations/all");
   if (!res.ok) {
     throw new Error("Fehler beim Laden der Locations");
@@ -84,7 +84,6 @@ const Map: React.FC<MapProps> = ({ filter }) => {
     markersRef.current = markers;
   }, []);
 
-  // Aktualisiere Marker bei Filteränderung
   useEffect(() => {
     const updateMarkers = async () => {
       if (!mapRef.current || !markersRef.current) return;

@@ -129,7 +129,7 @@ const Filter: React.FC<FilterProps> = ({ onApply }) => {
               type="number"
               min="0"
               className="input input-bordered w-full"
-              placeholder="z.B. 2"
+              placeholder="z. B. 2"
               value={kletterzeit}
               onChange={(e) => setKletterzeit(Number(e.target.value))}
             />
@@ -140,7 +140,7 @@ const Filter: React.FC<FilterProps> = ({ onApply }) => {
             <input
               type="number"
               className="input input-bordered w-full"
-              placeholder="z.B. 30"
+              placeholder="z. B. 30"
               value={kletterlaenge}
               step={25}
               onChange={(e) => setKletterlaenge(Number(e.target.value))}
@@ -163,16 +163,6 @@ const Filter: React.FC<FilterProps> = ({ onApply }) => {
                   </span>
                 </label>
               ))}
-              <label className="label cursor-pointer">
-                <input
-                  type="radio"
-                  name="kinder"
-                  className="radio"
-                  checked={kinder === null}
-                  onChange={() => setKinder(null)}
-                />
-                <span className="ml-2">egal</span>
-              </label>
             </div>
           </div>
           <div className="col-span-full flex justify-end">

@@ -68,16 +68,25 @@ const EditLocation: React.FC = () => {
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
-    const { name, value, type, checked } = e.target as HTMLInputElement;
-    setForm((prev) => ({
-      ...prev,
-      [name]:
-        type === "radio" || type === "checkbox"
-          ? checked
-          : type === "number"
-          ? Number(value)
-          : value,
-    }));
+    const target = e.target as HTMLInputElement;
+    const { name, value, type, checked } = target;
+
+    if (type === "radio" && name === "kinderfreundlich") {
+      setForm((prev) => ({ ...prev, [name]: value === "true" }));
+      return;
+    }
+
+    if (type === "checkbox") {
+      setForm((prev) => ({ ...prev, [name]: checked }));
+      return;
+    }
+
+    if (type === "number" || type === "range") {
+      setForm((prev) => ({ ...prev, [name]: Number(value) }));
+      return;
+    }
+
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -298,6 +307,7 @@ const EditLocation: React.FC = () => {
             <input
               type="radio"
               name="kinderfreundlich"
+              value="true"
               className="radio radio-primary"
               checked={form.kinderfreundlich === true}
               onChange={handleChange}
@@ -305,11 +315,11 @@ const EditLocation: React.FC = () => {
             />
             <span className="ml-2">Ja</span>
           </label>
-          {/* FIXME: Ja/Nein Button klappt nicht */}
           <label className="label cursor-pointer">
             <input
               type="radio"
               name="kinderfreundlich"
+              value="false"
               className="radio radio-primary"
               checked={form.kinderfreundlich === false}
               onChange={handleChange}

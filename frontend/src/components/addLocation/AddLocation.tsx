@@ -55,8 +55,17 @@ const AddLocation: React.FC = () => {
 
     if (
       target instanceof HTMLInputElement &&
-      (target.type === "checkbox" || target.type === "radio")
+      target.type === "radio" &&
+      name === "kinderfreundlich"
     ) {
+      setForm((prev) => ({
+        ...prev,
+        kinderfreundlich: target.value === "true",
+      }));
+      return;
+    }
+
+    if (target instanceof HTMLInputElement && target.type === "checkbox") {
       setForm((prev) => ({ ...prev, [name]: target.checked }));
       return;
     }
@@ -284,11 +293,13 @@ const AddLocation: React.FC = () => {
             <option value="klettersteig">klettersteig</option>
           </select>
         </label>
+
         <div className="flex items-center gap-4">
           <label className="label cursor-pointer">
             <input
               type="radio"
               name="kinderfreundlich"
+              value="true"
               className="radio radio-primary"
               checked={form.kinderfreundlich === true}
               onChange={handleChange}
@@ -296,11 +307,12 @@ const AddLocation: React.FC = () => {
             />
             <span className="ml-2">Ja</span>
           </label>
-          {/* FIXME: Ja/Nein Button klappt nicht */}
+
           <label className="label cursor-pointer">
             <input
               type="radio"
               name="kinderfreundlich"
+              value="false"
               className="radio radio-primary"
               checked={form.kinderfreundlich === false}
               onChange={handleChange}
@@ -309,6 +321,7 @@ const AddLocation: React.FC = () => {
             <span className="ml-2">Nein</span>
           </label>
         </div>
+
         <button type="submit" className="btn btn-primary sm:col-span-2">
           Speichern
         </button>
