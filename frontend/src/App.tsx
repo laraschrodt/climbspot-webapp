@@ -12,7 +12,6 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
 import EditLocationPage from "./pages/EditLocationPage";
 
-
 /**
  * App-Komponente
  *
@@ -33,20 +32,28 @@ export default function App() {
 
       <Route
         path="/profile"
-        element={<ProtectedRoute roles={["user"]} element={<ProfilePage />} />}
+        element={
+          <ProtectedRoute roles={["user", "admin"]} element={<ProfilePage />} />
+        }
       />
 
       <Route
         path="/add-location"
         element={
-          <ProtectedRoute roles={["user"]} element={<AddLocationPage />} />
+          <ProtectedRoute
+            roles={["user", "admin"]}
+            element={<AddLocationPage />}
+          />
         }
       />
 
       <Route
         path="/edit-location/:locationId"
         element={
-          <ProtectedRoute roles={["user"]} element={<EditLocationPage />} />
+          <ProtectedRoute
+            roles={["user", "admin"]}
+            element={<EditLocationPage />}
+          />
         }
       />
 

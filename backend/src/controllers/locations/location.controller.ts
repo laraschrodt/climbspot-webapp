@@ -4,7 +4,6 @@ import { AuthedRequest } from "../../middlewares/auth.middleware";
 import { supabase } from "../../lib/supabase";
 import { updateLocation as updateLocationInDb } from "../../services/locations/updateLocation.service";
 
-
 /**
  * LocationController
  *
@@ -18,7 +17,7 @@ import { updateLocation as updateLocationInDb } from "../../services/locations/u
  * - Ort aktualisieren
  */
 class LocationController {
-    /**
+  /**
    * Holt einen Ort anhand der ID.
    * Prüft optional, ob der anfragende Nutzer Eigentümer des Ortes ist.
    *
@@ -27,7 +26,7 @@ class LocationController {
    */
   async getLocationById(req: Request, res: Response): Promise<void> {
     const { locationId } = req.params;
-    const userId = req.header("x-user-id") || null; // ← kann null sein
+    const userId = req.header("x-user-id") || null;
 
     try {
       const location = await LocationsService.getLocationByIdFromDB(locationId);
@@ -39,14 +38,26 @@ class LocationController {
       let isOwner = false;
 
       if (userId) {
-        const { count, error } = await supabase
-          .from("my-locations")
-          .select("*", { head: true, count: "exact" })
-          .eq("ort_id", locationId)
-          .eq("benutzer_id", userId);
+        const { data: user, error: roleError } = await supabase
+          .from("benutzer")
+          .select("rolle")
+          .eq("benutzer_id", userId)
+          .single();
 
-        if (error) throw new Error(error.message);
-        isOwner = (count ?? 0) > 0;
+        if (roleError) throw new Error(roleError.message);
+
+        if (user?.rolle === "admin") {
+          isOwner = true;
+        } else {
+          const { count, error: countError } = await supabase
+            .from("my-locations")
+            .select("*", { head: true, count: "exact" })
+            .eq("ort_id", locationId)
+            .eq("benutzer_id", userId);
+
+          if (countError) throw new Error(countError.message);
+          isOwner = (count ?? 0) > 0;
+        }
       }
 
       res.status(200).json({ ...location, isOwner });
@@ -56,8 +67,7 @@ class LocationController {
     }
   }
 
-
-      /**
+  /**
    * Holt alle Kletterorte aus der Datenbank.
    *
    * @param req Express Request
@@ -73,8 +83,7 @@ class LocationController {
     }
   }
 
-
-      /**
+  /**
    * Holt beliebte Kletterorte aus der Datenbank.
    *
    * @param req Express Request
@@ -90,8 +99,7 @@ class LocationController {
     }
   }
 
-
-      /**
+  /**
    * Sucht Orte anhand eines Suchbegriffs (`query`).
    *
    * @param req Express Request mit `query` als Query-Parameter
@@ -114,8 +122,7 @@ class LocationController {
     }
   }
 
-
-      /**
+  /**
    * Holt die Favoritenorte des aktuell eingeloggten Nutzers.
    *
    * @param req Authentifizierter Request mit Nutzerinformationen
@@ -138,8 +145,7 @@ class LocationController {
     }
   }
 
-
-      /**
+  /**
    * Holt alle Bewertungen, die der Nutzer abgegeben hat.
    *
    * @param req Authentifizierter Request mit Nutzerinformationen
@@ -162,8 +168,7 @@ class LocationController {
     }
   }
 
-
-      /**
+  /**
    * Aktualisiert einen bestehenden Ort.
    *
    * @param req Express Request mit `locationId` als URL-Parameter und neuen Daten im Body

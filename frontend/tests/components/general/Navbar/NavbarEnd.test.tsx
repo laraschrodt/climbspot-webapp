@@ -16,7 +16,6 @@ const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 describe("NavbarEnd - Suchfunktion", () => {
   beforeEach(() => {
-    // Universeller Mock
     mockedAxios.get.mockImplementation((url) => {
       if (url.startsWith("/api/profile")) {
         return Promise.resolve({ data: { profilbild: null } });

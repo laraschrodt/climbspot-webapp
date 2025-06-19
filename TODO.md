@@ -4,6 +4,13 @@
 
 > **Kurze Rückmeldung am Sonntag Abend wie es läuft** <br> > **Bis dahin alle Tests fertig haben + MEETING:** Montag, 16.06.2025 19 Uhr <br> > **Bis dahin alle Unit/Integration Tests implementert haben** Freitag, 20.06.2025 <br> > **Deployment + MEETING:** Sonntag, 22.06.2025 19 Uhr
 
+## Bugs
+
+- [ ] Wenn man ein neues Profil macht klappt das Übertragen von Daten wie Vorname/Nachname etc. ins Backend nicht (nur veränderrn klappt)
+- [ ] Sterne-Bewertungen in PopularLocations auf der Homepage werden nicht angezeigt
+- [ ] Ja/Nein Radiobutton bei "Kinderfreundlich?" im Formular zum Erstellen und Ändern einer Location funktioniert nicht
+- [ ] Benachrichtigung laden immer neu, auch wenn man auf "gesehen" drückt
+
 ## 🧪 Testen
 
 ### Javadoc Dokumentation schreiben im Code (`Alex`)
@@ -45,7 +52,7 @@
 
 - [x] Interaktive Karte und gucken, dass der Filter funktioniert bei der Karte
 - [ ] Fehlende Felder in DB nachtragen bei Locations (es muss alles besetzt sein)
-- [X] Pins auf der Karte müssen einen irgendwie zu LocationDetails von der angeklickten Loation führen
+- [x] Pins auf der Karte müssen einen irgendwie zu LocationDetails von der angeklickten Loation führen
 
 ---
 
@@ -57,8 +64,8 @@
 - [ ] Bewertung schreiben (`Kimia`)
 - [ ] Location favorisieren (`Lara`)
 - [ ] Admin-Funktionen (`Lara`)
-- [X] Suchfunktion im Header (`Alex`)
-- [X] Filterfunktion bei Karte und Liste (`Alex`)
+- [x] Suchfunktion im Header (`Alex`)
+- [x] Filterfunktion bei Karte und Liste (`Alex`)
 - [ ] Nahverkehrsintegration (`Nelly`)
 - [ ] Interaktive Karte (`Lara`)
 - [ ] Benachrichtigungen (`Kimia`)

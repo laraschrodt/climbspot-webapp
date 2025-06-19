@@ -4,7 +4,6 @@ import { v4 as uuidv4 } from "uuid";
 import LocationPicture from "./LocationPicture";
 import type { Location } from "../../models/Location";
 
-
 /**
  * Seite zur Erstellung einer neuen Kletterlocation.
  *
@@ -297,7 +296,7 @@ const AddLocation: React.FC = () => {
             />
             <span className="ml-2">Ja</span>
           </label>
-          // FIXME: Ja/Nein Button klappt nicht
+          {/* FIXME: Ja/Nein Button klappt nicht */}
           <label className="label cursor-pointer">
             <input
               type="radio"
