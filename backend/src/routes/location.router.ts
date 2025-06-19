@@ -71,4 +71,6 @@ router.delete(
   DeleteLocationController.deleteLocation
 );
 
+router.post("/reviews/:locationId", AuthMiddleware.verifyToken, LocationController.addReview);
+
 export default router;

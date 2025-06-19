@@ -207,6 +207,41 @@ export class LocationsService {
     if (error) throw error;
     return updated;
   }
+
+  async getReviewsByLocationId(locationId: string) {
+    const { data, error } = await supabase
+      .from("bewertungen")
+      .select("*")
+      .eq("ort_id", locationId)
+      .order("erstellt_am", { ascending: false });
+
+    if (error) {
+      console.error("Fehler beim Laden der Bewertungen:", error);
+      throw new Error("Bewertungen konnten nicht geladen werden.");
+    }
+
+    return data;
+  }
+
+  async addReviewToDB(review: {
+    ort_id: string;
+    benutzer_id: string;
+    sterne: number;
+    kommentar: string;
+  }) {
+    const { data, error } = await supabase
+      .from("bewertungen")
+      .upsert([review], { onConflict: 'benutzer_id,ort_id' })
+      .select()
+      .single(); // genau eine Bewertung zurückgeben
+
+    if (error) {
+      console.error("Supabase-Fehler beim Speichern der Bewertung:", error);
+      throw new Error("Fehler beim Speichern der Bewertung.");
+    }
+
+    return data;
+  }
 }
 
 export default new LocationsService();
