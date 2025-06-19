@@ -21,6 +21,7 @@
     "leaflet": "^1.9.4",
     "leaflet-ui": "^0.6.0",
     "leaflet.markercluster": "^1.5.3",
+    "lucide-react": "^0.518.0",
     "multer": "^2.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

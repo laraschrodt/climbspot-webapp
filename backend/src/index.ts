@@ -6,10 +6,13 @@ import { Server } from "socket.io";
 import authRoutes from "./routes/account.routes";
 import profileRoutes from "./routes/profile.routes";
 import locationRouter from "./routes/location.router";
+import adminRoutes from "./routes/admin.routes";
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+app.use("/api/admin", adminRoutes);
 
 app.use("/api/auth", authRoutes);
 app.use("/api/profile", profileRoutes);

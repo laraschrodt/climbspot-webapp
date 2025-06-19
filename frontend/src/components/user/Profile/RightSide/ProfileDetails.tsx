@@ -2,6 +2,8 @@ import React from "react";
 import Favorites from "./Favorites";
 import Review from "./Reviews";
 import MyLocations from "./MyLocations";
+import UserAdministration from "./UserAdministration";
+import ProtectedComponent from "../../../../routes/ProtectedComponent";
 
 interface Review {
   location: string;
@@ -32,6 +34,9 @@ const ProfileDetails: React.FC<Props> = ({ favorites, reviews }) => {
       <Favorites favorites={favorites} />
       <Review reviews={reviews} />
       <MyLocations />
+      <ProtectedComponent roles={["admin"]}>
+        <UserAdministration />
+      </ProtectedComponent>
     </div>
   );
 };
