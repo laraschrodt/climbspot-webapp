@@ -23,7 +23,6 @@ import { OwnerActions } from "./OwnerActions";
  * - Enthält alle Bewertungs-, Favoriten- und Nutzer-spezifischen Zustände.
  */
 
-
 interface LeftSideProps {
   locationId: string;
   isOwner: boolean;
@@ -55,8 +54,6 @@ export const LeftSidebar: React.FC<LeftSideProps> = ({
     <div className="w-full md:w-1/3 space-y-6">
       {isOwner && <OwnerActions locationId={locationId} />}
 
-      <Reviews reviews={allReviews} />
-
       <ReviewForm
         stars={reviewStars}
         text={reviewText}
@@ -65,10 +62,9 @@ export const LeftSidebar: React.FC<LeftSideProps> = ({
         onSubmit={onSubmitReview}
       />
 
-      <FavoriteButton
-        isFavorited={isFavorited}
-        onToggle={onToggleFavorite}
-      />
+      <Reviews reviews={allReviews} />
+
+      <FavoriteButton isFavorited={isFavorited} onToggle={onToggleFavorite} />
 
       {location?.lat && location?.long && (
         <TransitButton lat={location.lat} long={location.long} />

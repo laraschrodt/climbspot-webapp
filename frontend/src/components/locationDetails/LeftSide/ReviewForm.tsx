@@ -1,3 +1,13 @@
+import React from "react";
+
+interface ReviewFormProps {
+  stars: number;
+  text: string;
+  setStars: (s: number) => void;
+  setText: (t: string) => void;
+  onSubmit: () => void;
+}
+
 /**
  * Formular zur Erstellung oder Bearbeitung einer Nutzerbewertung.
  *
@@ -12,16 +22,6 @@
  * - Sterne-Wert und Kommentar-Text (sowie zugehörige Set-Funktionen).
  * - `onSubmit`: Callback zur Verarbeitung.
  */
-
-import React from "react";
-
-interface ReviewFormProps {
-  stars: number;
-  text: string;
-  setStars: (s: number) => void;
-  setText: (t: string) => void;
-  onSubmit: () => void;
-}
 
 export const ReviewForm: React.FC<ReviewFormProps> = ({
   stars,
@@ -54,7 +54,7 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({
       />
       <button
         onClick={onSubmit}
-        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+        className="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-600"
       >
         Absenden
       </button>

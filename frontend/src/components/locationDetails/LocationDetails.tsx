@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import Reviews from "./LeftSide/Reviews";
-import LocationInfo from "./RightSide/LocationInfo";
+import { useParams } from "react-router-dom";
 import { Location } from "../../types/Location";
 import { useUserSession } from "../../auth/UseUserSession";
-import ProtectedComponent from "../../routes/ProtectedComponent";
-import DeleteLocationButton from "./LeftSide/DeleteLocationButton";
 import { Banner } from "./Banner";
 import { LeftSidebar } from "./LeftSide/LeftSide";
 import { RightSidebar } from "./RightSide/RightSide";
@@ -93,7 +89,9 @@ const LocationDetails: React.FC = () => {
         setReviewText(updated.kommentar);
         setReviewStars(updated.sterne);
 
-        const updatedLocation = await fetch(`/api/locations/details/${locationId}`).then((r) => r.json());
+        const updatedLocation = await fetch(
+          `/api/locations/details/${locationId}`
+        ).then((r) => r.json());
         setAllReviews(updatedLocation.bewertungen || []);
       } else {
         const msg = await res.text();

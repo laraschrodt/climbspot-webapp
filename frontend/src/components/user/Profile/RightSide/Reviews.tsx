@@ -8,13 +8,6 @@
  * Backend-Endpunkt ist noch in Planung (siehe TODO).
  */
 
-// TODO: Ratings anzeigen lassen (am besten erst wenn alle normalen Locations schon implementiert sind)
-/**
- * Backend hierfür steht noch nicht.
- * HTTP-Request an /profile/favorites in @file: backend/src/routes/profile.routes.ts
- * und @file: backend/src/controllers/profile.controller.ts bzw.
- * @file: backend/src/services/profile.service.ts, un die Logik zu implementieren.
- */
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 

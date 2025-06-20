@@ -2,7 +2,7 @@ import React from "react";
 
 /**
  * Props für die `Rating`-Komponente.
- * 
+ *
  * @property value - Bewertungswert zwischen 0 und 5.
  */
 
@@ -10,12 +10,11 @@ interface RatingProps {
   value: number;
 }
 
-
 /**
  * Zeigt eine einfache Sternebewertung basierend auf dem Wert (`value`) an.
  *
  * Kontext:
- * Wird z. B. in `LocationCard` verwendet, um die durchschnittliche Bewertung einer Location visuell darzustellen.
+ * Wird z.B. in `LocationCard` verwendet, um die durchschnittliche Bewertung einer Location visuell darzustellen.
  *
  * Funktion:
  * - Rendered 5 Sterne (maskierte Icons) in einer Reihe.
@@ -33,7 +32,9 @@ const Rating: React.FC<RatingProps> = ({ value }) => {
       {[1, 2, 3, 4, 5].map((i) => (
         <div
           key={i}
-          className={`mask mask-star w-4 h-4 ${i <= value ? "bg-yellow-400" : "bg-gray-300"}`}
+          className={`mask mask-star w-4 h-4 ${
+            i <= value ? "bg-yellow-400" : "bg-gray-300"
+          }`}
           aria-label={`${i} star`}
           aria-current={i === value ? "true" : undefined}
         />

@@ -3,7 +3,7 @@ import LocationsService from "../../services/locations/location.service";
 import { AuthedRequest } from "../../middlewares/auth.middleware";
 import { supabase } from "../../lib/supabase";
 import { updateLocation as updateLocationInDb } from "../../services/locations/updateLocation.service";
-import { JwtPayload } from "jsonwebtoken";
+import ReviewLocationService from "../../services/locations/review.location.service";
 
 /**
  * Verwaltet alle Endpunkte rund um Kletterorte:
@@ -63,7 +63,9 @@ class LocationController {
         }
       }
 
-      const reviews = await LocationsService.getUserReviewsFromDB(locationId);
+      const reviews = await ReviewLocationService.getUserReviewsFromDB(
+        locationId
+      );
 
       res.status(200).json({ ...location, isOwner, bewertungen: reviews });
     } catch (err) {
@@ -151,29 +153,6 @@ class LocationController {
   }
 
   /**
-   * Holt alle Bewertungen, die der Nutzer abgegeben hat.
-   *
-   * @param req Authentifizierter Request mit Nutzerinformationen
-   * @param res Express Response mit Liste der Bewertungen oder Fehler
-   */
-  async getUserReviews(req: AuthedRequest, res: Response): Promise<void> {
-    try {
-      const userId = (req.user as { userId: string })?.userId;
-
-      if (!userId) {
-        res.status(400).json({ error: "Ungültiger Token" });
-        return;
-      }
-
-      const reviews = await LocationsService.getUserReviewsFromDB(userId);
-      res.json(reviews);
-    } catch (err) {
-      console.error("Fehler beim Laden der Bewertungen:", err);
-      res.status(500).json({ error: "Fehler beim Laden der Bewertungen" });
-    }
-  }
-
-  /**
    * Aktualisiert einen bestehenden Ort.
    *
    * @param req Express Request mit `locationId` als URL-Parameter und neuen Daten im Body
@@ -186,32 +165,6 @@ class LocationController {
       res.status(200).json({ id: loc.ort_id });
     } catch {
       res.status(500).json({ error: "Serverfehler" });
-    }
-  }
-
-  async addReview(req: AuthedRequest, res: Response): Promise<void> {
-    const { locationId } = req.params;
-    const { sterne, kommentar } = req.body;
-
-    const userId = typeof req.user === "string" ? null : (req.user as JwtPayload)?.userId;
-
-    if (!userId || sterne === undefined || kommentar === undefined) {
-      res.status(400).json({ error: "Fehlende oder ungültige Felder" });
-      return;
-    }
-
-    try {
-      const result = await LocationsService.addReviewToDB({
-        ort_id: locationId,
-        benutzer_id: userId,
-        sterne,
-        kommentar,
-      });
-
-      res.status(201).json(result);
-    } catch (err) {
-      console.error("Fehler beim Speichern der Bewertung:", err);
-      res.status(500).json({ error: "Fehler beim Speichern" });
     }
   }
 }
