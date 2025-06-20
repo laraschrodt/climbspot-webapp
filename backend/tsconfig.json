@@ -5,7 +5,14 @@
     "rootDir": ".",
     "outDir": "./dist",
     "esModuleInterop": true,
-    "strict": true
+    "strict": true,
+    "baseUrl": "./",
+    "moduleResolution": "node",
+    "types": ["jest", "node"],
+    "paths": {
+      "@controllers/*": ["src/controllers/*"],
+      "@services/*": ["src/services/*"]
+    }
   },
   "include": ["src/**/*", "tests/**/*"]
 }
