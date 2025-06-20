@@ -2,7 +2,12 @@ import { supabase } from "../../lib/supabase";
 import { Location } from "../../types/Location";
 
 interface Bewertung {
+  id: string;
+  benutzer_id: string;
+  ort_id: string;
   sterne: number;
+  kommentar: string;
+  erstellt_am: string;
 }
 
 export interface RawLocation extends Location {
@@ -196,6 +201,34 @@ export class LocationsService {
 
     if (error) throw error;
     return updated;
+  }
+
+  /**
+   * Fügt eine neue Bewertung zu einem Ort hinzu oder aktualisiert eine bestehende Bewertung
+   * desselben Benutzers für diesen Ort.
+   *
+   * @param review Objekt mit Bewertung: ort_id, benutzer_id, sterne und kommentar
+   * @returns Promise mit der gespeicherten Bewertung
+   * @throws Fehler bei Datenbankfehlern 
+   */
+  async addReviewToDB(review: {
+    ort_id: string;
+    benutzer_id: string;
+    sterne: number;
+    kommentar: string;
+  }) {
+    const { data, error } = await supabase
+      .from("bewertungen")
+      .upsert([review], { onConflict: "benutzer_id,ort_id" })
+      .select()
+      .single();
+
+    if (error) {
+      console.error("Supabase-Fehler beim Speichern der Bewertung:", error);
+      throw new Error("Fehler beim Speichern der Bewertung.");
+    }
+
+    return data;
   }
 }
 
