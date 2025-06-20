@@ -1,53 +1,54 @@
 import React from "react";
+import { Review } from "../../../types/Review";
 
-
+type Props = {
+  reviews: Review[];
+};
 
 /**
- * Komponente zur Anzeige von Nutzerbewertungen für eine Location.
+ * Die Reviews-Komponente zeigt eine Liste von Bewertungen für einen bestimmten Ort an.
+ * Jede Bewertung enthält Sterne, ein Erstellungsdatum und einen Kommentar.
+ * Falls keine Bewertungen vorhanden sind, wird ein entsprechender Hinweis angezeigt.
  *
- * Kontext:
- * Wird typischerweise in der Detailansicht einer Location angezeigt,
- * um Feedback und Kommentare von Nutzern sichtbar zu machen.
- *
- * Funktion:
- * - Zeigt eine Liste von statischen Beispielbewertungen (Mock-Daten).
- * - Jede Bewertung enthält Autor, Datum und Text.
- * - Falls keine Bewertungen vorhanden sind, wird eine entsprechende Meldung angezeigt.
- *
- * Hinweis:
- * Aktuell werden keine echten Bewertungen geladen; dies ist ein Platzhalter.
+ * Props:
+ * - reviews: Ein Array von Review-Objekten, die angezeigt werden sollen.
  */
-const Reviews: React.FC = () => {
-  const mockReviews = [
-    {
-      id: 1,
-      author: "KletterMax",
-      date: "2024-08-12",
-      content: "Toller Spot! Super griffiger Fels und schöne Aussicht.",
-    },
-    {
-      id: 2,
-      author: "BoulderQueen",
-      date: "2024-06-30",
-      content: "Etwas voll am Wochenende, aber sehr abwechslungsreiche Routen!",
-    },
-  ];
-
+const Reviews: React.FC<Props> = ({ reviews }) => {
   return (
-    <div className="bg-white p-4 rounded-xl shadow-md">
+    <section className="bg-white p-6 rounded-xl shadow-md w-full max-w-4xl my-4">
       <h2 className="text-xl font-semibold mb-4">Bewertungen</h2>
-      {mockReviews.map((review) => (
-        <div key={review.id} className="mb-4 border-b pb-2">
-          <p className="text-sm text-gray-500">
-            {review.date} – {review.author}
-          </p>
-          <p>{review.content}</p>
-        </div>
-      ))}
-      {mockReviews.length === 0 && (
-        <p className="text-gray-600">Noch keine Bewertungen vorhanden.</p>
+
+      {reviews.length === 0 ? (
+        <p className="text-gray-500">Noch keine Bewertungen vorhanden.</p>
+      ) : (
+        <ul className="space-y-4">
+          {reviews.map((rev) => (
+            <li
+              key={rev.id}
+              className="flex items-start space-x-4 border-b pb-2"
+            >
+              <div className="flex-1">
+                <div className="flex items-center justify-between">
+                  <div className="flex">
+                    {Array(rev.sterne)
+                      .fill(0)
+                      .map((_, i) => (
+                        <span key={i}>⭐</span>
+                      ))}
+                  </div>
+                  <span className="text-sm text-gray-400">
+                    erstellt am{" "}
+                    {new Date(rev.erstellt_am).toLocaleDateString("de-DE")}
+                  </span>
+                </div>
+
+                <p className="text-gray-700 mt-1">{rev.kommentar}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
       )}
-    </div>
+    </section>
   );
 };
 

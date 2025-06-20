@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import Reviews from "./LeftSide/Reviews";
-import LocationInfo from "./RightSide/LocationInfo";
-import { Location } from "../../models/Location";
+import { useParams } from "react-router-dom";
+import { Location } from "../../types/Location";
 import { useUserSession } from "../../auth/UseUserSession";
-import ProtectedComponent from "../../routes/ProtectedComponent";
-import DeleteLocationButton from "./LeftSide/DeleteLocationButton";
+import { Banner } from "./Banner";
+import { LeftSidebar } from "./LeftSide/LeftSide";
+import { RightSidebar } from "./RightSide/RightSide";
+import { Review } from "../../types/Review";
 
 /**
  * Detailseite für eine einzelne Kletterlocation.
@@ -29,12 +29,16 @@ import DeleteLocationButton from "./LeftSide/DeleteLocationButton";
  */
 
 const LocationDetails: React.FC = () => {
-  const { user } = useUserSession();
   const [location, setLocation] = useState<Location | null>(null);
   const [loading, setLoading] = useState(true);
   const [isFavorited, setIsFavorited] = useState(false);
+  const [userReview, setUserReview] = useState<Review | null>(null);
+  const [allReviews, setAllReviews] = useState<Review[]>([]);
+  const [reviewText, setReviewText] = useState("");
+  const [reviewStars, setReviewStars] = useState(0);
   const { locationId } = useParams<{ locationId: string }>();
   const [isOwner, setIsOwner] = useState<boolean>(false);
+  const { user } = useUserSession();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,6 +56,7 @@ const LocationDetails: React.FC = () => {
 
         const data = await res.json();
         setLocation(data);
+        setAllReviews(data.bewertungen || []);
         setIsOwner(data.isOwner ?? false);
       } finally {
         setLoading(false);
@@ -60,6 +65,42 @@ const LocationDetails: React.FC = () => {
 
     if (locationId) fetchData();
   }, [locationId, user]);
+
+  const handleReviewSubmit = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("Bitte einloggen, um eine Bewertung abzugeben.");
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/locations/reviews/${locationId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ sterne: reviewStars, kommentar: reviewText }),
+      });
+
+      if (res.ok) {
+        const updated = await res.json();
+        setUserReview(updated);
+        setReviewText(updated.kommentar);
+        setReviewStars(updated.sterne);
+
+        const updatedLocation = await fetch(
+          `/api/locations/details/${locationId}`
+        ).then((r) => r.json());
+        setAllReviews(updatedLocation.bewertungen || []);
+      } else {
+        const msg = await res.text();
+        console.error("Bewertung nicht gespeichert:", msg);
+      }
+    } catch (err) {
+      console.error("Fehler beim Speichern der Bewertung:", err);
+    }
+  };
 
   const handleFavoriteToggle = async () => {
     const token = localStorage.getItem("token");
@@ -91,77 +132,28 @@ const LocationDetails: React.FC = () => {
   if (loading) return <div>Loading...</div>;
 
   return (
-    // FIXME: Aufteilen in Components weil das zu unübersichtlich ist
     <div>
-      {/* Banner mit Bild und Text */}
-      <div
-        className="w-full h-128 bg-cover bg-center text-white text-center flex flex-col justify-center items-center"
-        style={{ backgroundImage: `url(${location?.picture_url})` }}
-      >
-        <h1 className="text-4xl font-bold">{location?.name}</h1>
-        {/* Untertitel ändern */}
-        <p className="text-lg max-w-xl px-4">
-          Erfahre mehr über diesen Kletterspot – Bewertungen, Beschreibung und
-          Besonderheiten.
-        </p>
-      </div>
+      <Banner
+        title={location?.name || ""}
+        imageUrl={location?.picture_url || ""}
+        subtitle="Erfahre mehr über diesen Kletterspot – Bewertungen, Beschreibung und Besonderheiten."
+      />
 
-      {/* Zwei-Spalten-Layout: Reviews und Buttons links, LocationInfo rechts */}
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-6 px-4 py-8">
-        {/* Spalte 1 - LeftSide: Reviews und Buttons */}
-        <div className="w-full md:w-1/3 space-y-6">
-          {isOwner && (
-            <ProtectedComponent roles={["user", "admin"]}>
-              <div className="flex gap-4">
-                <Link
-                  to={`/edit-location/${locationId}`}
-                  className="btn btn-secondary"
-                >
-                  Bearbeiten
-                </Link>
-
-                <DeleteLocationButton locationId={locationId!} />
-              </div>
-            </ProtectedComponent>
-          )}
-
-          <div>
-            {/* Reviews */}
-            <Reviews />
-          </div>
-          <div className="space-y-4">
-            {/* Sterne-Bewertung */}
-            {/* <StarRating rating={rating} onClick={handleStarClick} /> */}
-            {/* Favoriten-Button */}
-            <button
-              onClick={handleFavoriteToggle}
-              className="w-full btn btn-primary"
-            >
-              {isFavorited
-                ? "Vom Favoriten entfernen"
-                : "Zu Favoriten hinzufügen"}
-            </button>
-            {/* ÖPNV-Button */}
-            {location?.lat && location?.long && (
-              <button
-                className="btn btn-secondary w-full"
-                onClick={() => {
-                  const url = `https://www.google.com/maps/dir/?api=1&destination=${location.lat},${location.long}&travelmode=transit`;
-                  window.open(url, "_blank");
-                }}
-              >
-                ÖPNV - Route zu Google Maps
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* Spalte 2 - RightSide: LocationInfo */}
-        <div className="w-full md:w-2/3">
-          <div className="text-xl font-semibold mt-8">
-            {location && <LocationInfo location={location} />}
-          </div>
-        </div>
+        <LeftSidebar
+          locationId={locationId!}
+          isOwner={isOwner}
+          isFavorited={isFavorited}
+          onToggleFavorite={handleFavoriteToggle}
+          allReviews={allReviews}
+          reviewText={reviewText}
+          reviewStars={reviewStars}
+          setReviewText={setReviewText}
+          setReviewStars={setReviewStars}
+          onSubmitReview={handleReviewSubmit}
+          location={location}
+        />
+        <RightSidebar location={location!} />
       </div>
     </div>
   );

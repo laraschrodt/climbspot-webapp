@@ -3,6 +3,7 @@ import LocationsService from "../../services/locations/location.service";
 import { AuthedRequest } from "../../middlewares/auth.middleware";
 import { supabase } from "../../lib/supabase";
 import { updateLocation as updateLocationInDb } from "../../services/locations/updateLocation.service";
+import ReviewLocationService from "../../services/locations/review.location.service";
 
 /**
  * Verwaltet alle Endpunkte rund um Kletterorte:
@@ -18,17 +19,21 @@ class LocationController {
   /**
    * Holt einen Ort anhand der ID.
    * Prüft optional, ob der anfragende Nutzer Eigentümer des Ortes ist.
+   * Gibt zusätzlich alle Bewertungen zurück.
    *
    * @param req Express Request mit `locationId` als URL-Parameter und optional Header `x-user-id`
-   * @param res Express Response mit Ort-Details und `isOwner`-Flag
+   * @param res Express Response mit Ort-Details, Bewertungen und `isOwner`-Flag
    */
   async getLocationById(req: Request, res: Response): Promise<void> {
     const { locationId } = req.params;
+    console.log("Angeforderte Location-ID:", locationId);
     const userId = req.header("x-user-id") || null;
 
     try {
       const location = await LocationsService.getLocationByIdFromDB(locationId);
+      console.log("Gefundene Location aus DB:", location);
       if (!location) {
+        console.log("Keine Location mit dieser ID gefunden.");
         res.status(404).json({ error: "Standort nicht gefunden" });
         return;
       }
@@ -58,7 +63,11 @@ class LocationController {
         }
       }
 
-      res.status(200).json({ ...location, isOwner });
+      const reviews = await ReviewLocationService.getUserReviewsFromDB(
+        locationId
+      );
+
+      res.status(200).json({ ...location, isOwner, bewertungen: reviews });
     } catch (err) {
       console.error(err);
       res.status(500).json({ error: "Serverfehler" });
@@ -140,29 +149,6 @@ class LocationController {
     } catch (err) {
       console.error("Fehler in getFavorites:", err);
       res.status(500).json({ error: "Serverfehler beim Laden der Favoriten" });
-    }
-  }
-
-  /**
-   * Holt alle Bewertungen, die der Nutzer abgegeben hat.
-   *
-   * @param req Authentifizierter Request mit Nutzerinformationen
-   * @param res Express Response mit Liste der Bewertungen oder Fehler
-   */
-  async getUserReviews(req: AuthedRequest, res: Response): Promise<void> {
-    try {
-      const userId = (req.user as { userId: string })?.userId;
-
-      if (!userId) {
-        res.status(400).json({ error: "Ungültiger Token" });
-        return;
-      }
-
-      const reviews = await LocationsService.getUserReviewsFromDB(userId);
-      res.json(reviews);
-    } catch (err) {
-      console.error("Fehler beim Laden der Bewertungen:", err);
-      res.status(500).json({ error: "Fehler beim Laden der Bewertungen" });
     }
   }
 

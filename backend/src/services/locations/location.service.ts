@@ -2,7 +2,12 @@ import { supabase } from "../../lib/supabase";
 import { Location } from "../../types/Location";
 
 interface Bewertung {
+  id: string;
+  benutzer_id: string;
+  ort_id: string;
   sterne: number;
+  kommentar: string;
+  erstellt_am: string;
 }
 
 export interface RawLocation extends Location {
@@ -141,38 +146,6 @@ export class LocationsService {
 
     const rows = (data ?? []) as unknown as RawFavoriteRow[];
     return rows.map((row) => row.o);
-  }
-
-  /**
-   * Holt alle Bewertungen eines Nutzers.
-   *
-   * @param userId ID des Nutzers
-   * @returns Promise mit Array der Bewertungen inklusive Ort-Infos
-   * @throws Fehler bei Datenbankfehlern
-   */
-  async getUserReviewsFromDB(userId: string) {
-    const { data, error } = await supabase
-      .from("bewertungen")
-      .select(
-        `
-        sterne,
-        kommentar,
-        erstellt_am,
-        orte (
-          name,
-          picture_url
-        )
-      `
-      )
-      .eq("benutzer_id", userId)
-      .order("erstellt_am", { ascending: false });
-
-    if (error) {
-      console.error("Fehler beim Laden der Bewertungen:", error);
-      throw new Error("Bewertungen konnten nicht geladen werden.");
-    }
-
-    return data;
   }
 
   /**

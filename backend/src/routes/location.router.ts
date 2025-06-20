@@ -5,6 +5,7 @@ import AuthMiddleware from "../middlewares/auth.middleware";
 import uploadMiddleware from "../middlewares/upload.middlewear";
 import FavoritesLocationController from "../controllers/locations/favorites.location.controller";
 import DeleteLocationController from "../controllers/locations/delete.location.controller";
+import ReviewLocationController from "../controllers/locations/review.location.controller";
 
 const router = Router();
 
@@ -32,7 +33,7 @@ router.get(
 router.get(
   "/reviews",
   AuthMiddleware.verifyToken,
-  LocationController.getUserReviews
+  ReviewLocationController.getUserReviews
 );
 
 router.post(
@@ -64,6 +65,12 @@ router.delete(
   "/:locationId",
   AuthMiddleware.verifyToken,
   DeleteLocationController.deleteLocation
+);
+
+router.post(
+  "/reviews/:locationId",
+  AuthMiddleware.verifyToken,
+  ReviewLocationController.addReview
 );
 
 export default router;
