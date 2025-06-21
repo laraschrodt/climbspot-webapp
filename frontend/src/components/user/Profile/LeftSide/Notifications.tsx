@@ -28,7 +28,6 @@ interface Notification {
  * Die Zustände "gesehen" werden aktuell nur lokal im Frontend gespeichert.
  */
 
-// FIXME: Benachrichtigung laden immer neu, auch wenn man auf "gesehen" drückt
 
 const Notifications: React.FC = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);

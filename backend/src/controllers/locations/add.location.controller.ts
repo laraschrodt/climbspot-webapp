@@ -1,16 +1,29 @@
-// src/controllers/locations/AddLocationController.ts
-
 import { Request, Response } from "express";
 import { addLocation } from "../../services/locations/add.location.service";
 
 /**
- * Steuert die Verarbeitung von Anfragen zum Hinzufügen neuer Kletterorte.
- * Sendet nach erfolgreichem Anlegen eine WebSocket-Nachricht (über `io.emit`) an verbundene Clients.
+ * Controller zum Hinzufügen neuer Kletterorte.
+ * Delegiert die Geschäftslogik an den `addLocation`-Service.
+ * Sendet nach erfolgreicher Erstellung ein `new-location`-WebSocket-Event an alle Clients.
  */
+
 class AddLocationController {
-  /**
-   * Fügt einen neuen Kletterort hinzu.
-   */
+/**
+ * HTTP-Handler zum Hinzufügen eines neuen Kletterortes.
+ *
+ * - Liest Ort-Daten aus dem Request (`name`, `region`, `land`, `picture_url`, ...)
+ * - Übergibt die Daten an den Service `addLocation`
+ * - Erstellt automatisch Benachrichtigungen für alle Nutzer
+ * - Sendet ein `new-location`-Event an alle WebSocket-Clients
+ *
+ * Bei Erfolg: 201 Created mit Ort-ID im JSON-Body.  
+ * Bei Fehler: 500 Internal Server Error.
+ *
+ * @param request - Express Request mit Ort-Daten und optional Datei-Upload
+ * @param response - Express Response zur Rückgabe von Status & Daten
+ */
+
+
   static async addLocation(request: Request, response: Response) {
     try {
       const result = await addLocation(request); // Ort wird gespeichert inkl. Notification für alle

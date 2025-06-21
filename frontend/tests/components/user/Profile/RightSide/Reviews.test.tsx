@@ -1,5 +1,3 @@
-// tests/components/user/Reviews.test.tsx
-
 import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import Reviews from "../../../../../src/components/user/Profile/RightSide/Reviews";
@@ -56,7 +54,7 @@ describe("Reviews-Komponente", () => {
     );
     expect(
       screen.getByText(/erstellt am 1\.12\.2024/i)
-    ).toBeInTheDocument(); // deutsches Datum
+    ).toBeInTheDocument();
   });
 
   it("zeigt trotzdem was an, wenn ein Bild fehlt", async () => {

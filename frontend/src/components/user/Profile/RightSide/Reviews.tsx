@@ -43,7 +43,7 @@ const Reviews: React.FC = () => {
       }
     };
 
-    // 🧪 act()-sichere Verzögerung bei Bedarf
+   
     setTimeout(fetchReviews, 0);
   }, []);
 

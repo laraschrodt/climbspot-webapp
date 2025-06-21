@@ -132,7 +132,6 @@ class ProfileController {
     }
   }
   
-  
 
   /**
    * Ändert das Passwort des Nutzers.

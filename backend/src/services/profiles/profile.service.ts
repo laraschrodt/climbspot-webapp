@@ -4,7 +4,6 @@ import { supabase } from "../../lib/supabase";
 import { randomUUID } from "crypto";
 import { Location } from "../../types/Location";
 
-
 interface Bewertung {
   sterne: number;
 }
@@ -23,9 +22,8 @@ export interface NotificationRow {
 }
 
 /**
- * Bietet Methoden zum Laden und Aktualisieren von Profildaten,
- * zum Upload von Profilbildern, zum Abrufen von Favoriten,
- * Bewertungen und Benachrichtigungen für Nutzer.
+ * Bietet Funktionen zum Laden und Aktualisieren von Nutzerprofilen,
+ * Favoriten, Bewertungen sowie ungelesenen Benachrichtigungen.
  */
 class ProfileService {
   /**
@@ -38,9 +36,7 @@ class ProfileService {
   async getProfileDataByUserId(userId: string) {
     const { data, error } = await supabase
       .from("benutzer")
-      .select(
-        "vorname, nachname, email, benutzername, stadt, passwort_hash, profilbild_url"
-      )
+      .select("vorname, nachname, email, benutzername, stadt, passwort_hash, profilbild_url")
       .eq("benutzer_id", userId)
       .single();
 
@@ -100,7 +96,7 @@ class ProfileService {
       .eq("benutzer_id", userId);
 
     if (error) {
-      throw new Error("Error while updating profile: " + error.message);
+      throw new Error("Fehler beim Aktualisieren des Profils: " + error.message);
     }
 
     return { success: true };
@@ -115,10 +111,7 @@ class ProfileService {
    * @returns URL des hochgeladenen Profilbilds
    * @throws Fehler bei Upload- oder Datenbankproblemen
    */
-  async uploadProfileImageToDatabase(
-    userId: string,
-    file: Express.Multer.File
-  ) {
+  async uploadProfileImageToDatabase(userId: string, file: Express.Multer.File) {
     const fileName = `profile-pictures/${userId}-${randomUUID()}.jpg`;
 
     const { error: uploadError } = await supabase.storage
@@ -129,12 +122,12 @@ class ProfileService {
       });
 
     if (uploadError) {
-      throw new Error("Supabase-Upload fehlgeschlagen: " + uploadError.message);
+      throw new Error("Bild-Upload fehlgeschlagen: " + uploadError.message);
     }
 
-    const {
-      data: { publicUrl },
-    } = supabase.storage.from("profile-pictures").getPublicUrl(fileName);
+    const { data: { publicUrl } } = supabase.storage
+      .from("profile-pictures")
+      .getPublicUrl(fileName);
 
     await supabase
       .from("benutzer")
@@ -154,8 +147,7 @@ class ProfileService {
   async getFavoriteLocationsFromDB(userId: string): Promise<Location[]> {
     const { data, error } = await supabase
       .from("favoriten")
-      .select(
-        `
+      .select(`
         o:orte (
           ort_id,
           name,
@@ -163,14 +155,13 @@ class ProfileService {
           land,
           schwierigkeit,
           picture_url,
-          bewertungen ( sterne )
+          bewertungen (sterne)
         )
-      `
-      )
+      `)
       .eq("benutzer_id", userId);
 
     if (error) {
-      console.error("Supabase-Fehler beim Laden der Favoriten:", error);
+      console.error("Fehler beim Laden der Favoriten:", error);
       throw new Error("Favoriten nicht gefunden");
     }
 
@@ -188,8 +179,7 @@ class ProfileService {
   async getReviewsByUserId(userId: string) {
     const { data, error } = await supabase
       .from("bewertungen")
-      .select(
-        `
+      .select(`
         sterne,
         kommentar,
         erstellt_am,
@@ -197,23 +187,25 @@ class ProfileService {
           name,
           picture_url
         )
-      `
-      )
+      `)
       .eq("benutzer_id", userId);
 
     if (error) {
-      console.error("Supabase-Fehler beim Laden der Bewertungen:", error);
+      console.error("Fehler beim Laden der Bewertungen:", error);
       throw new Error("Bewertungen konnten nicht geladen werden");
     }
+
     return data || [];
   }
 
   /**
-   * Holt die letzten 20 Benachrichtigungen, sortiert nach Erstellungsdatum.
+   * Holt die ungelesenen Benachrichtigungen eines Nutzers.
    *
-   * @returns Promise mit Array der Notifications
+   * @param userId ID des Nutzers
+   * @returns Promise mit Array der ungelesenen Notifications, sortiert nach Erstellungsdatum
    * @throws Fehler bei Datenbankfehlern
    */
+
   async getNotifications(userId: string): Promise<NotificationRow[]> {
     const { data, error } = await supabase
       .from("notifications")
@@ -222,21 +214,21 @@ class ProfileService {
       .eq("is_read", false)
       .order("erstellt_am", { ascending: false })
       .limit(20);
-  
+
     if (error) {
-      console.error("Supabase-Fehler beim Laden der Notifications:", error);
+      console.error("Fehler beim Laden der Notifications:", error);
       throw new Error("Notifications konnten nicht geladen werden");
     }
-  
+
     return (data ?? []) as NotificationRow[];
   }
 
   /**
-   * Markiert eine Notification als gelesen.
+   * Markiert eine bestimmte Benachrichtigung als gelesen.
    *
    * @param notificationId ID der Notification
-   * @param userId ID des Nutzers
-   * @returns Promise, die aufgelöst wird, wenn die Notification erfolgreich aktualisiert wurde
+   * @param userId ID des Nutzers, zur Sicherstellung der Rechte
+   * @returns Promise, die aufgelöst wird, wenn das Update erfolgreich war
    * @throws Fehler bei Datenbankfehlern
    */
 
@@ -245,42 +237,11 @@ class ProfileService {
       .from("notifications")
       .update({ is_read: true })
       .eq("id", notificationId)
-      .eq("benutzer_id", userId); // 👈 nur eigene Nachricht
-  
+      .eq("benutzer_id", userId); // sicherstellen, dass Nutzer nur eigene lesen kann
+
     if (error) {
-      throw new Error("Fehler beim Aktualisieren der Notification: " + error.message);
+      throw new Error("Fehler beim Setzen auf 'gelesen': " + error.message);
     }
-  }
-
-}
-
-export async function createNotificationsForAllUsers(
-  ortId: string,
-  ortName: string,
-  pictureUrl: string
-) {
-  const { data: users, error } = await supabase.from("benutzer").select("benutzer_id");
-
-  if (error || !users) {
-    console.error("Fehler beim Laden der Benutzer:", error);
-    return;
-  }
-
-  const insertData = users.map(user => ({
-    id: randomUUID(),
-    ort_id: ortId,
-    title: "Neuer Ort verfügbar!",
-    message: `${ortName} wurde hinzugefügt.`,
-    picture_url: pictureUrl,
-    erstellt_am: new Date().toISOString(),
-    is_read: false,
-    benutzer_id: user.benutzer_id
-  }));
-
-  const { error: insertError } = await supabase.from("notifications").insert(insertData);
-
-  if (insertError) {
-    console.error("Fehler beim Einfügen der Notifications:", insertError);
   }
 }
 

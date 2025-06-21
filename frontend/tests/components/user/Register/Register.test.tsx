@@ -4,22 +4,22 @@ import Register from "../../../../src/components/user/Register/Register";
 import { BrowserRouter } from "react-router-dom";
 import "@testing-library/jest-dom";
 
-// ✅ window.alert verhindern (jsdom unterstützt es nicht)
+
 beforeAll(() => {
   window.alert = jest.fn();
 });
 
-// ✅ mock für useNavigate
+
 const mockNavigate = jest.fn();
 jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
   useNavigate: () => mockNavigate,
 }));
 
-// ✅ mockRegister definieren
+
 const mockRegister = jest.fn();
 
-// ✅ RegisterApi-Klasse mocken
+
 jest.mock("../../../../src/api/RegisterApi", () => {
   return {
     RegisterApi: class {
@@ -56,7 +56,7 @@ describe("Register-Komponente", () => {
     fireEvent.click(screen.getByRole("button", { name: /registrieren/i }));
 
     await waitFor(() => {
-      // 👇 passt zu dem echten Aufruf (ohne explizites "user"-Argument)
+
       expect(mockRegister).toHaveBeenCalledWith(
         "TestUser",
         "test@example.com",

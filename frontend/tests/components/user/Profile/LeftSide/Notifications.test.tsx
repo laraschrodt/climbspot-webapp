@@ -1,11 +1,9 @@
-// tests/components/user/Notifications.test.tsx
-
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import Notifications from "../../../../../src/components/user/Profile/LeftSide/Notifications";
 import "@testing-library/jest-dom";
 import axios from "axios";
 
-// ✅ Mocks
+
 jest.mock("axios");
 jest.mock("socket.io-client", () => ({
   __esModule: true,
