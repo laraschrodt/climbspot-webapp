@@ -51,7 +51,7 @@
 
 - [x] Größe von Location Cards im Profil anpassen
 - [x] Benachrichtigungen bei neuer Location
-- [ ] Gucken dass Notification dauerhaft gelöscht wird, wenn man auf "gesehen" klickt
+- [x] Gucken dass Notification dauerhaft gelöscht wird, wenn man auf "gesehen" klickt
 
 `Nelly`:
 
@@ -70,17 +70,17 @@
 
 ### Unit-Tests:
 
-- [ ] Regestrierung (`Kimia`)
+- [x] Regestrierung (`Kimia`)
 - [ ] Anmeldung (`Nelly`)
 - [ ] Location hinzufügen (`Nelly`)
-- [ ] Bewertung schreiben (`Kimia`)
+- [x] Bewertung schreiben (`Kimia`)
 - [ ] Location favorisieren (`Lara`)
 - [x] Admin-Funktionen (`Lara`)
 - [x] Suchfunktion im Header (`Alex`)
 - [x] Filterfunktion bei Karte und Liste (`Alex`)
 - [ ] Nahverkehrsintegration (`Nelly`)
 - [x] Interaktive Karte (`Lara`)
-- [ ] Benachrichtigungen (`Kimia`)
+- [x] Benachrichtigungen (`Kimia`)
 
 > Tests kommen in den `tests`-Ordner jeweils im Frontend und im Backend.<br>
 > Macht euch einen Unterordner für euer Feauture, das ihr testet (z.B. `register`, `login` etc.) <br>
