@@ -6,6 +6,7 @@ import { TransitButton } from "./TransitButton";
 import { Location } from "../../../types/Location";
 import { Review } from "../../../types/Review";
 import { OwnerActions } from "./OwnerActions";
+import ProtectedComponent from "../../../routes/ProtectedComponent";
 
 /**
  * Linke Spalte der Detailansicht einer Location.
@@ -54,17 +55,21 @@ export const LeftSidebar: React.FC<LeftSideProps> = ({
     <div className="w-full md:w-1/3 space-y-6">
       {isOwner && <OwnerActions locationId={locationId} />}
 
-      <ReviewForm
-        stars={reviewStars}
-        text={reviewText}
-        setStars={setReviewStars}
-        setText={setReviewText}
-        onSubmit={onSubmitReview}
-      />
+      <ProtectedComponent roles={["user", "admin"]}>
+        <ReviewForm
+          stars={reviewStars}
+          text={reviewText}
+          setStars={setReviewStars}
+          setText={setReviewText}
+          onSubmit={onSubmitReview}
+        />
+      </ProtectedComponent>
 
       <Reviews reviews={allReviews} />
 
-      <FavoriteButton isFavorited={isFavorited} onToggle={onToggleFavorite} />
+      <ProtectedComponent roles={["user", "admin"]}>
+        <FavoriteButton isFavorited={isFavorited} onToggle={onToggleFavorite} />
+      </ProtectedComponent>
 
       {location?.lat && location?.long && (
         <TransitButton lat={location.lat} long={location.long} />
