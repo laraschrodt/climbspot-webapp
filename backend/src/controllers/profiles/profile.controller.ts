@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import { AuthedRequest } from "../../middlewares/auth.middleware";
 import ProfileService from "../../services/profiles/profile.service";
 import AccountService from "../../services/accounts/account.service";
@@ -105,14 +105,34 @@ class ProfileController {
    * @param req Request-Objekt
    * @param res Response mit Liste der Benachrichtigungen oder Fehler
    */
-  async getNotifications(req: Request, res: Response): Promise<void> {
+  async getNotifications(req: AuthedRequest, res: Response): Promise<void> {
     try {
-      const notifications = await ProfileService.getNotifications();
+      const userId = (req.user as { userId: string })?.userId;
+      const notifications = await ProfileService.getNotifications(userId);
       res.json(notifications);
     } catch (error) {
       res.status(500).json({ error: (error as Error).message });
     }
   }
+
+  /**
+   * Markiert eine Benachrichtigung als gelesen.
+   *
+   * @param req Request-Objekt mit Nutzer-ID und Benachrichtigungs-ID
+   * @param res Response mit Erfolgsmeldung oder Fehler
+   */
+  async markNotificationAsRead(req: AuthedRequest, res: Response): Promise<void> {
+    try {
+      const userId = (req.user as { userId: string })?.userId;
+      const notificationId = req.params.id;
+      await ProfileService.markNotificationAsRead(notificationId, userId);
+      res.status(200).json({ message: "Notification als gelesen markiert" });
+    } catch (error) {
+      res.status(500).json({ error: (error as Error).message });
+    }
+  }
+  
+  
 
   /**
    * Ändert das Passwort des Nutzers.

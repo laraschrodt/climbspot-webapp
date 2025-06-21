@@ -4,6 +4,7 @@ import { supabase } from "../../lib/supabase";
 import { randomUUID } from "crypto";
 import { Location } from "../../types/Location";
 
+
 interface Bewertung {
   sterne: number;
 }
@@ -213,19 +214,73 @@ class ProfileService {
    * @returns Promise mit Array der Notifications
    * @throws Fehler bei Datenbankfehlern
    */
-  async getNotifications(): Promise<NotificationRow[]> {
+  async getNotifications(userId: string): Promise<NotificationRow[]> {
     const { data, error } = await supabase
       .from("notifications")
       .select("*")
+      .eq("benutzer_id", userId)
+      .eq("is_read", false)
       .order("erstellt_am", { ascending: false })
       .limit(20);
-
+  
     if (error) {
       console.error("Supabase-Fehler beim Laden der Notifications:", error);
       throw new Error("Notifications konnten nicht geladen werden");
     }
-
+  
     return (data ?? []) as NotificationRow[];
+  }
+
+  /**
+   * Markiert eine Notification als gelesen.
+   *
+   * @param notificationId ID der Notification
+   * @param userId ID des Nutzers
+   * @returns Promise, die aufgelöst wird, wenn die Notification erfolgreich aktualisiert wurde
+   * @throws Fehler bei Datenbankfehlern
+   */
+
+  async markNotificationAsRead(notificationId: string, userId: string): Promise<void> {
+    const { error } = await supabase
+      .from("notifications")
+      .update({ is_read: true })
+      .eq("id", notificationId)
+      .eq("benutzer_id", userId); // 👈 nur eigene Nachricht
+  
+    if (error) {
+      throw new Error("Fehler beim Aktualisieren der Notification: " + error.message);
+    }
+  }
+
+}
+
+export async function createNotificationsForAllUsers(
+  ortId: string,
+  ortName: string,
+  pictureUrl: string
+) {
+  const { data: users, error } = await supabase.from("benutzer").select("benutzer_id");
+
+  if (error || !users) {
+    console.error("Fehler beim Laden der Benutzer:", error);
+    return;
+  }
+
+  const insertData = users.map(user => ({
+    id: randomUUID(),
+    ort_id: ortId,
+    title: "Neuer Ort verfügbar!",
+    message: `${ortName} wurde hinzugefügt.`,
+    picture_url: pictureUrl,
+    erstellt_am: new Date().toISOString(),
+    is_read: false,
+    benutzer_id: user.benutzer_id
+  }));
+
+  const { error: insertError } = await supabase.from("notifications").insert(insertData);
+
+  if (insertError) {
+    console.error("Fehler beim Einfügen der Notifications:", insertError);
   }
 }
 
