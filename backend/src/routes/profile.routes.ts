@@ -36,6 +36,11 @@ router.get(
   profileController.getNotifications.bind(profileController)
 );
 
+router.patch("/notifications/:id/read",
+  AuthMiddleware.verifyToken,
+  profileController.markNotificationAsRead
+);
+
 router.get(
   "/favorites",
   AuthMiddleware.verifyToken,

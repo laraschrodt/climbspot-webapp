@@ -295,6 +295,7 @@ const AddLocation: React.FC = () => {
         </label>
 
         <div className="flex items-center gap-4">
+          Kinderfreundlich?
           <label className="label cursor-pointer">
             <input
               type="radio"
@@ -307,7 +308,6 @@ const AddLocation: React.FC = () => {
             />
             <span className="ml-2">Ja</span>
           </label>
-
           <label className="label cursor-pointer">
             <input
               type="radio"

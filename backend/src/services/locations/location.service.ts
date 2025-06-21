@@ -49,7 +49,9 @@ export class LocationsService {
    * @throws Fehler bei Datenbankfehlern
    */
   async getAllLocationsFromDB(): Promise<Location[]> {
-    const { data, error } = await supabase.from("orte").select("*");
+    const { data, error } = await supabase
+      .from("orte")
+      .select(`*, bewertungen ( sterne )`);
 
     if (error) throw new Error(error.message);
     return (data ?? []) as Location[];

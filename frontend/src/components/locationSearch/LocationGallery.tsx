@@ -7,52 +7,45 @@ interface LocationGalleryProps {
   locations: Location[];
 }
 
-
 /**
  * Komponente zur Darstellung einer Galerie von Kletterlocations.
  *
- * Kontext:
- * Wird typischerweise auf der Übersichtsseite verwendet, um mehrere Locations
- * visuell als Karten (`LocationCard`) anzuzeigen.
- *
- * Funktion:
- * - Erwartet ein Array von `Location`-Objekten.
- * - Für jede Location wird eine klickbare `LocationCard` erzeugt, die zur Detailseite führt.
- * - Bewertungsdurchschnitt wird aus den Sternbewertungen berechnet (sofern vorhanden).
- * - Layout ist als responsives Grid umgesetzt.
- *
- * Hinweise:
- * - Bei fehlenden Bildern wird ein leerer String verwendet.
- * - Wenn keine Bewertungen vorliegen, wird 0 angezeigt.
+ * Berechnet den Bewertungsdurchschnitt aus `bewertungen`, falls vorhanden.
+ * Fällt auf `rating` zurück, wenn das Backend bereits den Durchschnitt liefert.
  */
-
 const LocationGallery: React.FC<LocationGalleryProps> = ({ locations }) => {
-  const calculateAverageRating = (bewertungen: { sterne: number }[] = []) => {
-    if (bewertungen.length === 0) return 0;
-    const sum = bewertungen.reduce((a, b) => a + b.sterne, 0);
-    return Math.round(sum / bewertungen.length);
-  };
+  const calcAverage = (arr: { sterne: number }[] = []) =>
+    arr.length === 0
+      ? 0
+      : Math.round(arr.reduce((sum, x) => sum + x.sterne, 0) / arr.length);
 
   return (
     <div className="container mx-auto p-4">
       <h1 className="mb-8 mt-8 text-2xl font-bold">Locations</h1>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-        {locations.map((spot) => (
-          <Link
-            to={`/details/${spot.ort_id}`}
-            key={spot.ort_id}
-            className="block"
-          >
-            <LocationCard
-              name={spot.name}
-              location={`${spot.region}, ${spot.land}`}
-              difficulty={(spot.schwierigkeit ?? 0).toString()}
-              // FIXME: Sternebewertungen klappen nicht
-              rating={calculateAverageRating(spot.rating)}
-              imageUrl={spot.picture_url ?? ""}
-            />
-          </Link>
-        ))}
+        {locations.map((spot) => {
+          const average =
+            spot.rating !== undefined
+              ? spot.rating // schon berechnet
+              : calcAverage(spot.bewertungen); // aus Einzelwerten
+
+          return (
+            <Link
+              to={`/details/${spot.ort_id}`}
+              key={spot.ort_id}
+              className="block"
+            >
+              <LocationCard
+                name={spot.name}
+                location={`${spot.region}, ${spot.land}`}
+                difficulty={(spot.schwierigkeit ?? 0).toString()}
+                rating={average}
+                imageUrl={spot.picture_url ?? ""}
+              />
+            </Link>
+          );
+        })}
       </div>
     </div>
   );

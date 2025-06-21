@@ -5,7 +5,10 @@ export interface Location {
   land: string;
   schwierigkeit: number | string;
   picture_url: string | null;
-  rating?: { sterne: number }[];
+
+  bewertungen?: { sterne: number }[];
+
+  rating?: number;
 
   lat?: number;
   long?: number;

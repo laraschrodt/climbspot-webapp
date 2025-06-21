@@ -304,6 +304,7 @@ const EditLocation: React.FC = () => {
         </label>
         <div className="flex items-center gap-4">
           <label className="label cursor-pointer">
+            Kinderfreundlich?
             <input
               type="radio"
               name="kinderfreundlich"
