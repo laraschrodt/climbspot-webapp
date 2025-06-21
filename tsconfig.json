@@ -12,6 +12,6 @@
     "outDir": "dist",
     "types": ["jest", "node"],
   },
-  "include": ["frontend/src/**/*", "frontend/tests/**/*"],
+  "include": ["frontend/src/**/*", "frontend/tests/**/*", "frontend/tests/setupTests.ts"],
   "exclude": ["node_modules", "dist"]
 }

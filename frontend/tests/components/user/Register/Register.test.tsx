@@ -1,28 +1,32 @@
-// tests/components/auth/Register.test.tsx
-
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import Register from "../../../../src/components/user/Register/Register";
 import { BrowserRouter } from "react-router-dom";
 import "@testing-library/jest-dom";
 
-// 🧪 Mocks
-jest.mock("../../../../src/api/RegisterApi", () => {
-  return {
-    RegisterApi: jest.fn().mockImplementation(() => ({
-      register: mockRegister,
-    })),
-  };
+// ✅ window.alert verhindern (jsdom unterstützt es nicht)
+beforeAll(() => {
+  window.alert = jest.fn();
 });
 
-const mockRegister = jest.fn();
-
-// 🧪 useNavigate Mock
+// ✅ mock für useNavigate
 const mockNavigate = jest.fn();
 jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
   useNavigate: () => mockNavigate,
 }));
+
+// ✅ mockRegister definieren
+const mockRegister = jest.fn();
+
+// ✅ RegisterApi-Klasse mocken
+jest.mock("../../../../src/api/RegisterApi", () => {
+  return {
+    RegisterApi: class {
+      register = (...args: any[]) => mockRegister(...args);
+    },
+  };
+});
 
 describe("Register-Komponente", () => {
   beforeEach(() => {
@@ -39,7 +43,6 @@ describe("Register-Komponente", () => {
       </BrowserRouter>
     );
 
-    // Eingabefelder ausfüllen
     fireEvent.change(screen.getByLabelText("Benutzername"), {
       target: { value: "TestUser" },
     });
@@ -50,16 +53,19 @@ describe("Register-Komponente", () => {
       target: { value: "123456" },
     });
 
-    // Absenden
     fireEvent.click(screen.getByRole("button", { name: /registrieren/i }));
 
     await waitFor(() => {
+      // 👇 passt zu dem echten Aufruf (ohne explizites "user"-Argument)
       expect(mockRegister).toHaveBeenCalledWith(
         "TestUser",
         "test@example.com",
         "123456"
       );
       expect(mockNavigate).toHaveBeenCalledWith("/login");
+      expect(window.alert).toHaveBeenCalledWith(
+        "Willkommen, TestUser! Registrierung erfolgreich."
+      );
     });
   });
 
