@@ -11,6 +11,7 @@ class AddLocationController {
 /**
  * HTTP-Handler zum Hinzufügen eines neuen Kletterortes.
  *
+ *
  * - Liest Ort-Daten aus dem Request (`name`, `region`, `land`, `picture_url`, ...)
  * - Übergibt die Daten an den Service `addLocation`
  * - Erstellt automatisch Benachrichtigungen für alle Nutzer
