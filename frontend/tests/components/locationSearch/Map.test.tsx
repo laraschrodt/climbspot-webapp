@@ -1,8 +1,7 @@
 import { render, waitFor } from "@testing-library/react";
-import Map, {
-  fetchLocations,
-} from "../../../src/components/locationSearch/Map";
+import Map from "../../../src/components/locationSearch/Map";
 import L from "leaflet";
+import fetchMock from "jest-fetch-mock";
 
 type Location = {
   ort_id: string;
@@ -15,6 +14,7 @@ type Location = {
   schwierigkeit: string;
 };
 
+// Leaflet mocken
 jest.mock("leaflet", () => {
   const original = jest.requireActual("leaflet");
   return {
@@ -25,15 +25,16 @@ jest.mock("leaflet", () => {
       clearLayers: jest.fn(),
       addLayer: jest.fn(),
     }),
-    marker: jest
-      .fn()
-      .mockReturnValue({ bindPopup: jest.fn().mockReturnValue({}) }),
+    marker: jest.fn().mockReturnValue({
+      bindPopup: jest.fn().mockReturnValue({}),
+    }),
   };
 });
 
 describe("Map component", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    fetchMock.resetMocks();
   });
 
   it("renders and adds markers for all fetched locations", async () => {
@@ -59,9 +60,8 @@ describe("Map component", () => {
         schwierigkeit: "3",
       },
     ];
-    jest
-      .spyOn({ fetchLocations }, "fetchLocations")
-      .mockResolvedValue(locations);
+
+    fetchMock.mockResponseOnce(JSON.stringify(locations));
 
     render(<Map filter={null} />);
 
@@ -99,9 +99,8 @@ describe("Map component", () => {
         schwierigkeit: "3",
       },
     ];
-    jest
-      .spyOn({ fetchLocations }, "fetchLocations")
-      .mockResolvedValue(locations);
+
+    fetchMock.mockResponseOnce(JSON.stringify(locations));
 
     render(
       <Map

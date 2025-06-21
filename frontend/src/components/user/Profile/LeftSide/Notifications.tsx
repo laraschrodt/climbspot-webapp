@@ -28,11 +28,9 @@ interface Notification {
  * Die Zustände "gesehen" werden aktuell nur lokal im Frontend gespeichert.
  */
 
-// FIXME: Benachrichtigung laden immer neu, auch wenn man auf "gesehen" drückt
 
 const Notifications: React.FC = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [seen, setSeen] = useState<string[]>([]);
   const [showPopup, setShowPopup] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -71,11 +69,26 @@ const Notifications: React.FC = () => {
     };
   }, []);
 
-  const handleSeen = (id: string) => {
-    setSeen((prev) => [...prev, id]);
+  const handleSeen = async (id: string) => {
+    const token = localStorage.getItem("token");
+  
+    try {
+      await axios.patch(`/api/profile/notifications/${id}/read`, null, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+  
+      // Entferne Notification aus dem Zustand
+      setNotifications(prev => prev.filter(n => n.id !== id));
+    } catch (err) {
+      console.error("Fehler beim Setzen auf 'gelesen':", err);
+    }
   };
+  ;
+  
 
-  const unseenNotifications = notifications.filter((n) => !seen.includes(n.id));
+ // ✅ keine zusätzliche Filterung nötig – Backend liefert nur ungelesene
+const unseenNotifications = notifications;
+
 
   return (
     <div className="relative w-full">
