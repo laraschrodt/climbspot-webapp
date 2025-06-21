@@ -20,14 +20,17 @@ interface TransitButtonProps {
 }
 
 export const TransitButton: React.FC<TransitButtonProps> = ({ lat, long }) => {
-  const handleClick = () => {
-    const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${long}&travelmode=transit`;
-    window.open(url, "_blank");
-  };
+  const url = `https://www.google.com/maps/dir/?api=1&travelmode=transit&destination=${lat},${long}`;
 
   return (
-    <button className="btn btn-secondary w-full" onClick={handleClick}>
-      ÖPNV - Route zu Google Maps
-    </button>
+    <a
+      href={url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-sm text-blue-600 hover:underline"
+    >
+      ÖPNV Route
+    </a>
   );
 };
+

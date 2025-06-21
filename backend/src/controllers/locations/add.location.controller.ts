@@ -1,13 +1,40 @@
 import { Request, Response } from "express";
-import { addLocation } from "../../services/locations/add.location.service";
+import { supabase } from "../../lib/supabase";
 
 /**
+<<<<<<< HEAD
+ * Steuert die Verarbeitung von Anfragen zum Hinzufügen neuer Kletterorte.
+ * Diese vereinfachte Version verzichtet auf einen separaten Service und behandelt die Logik direkt.
+ *
+ * Ziel: Einfachheit bei Tests und Debugging – insbesondere ohne Dateiupload oder zusätzliche Businesslogik.
+=======
  * Controller zum Hinzufügen neuer Kletterorte.
  * Delegiert die Geschäftslogik an den `addLocation`-Service.
  * Sendet nach erfolgreicher Erstellung ein `new-location`-WebSocket-Event an alle Clients.
+>>>>>>> 762ba870fe667563a9f2a070d2f8114fa3f66ea7
  */
 
 class AddLocationController {
+<<<<<<< HEAD
+  /**
+   * Fügt einen neuen Kletterort hinzu.
+   * Erwartet `name`, `region` und `difficulty` im Request-Body.
+   *
+   * @param req Express Request-Objekt
+   * @param res Express Response-Objekt
+   *
+   * - Gibt 400 zurück, wenn Felder fehlen
+   * - Gibt 500 zurück, wenn das Einfügen fehlschlägt
+   * - Gibt 201 zurück mit den erstellten Daten bei Erfolg
+   */
+  async addLocation(req: Request, res: Response): Promise<void> {
+    const { name, region, difficulty } = req.body;
+
+    // Validierung: Alle Felder erforderlich
+    if (!name || !region || !difficulty) {
+      res.status(400).json({ message: "Fehlende Felder" });
+      return;
+=======
 /**
  * HTTP-Handler zum Hinzufügen eines neuen Kletterortes.
  *
@@ -44,8 +71,25 @@ class AddLocationController {
     } catch (error) {
       console.error("Fehler beim Hinzufügen des Ortes:", error);
       response.status(500).json({ error: (error as Error).message });
+>>>>>>> 762ba870fe667563a9f2a070d2f8114fa3f66ea7
     }
+
+    // Versuch, den neuen Ort in die Supabase-Tabelle "orte" einzufügen
+    const { data, error } = await supabase
+      .from("orte")
+      .insert({ name, region, difficulty })
+      .single();
+
+    // Fehler beim Einfügen in DB
+    if (error) {
+      console.error("Fehler beim Einfügen:", error);
+      res.status(500).json({ message: "Fehler beim Hinzufügen" });
+      return;
+    }
+
+    // Erfolgreich hinzugefügt
+    res.status(201).json(data);
   }
 }
 
-export default AddLocationController;
+export default new AddLocationController();

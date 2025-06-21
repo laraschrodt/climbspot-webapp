@@ -1,14 +1,22 @@
 {
+  "name": "frontend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "jest"
+  },
   "scripts": {
     "test": "jest"
   },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
   "devDependencies": {
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
-    "@types/jest": "^30.0.0",
-    "identity-obj-proxy": "^3.0.0",
-    "jest": "^29.7.0",
-    "jest-fetch-mock": "^3.0.3",
-    "ts-jest": "^29.4.0"
-  }
+    "jsdom": "^26.1.0",
+    "vitest": "^3.2.4"
+  }  
 }

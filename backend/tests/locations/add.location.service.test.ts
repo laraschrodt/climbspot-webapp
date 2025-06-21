@@ -1,98 +1,86 @@
-import { Request } from "express";
-import { addLocation } from "../../src/services/locations/add.location.service";
-import { supabase } from "../../src/lib/supabase";
+import { Request, Response } from "express";
+import AddLocationController from "../../src/controllers/locations/add.location.controller";
 
+// Supabase-Mock
 jest.mock("../../src/lib/supabase", () => ({
   supabase: {
-    storage: { from: jest.fn() },
-    from: jest.fn(),
+    from: jest.fn(() => ({
+      insert: jest.fn(() => ({
+        single: jest.fn().mockResolvedValue({
+          data: { ort_id: "123", name: "Kletterwald Test" },
+          error: null,
+        }),
+      })),
+    })),
   },
 }));
 
-jest.mock("crypto", () => ({
-  randomUUID: jest.fn().mockReturnValue("generated-uuid"),
-}));
-
-interface FakeBody {
-  ort_id: string;
-  name: string;
-  region: string;
-  land: string;
-  schwierigkeit: string;
-  lat: string;
-  long: string;
-  charakter: string;
-  gebirge: string;
-  berg: string;
-  hoehe_einstieg_m: string;
-  talort: string;
-  ausruestung: string;
-  kletterlaenge_m: string;
-  kletterzeit: string;
-  kletterart: string;
-  kinderfreundlich: string;
-}
-
-describe("addLocation Service", () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-
-    (supabase.storage.from as jest.Mock).mockReturnValue({
-      upload: jest.fn().mockResolvedValue({ error: null }),
-      getPublicUrl: jest.fn().mockReturnValue({
-        data: { publicUrl: "http://public.url/image.png" },
-      }),
-    });
-
-    (supabase.from as jest.Mock).mockReturnValue({
-      insert: jest.fn().mockResolvedValue({ error: null }),
-    });
-  });
-
-  it("lädt Bild hoch, speichert Datensatz und liefert ort_id zurück", async () => {
-    const fakeRequest = {
-      file: { buffer: Buffer.from(""), mimetype: "image/png" },
+describe("AddLocationController.addLocation", () => {
+  it("should return 201 if location is added successfully", async () => {
+    const req = {
       body: {
-        ort_id: "provided-uuid",
-        name: "TestName",
-        region: "TestRegion",
-        land: "TestLand",
-        schwierigkeit: "5",
-        lat: "1.23",
-        long: "4.56",
-        charakter: "Char",
-        gebirge: "Geb",
-        berg: "Brg",
-        hoehe_einstieg_m: "100",
-        talort: "Tal",
-        ausruestung: "Ausr",
-        kletterlaenge_m: "30",
-        kletterzeit: "02:00",
-        kletterart: "Sport",
-        kinderfreundlich: "true",
+        name: "Kletterwald Test",
+        region: "Rheinland-Pfalz",
+        difficulty: "mittel",
       },
-    } as unknown as Request & { file: Express.Multer.File; body: FakeBody };
+    } as Request;
 
-    (fakeRequest as any).user = { userId: "provided-uuid" };
+    const json = jest.fn();
+    const status = jest.fn(() => ({ json }));
+    const res = { status } as unknown as Response;
 
-    const result = await addLocation(fakeRequest);
+    await AddLocationController.addLocation(req, res);
 
-    expect(supabase.storage.from).toHaveBeenCalledWith("location-pictures");
-
-    const bucket = (supabase.storage.from as jest.Mock).mock.results[0].value;
-    expect(bucket.upload).toHaveBeenCalledWith(
-      expect.stringMatching(/^locations\/generated-uuid\.png$/),
-      fakeRequest.file.buffer,
-      { contentType: "image/png", upsert: true }
-    );
-
-    expect((result as any).ort_id).toBe("provided-uuid");
+    expect(status).toHaveBeenCalledWith(201);
+    expect(json).toHaveBeenCalledWith({ ort_id: "123", name: "Kletterwald Test" });
   });
 
-  it("wirft Fehler, wenn keine Datei vorhanden ist", async () => {
-    const fakeRequest = { file: undefined } as unknown as Request;
-    await expect(addLocation(fakeRequest)).rejects.toThrow(
-      "Image file missing"
-    );
+  it("should return 400 if required field is missing", async () => {
+    const req = {
+      body: {
+        region: "NRW",
+        difficulty: "leicht",
+        // name fehlt
+      },
+    } as Request;
+
+    const json = jest.fn();
+    const status = jest.fn(() => ({ json }));
+    const res = { status } as unknown as Response;
+
+    await AddLocationController.addLocation(req, res);
+
+    expect(status).toHaveBeenCalledWith(400);
+    expect(json).toHaveBeenCalledWith({ message: "Fehlende Felder" });
+  });
+
+  it("should return 500 if Supabase returns an error", async () => {
+    const { supabase } = require("../../src/lib/supabase");
+
+    supabase.from = jest.fn(() => ({
+      insert: jest.fn(() => ({
+        single: jest.fn().mockResolvedValue({
+          data: null,
+          error: { message: "DB-Fehler" },
+        }),
+      })),
+    }));
+
+    const req = {
+      body: {
+        name: "Test Ort",
+        region: "Bayern",
+        difficulty: "schwer",
+      },
+    } as Request;
+
+    const json = jest.fn();
+    const status = jest.fn(() => ({ json }));
+    const res = { status } as unknown as Response;
+
+    await AddLocationController.addLocation(req, res);
+
+    expect(status).toHaveBeenCalledWith(500);
+    expect(json).toHaveBeenCalledWith({ message: "Fehler beim Hinzufügen" });
   });
 });
