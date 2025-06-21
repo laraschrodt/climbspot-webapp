@@ -31,7 +31,6 @@ class LocationController {
 
     try {
       const location = await LocationsService.getLocationByIdFromDB(locationId);
-      console.log("Gefundene Location aus DB:", location);
       if (!location) {
         console.log("Keine Location mit dieser ID gefunden.");
         res.status(404).json({ error: "Standort nicht gefunden" });
