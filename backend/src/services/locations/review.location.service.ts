@@ -59,6 +59,37 @@ export class ReviewLocationService {
 
     return data;
   }
+
+  /**
+   * Holt die eigene Bewertung eines Nutzers für einen bestimmten Ort.
+   *
+   * @param params Objekt mit ort_id und benutzer_id
+   * @returns Promise mit der Bewertung oder null, falls keine existiert
+   * @throws Fehler bei Datenbankfehlern
+   */
+  async getMyOwnReviewFromDB(params: {
+    ort_id: string;
+    benutzer_id: string;
+  }): Promise<{
+    sterne: number;
+    kommentar: string;
+    erstellt_am: string;
+  } | null> {
+    const { ort_id, benutzer_id } = params;
+    const { data, error } = await supabase
+      .from("bewertungen")
+      .select("sterne, kommentar, erstellt_am")
+      .eq("ort_id", ort_id)
+      .eq("benutzer_id", benutzer_id)
+      .maybeSingle();
+
+    if (error) {
+      console.error("Fehler beim Laden der eigenen Bewertung:", error);
+      throw new Error("Eigene Bewertung konnte nicht geladen werden.");
+    }
+
+    return data;
+  }
 }
 
 export default new ReviewLocationService();

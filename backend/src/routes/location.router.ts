@@ -73,4 +73,6 @@ router.post(
   ReviewLocationController.addReview
 );
 
+router.get("/reviews/:locationId", ReviewLocationController.getMyOwnComment);
+
 export default router;

@@ -76,6 +76,40 @@ class ReviewLocationController {
       res.status(500).json({ error: "Fehler beim Laden der Bewertungen" });
     }
   }
+
+  /**
+   * Holt die eigene Bewertung für einen bestimmten Ort.
+   *
+   * @param req Authentifizierter Request mit Nutzerinformationen und Orts-ID
+   * @param res Express Response mit der Bewertung oder null
+   */
+  static async getMyOwnComment(
+    req: AuthedRequest,
+    res: Response
+  ): Promise<void> {
+    const { locationId } = req.params;
+
+    const userId = req.header("x-user-id") || null;
+
+    try {
+      if (!userId) {
+        res.json(null);
+        return;
+      }
+
+      const review = await ReviewLocationService.getMyOwnReviewFromDB({
+        ort_id: locationId,
+        benutzer_id: userId,
+      });
+
+      res.json(review ?? null);
+    } catch (err) {
+      console.error("Fehler beim Laden der eigenen Bewertung:", err);
+      res
+        .status(500)
+        .json({ error: "Fehler beim Laden der eigenen Bewertung" });
+    }
+  }
 }
 
 export default ReviewLocationController;
