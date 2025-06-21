@@ -32,7 +32,7 @@ export async function createNotificationsForAllUsers(
     id: randomUUID(), // Eindeutige ID für Notification
     ort_id: ortId,
     title: "Neuer Ort verfügbar!",
-    message: `${ortName} wurde hinzugefügt.`,
+    message: `🧗‍♂️ Neuer Kletterort "${ortName}" wurde hinzugefügt!`,
     picture_url: pictureUrl,
     erstellt_am: new Date().toISOString(),
     is_read: false,
