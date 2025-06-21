@@ -8,7 +8,6 @@ import { Location } from "../../../models/Location";
  * Erweiterung des `Location`-Modells um ein `rating`-Feld.
  * Wird verwendet für die Anzeige populärer Orte.
  */
-// FIXME: Sterne-Rating wird nicht angezeigt (Logik aus LocationList übernehmen)
 interface PopularLocation extends Location {
   rating: number;
 }

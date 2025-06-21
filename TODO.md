@@ -6,10 +6,10 @@
 
 ## Bugs
 
-- [ ] Eigenes (schon vorhandenes) Kommentar muss noch in die "Deine Bewertung" Sektion geladen werden
-- [ ] Sterne-Bewertungen in PopularLocations auf der Homepage werden nicht angezeigt
+- [x] Eigenes (schon vorhandenes) Kommentar muss noch in die "Deine Bewertung" Sektion geladen werden
+- [x] Sterne-Bewertungen in PopularLocations auf der Homepage werden nicht angezeigt
 - [x] Ja/Nein Radiobutton bei "Kinderfreundlich?" im Formular zum Erstellen und Ändern einer Location funktioniert nicht
-- [ ] Benachrichtigung laden immer neu, auch wenn man auf "gesehen" drückt
+- [x] Benachrichtigung laden immer neu, auch wenn man auf "gesehen" drückt
 - [ ] Favoriten fixen
 - [ ] Pages auf Handy-Ansicht anpassen
 - [x] Funktionen/Components verkleinern und auseinander ziehen (ein usecase pro Datei - wie in Software Eng. besproche)
