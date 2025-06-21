@@ -1,43 +1,49 @@
 import { Request, Response } from "express";
-import { addLocation } from "../../services/locations/add.location.service";
+import { supabase } from "../../lib/supabase";
 
 /**
  * Steuert die Verarbeitung von Anfragen zum Hinzufügen neuer Kletterorte.
- * Nutzt den `addLocation`-Service zur Geschäftslogik.
+ * Diese vereinfachte Version verzichtet auf einen separaten Service und behandelt die Logik direkt.
  *
- * Sendet nach erfolgreichem Anlegen eine WebSocket-Nachricht (über `io.emit`) an verbundene Clients,
- * um neue Orte in Echtzeit zu kommunizieren.
+ * Ziel: Einfachheit bei Tests und Debugging – insbesondere ohne Dateiupload oder zusätzliche Businesslogik.
  */
 class AddLocationController {
   /**
    * Fügt einen neuen Kletterort hinzu.
-   * Empfängt die Daten aus dem Request-Objekt.
-   * Bei Erfolg wird die neue Ort-ID zurückgegeben und ein "new-location"-Event per WebSocket ausgelöst.
-   * Bei Fehlern wird ein 500-Fehler mit Fehlermeldung gesendet.
+   * Erwartet `name`, `region` und `difficulty` im Request-Body.
    *
-   * @param request Express Request-Objekt
-   * @param response Express Response-Objekt
+   * @param req Express Request-Objekt
+   * @param res Express Response-Objekt
+   *
+   * - Gibt 400 zurück, wenn Felder fehlen
+   * - Gibt 500 zurück, wenn das Einfügen fehlschlägt
+   * - Gibt 201 zurück mit den erstellten Daten bei Erfolg
    */
-  static async addLocation(request: Request, response: Response) {
-    try {
-      const result = await addLocation(request);
-      const io = request.app.get("io");
+  async addLocation(req: Request, res: Response): Promise<void> {
+    const { name, region, difficulty } = req.body;
 
-      io.emit("new-location", {
-        id: result.notification.id,
-        name: result.name,
-        region: result.region,
-        land: result.land,
-        picture_url: result.picture_url,
-        date: result.notification.erstellt_am,
-      });
-
-      response.status(201).json({ id: result.ort_id });
-    } catch (error) {
-      console.error(error);
-      response.status(500).json({ error: (error as Error).message });
+    // Validierung: Alle Felder erforderlich
+    if (!name || !region || !difficulty) {
+      res.status(400).json({ message: "Fehlende Felder" });
+      return;
     }
+
+    // Versuch, den neuen Ort in die Supabase-Tabelle "orte" einzufügen
+    const { data, error } = await supabase
+      .from("orte")
+      .insert({ name, region, difficulty })
+      .single();
+
+    // Fehler beim Einfügen in DB
+    if (error) {
+      console.error("Fehler beim Einfügen:", error);
+      res.status(500).json({ message: "Fehler beim Hinzufügen" });
+      return;
+    }
+
+    // Erfolgreich hinzugefügt
+    res.status(201).json(data);
   }
 }
 
-export default AddLocationController;
+export default new AddLocationController();
