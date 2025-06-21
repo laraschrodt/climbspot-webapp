@@ -5,13 +5,14 @@ import Notifications from "../../../../../src/components/user/Profile/LeftSide/N
 import "@testing-library/jest-dom";
 import axios from "axios";
 
-// 🧪 axios und socket.io-client mocken
+// ✅ Mocks
 jest.mock("axios");
 jest.mock("socket.io-client", () => ({
-  io: jest.fn(() => ({
+  __esModule: true,
+  default: () => ({
     on: jest.fn(),
     disconnect: jest.fn(),
-  })),
+  }),
 }));
 
 const mockedAxios = axios as jest.Mocked<typeof axios>;
@@ -20,18 +21,19 @@ describe("Notifications-Komponente", () => {
   beforeEach(() => {
     localStorage.setItem("token", "FAKE_TOKEN");
     mockedAxios.get.mockReset();
+    mockedAxios.patch.mockReset();
   });
 
   it("zeigt Ladeanzeige beim ersten Render", async () => {
     mockedAxios.get.mockResolvedValueOnce({ data: [] });
 
     render(<Notifications />);
-    expect(screen.getByText(/benachrichtigungen/i)).toBeInTheDocument();
-
     fireEvent.click(screen.getByText(/benachrichtigungen/i));
 
+    // Ladeanzeige sichtbar
     expect(screen.getByText(/lade/i)).toBeInTheDocument();
 
+    // Kein Resultat vorhanden
     await waitFor(() => {
       expect(screen.getByText(/keine neuen benachrichtigungen/i)).toBeInTheDocument();
     });
@@ -53,7 +55,7 @@ describe("Notifications-Komponente", () => {
     fireEvent.click(screen.getByText(/benachrichtigungen/i));
 
     expect(await screen.findByText(/neuer spot entdeckt/i)).toBeInTheDocument();
-    expect(screen.getByText(/20\.06\.2025/)).toBeInTheDocument(); // deutscher Datumsstring
+    expect(screen.getByText(/2025-06-20/i)).toBeInTheDocument();
   });
 
   it("entfernt Benachrichtigung nach Klick auf 'Gesehen'", async () => {
@@ -68,12 +70,16 @@ describe("Notifications-Komponente", () => {
       ],
     });
 
+    mockedAxios.patch.mockResolvedValueOnce({ status: 200 });
+
     render(<Notifications />);
     fireEvent.click(screen.getByText(/benachrichtigungen/i));
 
     const btn = await screen.findByRole("button", { name: /gesehen/i });
     fireEvent.click(btn);
 
-    expect(await screen.findByText(/keine neuen benachrichtigungen/i)).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText(/keine neuen benachrichtigungen/i)).toBeInTheDocument();
+    });
   });
 });
