@@ -6,18 +6,16 @@
 
 ## Bugs
 
-- [x] Eigenes (schon vorhandenes) Kommentar muss noch in die "Deine Bewertung" Sektion geladen werden
-- [x] Sterne-Bewertungen in PopularLocations auf der Homepage werden nicht angezeigt
-- [x] Ja/Nein Radiobutton bei "Kinderfreundlich?" im Formular zum Erstellen und Ändern einer Location funktioniert nicht
-- [x] Benachrichtigung laden immer neu, auch wenn man auf "gesehen" drückt
-- [ ] Favoriten fixen
-- [ ] Pages auf Handy-Ansicht anpassen
-- [x] Funktionen/Components verkleinern und auseinander ziehen (ein usecase pro Datei - wie in Software Eng. besproche)
+- [ ] `Nelly`: Favoriten fixen
+
+- [ ] ``: nur für admins (ProtectedComponent): Buttom neben jedem Kommentar in LocationDetails um das Kommentar zu löschen
+- [ ] `Alex`: Suchfunktion klappt nicht auf Handy-Ansicht im Browser
+- [ ] ``: /profile sieht in der Handy-Ansicht falsch aus
 
 ## Erledigen vor Abgabe
 
-- [ ] CI Test Pipeline
-- [ ] Datenbank mit mehr Daten befüllen
+- [ ] `Lara`: CI Test Pipeline
+- [ ] ``: Datenbank mit mehr Daten befüllen
 - [ ] Deployment mit Render.com
 - [ ] Alle Funktionen nochmal durchgehen und testen
 - [ ] TODO.md entfernen
