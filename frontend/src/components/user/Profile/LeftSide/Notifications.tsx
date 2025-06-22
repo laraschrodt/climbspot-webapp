@@ -14,7 +14,6 @@ interface Notification {
   date: string;
 }
 
-
 /**
  * Notifications-Komponente
  *
@@ -28,14 +27,13 @@ interface Notification {
  * Die Zustände "gesehen" werden aktuell nur lokal im Frontend gespeichert.
  */
 
-
 const Notifications: React.FC = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [showPopup, setShowPopup] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const socket = io("http://localhost:3001", {
+    const socket = io("http://localhost:3000", {
       transports: ["websocket"],
     });
 
@@ -71,24 +69,20 @@ const Notifications: React.FC = () => {
 
   const handleSeen = async (id: string) => {
     const token = localStorage.getItem("token");
-  
+
     try {
       await axios.patch(`/api/profile/notifications/${id}/read`, null, {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
-  
+
       // Entferne Notification aus dem Zustand
-      setNotifications(prev => prev.filter(n => n.id !== id));
+      setNotifications((prev) => prev.filter((n) => n.id !== id));
     } catch (err) {
       console.error("Fehler beim Setzen auf 'gelesen':", err);
     }
   };
-  ;
-  
-
- // ✅ keine zusätzliche Filterung nötig – Backend liefert nur ungelesene
-const unseenNotifications = notifications;
-
+  // ✅ keine zusätzliche Filterung nötig – Backend liefert nur ungelesene
+  const unseenNotifications = notifications;
 
   return (
     <div className="relative w-full">

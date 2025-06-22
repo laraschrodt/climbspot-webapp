@@ -10,7 +10,6 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.49.4",
     "axios": "^1.9.0",
     "leaflet": "^1.9.4",
     "leaflet-ui": "^0.6.0",
