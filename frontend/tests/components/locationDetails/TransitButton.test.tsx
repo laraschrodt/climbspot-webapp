@@ -3,6 +3,12 @@ import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { TransitButton } from "../../../src/components/locationDetails/LeftSide/TransitButton";
 
+/**
+ * Test suite for the TransitButton component.
+ *
+ * Verifies that the TransitButton renders a link with the correct
+ * attributes for public transit directions using Google Maps.
+ */
 describe("TransitButton", () => {
   const lat = 50.1234;
   const long = 8.5678;
