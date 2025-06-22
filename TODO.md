@@ -2,82 +2,47 @@
 
 ## ✅ Aufgabenverteilung verteilt nach Person
 
-> **Kurze Rückmeldung am Sonntag Abend wie es läuft** <br> > **Bis dahin alle Tests fertig haben + MEETING:** Montag, 16.06.2025 19 Uhr <br> > **Bis dahin alle Unit/Integration Tests implementert haben** Freitag, 20.06.2025 <br> > **Deployment + MEETING:** Sonntag, 22.06.2025 19 Uhr
+> **Alle Bugs und Tests fertig haben:** Dienstag Abend<br> **Meeting für Präsentation:** Dienstag 18 Uhr <br> **Präsentation durchsprechen:** Mittwoch 20 Uhr
+
+## Präsentation
+
+- Lessions learned
+-
 
 ## Bugs
 
 - [ ] `Nelly`: Favoriten fixen
 
-- [ ] ``: nur für admins (ProtectedComponent): Buttom neben jedem Kommentar in LocationDetails um das Kommentar zu löschen
+- [ ] `Lara`: nur für admins (ProtectedComponent): Buttom neben jedem Kommentar in LocationDetails um das Kommentar zu löschen
 - [ ] `Alex`: Suchfunktion klappt nicht auf Handy-Ansicht im Browser
-- [ ] ``: /profile sieht in der Handy-Ansicht falsch aus
-- [ ] Kaputte Tests
+- [ ] `Kimia`: /profile sieht in der Handy-Ansicht falsch aus
+- [x] ÖPNV Routen Button gone ???
+- [ ] Tests funktionieren nicht mehr alle
 
 ## Erledigen vor Abgabe
 
-- [ ] `Lara`: CI Test Pipeline
-- [ ] ``: Datenbank mit mehr Daten befüllen
-- [ ] Deployment mit Render.com
+- [ ] ``: CI Test Pipeline
+- [ ] `Alex`: Datenbank mit mehr Daten befüllen
+- [x] Deployment mit Render.com
 - [ ] Alle Funktionen nochmal durchgehen und testen
-- [ ] TODO.md entfernen
+- [ ] Dokument für Prof vorbereiten
+  - .env Datein
+  - Admin Zugangsdaten
+  - Link zu render.com
 
 ## 🧪 Testen
-
-### Javadoc Dokumentation schreiben im Code (`Alex`)
-
-- nur wichtige Dinge, keine unnötigen Kommentare (welche Dinge beschreiben die man eh auf den ersten Blick sieht)
-- in Kontext zum Rest unserer Architektur stellen, sodass man das Zusammenspiel der Komponenten versteht
-- also nicht übertreiben
-
----
-
-### Zu erledigen vor den Tests:
-
-`Lara`:
-
-- [x] Neue Page um Location hinzuzufügen
-- [x] Komm in die Community Button verlinken
-- [x] Im Profil eine Seite machen in der man die Locations sieht, die man selbst hinzugefügt hat
-- [x] Eigene Locations bearbeitbar machen
-- [x] Eigene Locations löschen
-- [x] jest config
-- [x] Admins können alle Locations verwalten
-- [x] Gastrechte beschränken
-- [x] Admins können andere Admins erstellen
-- [x] Admins können alle Benutzer verwalten
-
-`Kimia`:
-
-- [x] Größe von Location Cards im Profil anpassen
-- [x] Benachrichtigungen bei neuer Location
-- [x] Gucken dass Notification dauerhaft gelöscht wird, wenn man auf "gesehen" klickt
-
-`Nelly`:
-
-- [ ] Gucken dass man von jeder Page aus zu Favoriten hinzufügen/entfernen kann
-- [x] Berwertungen schreiben (Sterne-Rating und kurzer Text) und anzeigen auf LocationDetails
-  - Bei jeder LocationDetail Seite gibt es über den Bewertungen einen Bereich indem man selbst ein
-    Sterne-Rating abgeben kann und einen kurzen Bewertungstext schreiben kann - die eigene Bewertung ist persistiert und änderbar (so ähnlich wie das Ändern von Infos im Formular vielleicht)
-
-`Alex`:
-
-- [x] Interaktive Karte und gucken, dass der Filter funktioniert bei der Karte
-- [ ] Fehlende Felder in DB nachtragen bei Locations (es muss alles besetzt sein)
-- [x] Pins auf der Karte müssen einen irgendwie zu LocationDetails von der angeklickten Loation führen
-
----
 
 ### Unit-Tests:
 
 - [x] Regestrierung (`Kimia`)
-- [ ] Anmeldung (`Nelly`)
-- [ ] Location hinzufügen (`Nelly`)
+- [x] Anmeldung (`Nelly`)
+- [x] Location hinzufügen (`Nelly`)
 - [x] Bewertung schreiben (`Kimia`)
 - [ ] Location favorisieren (`Lara`)
 - [x] Admin-Funktionen (`Lara`)
 - [x] Suchfunktion im Header (`Alex`)
 - [x] Filterfunktion bei Karte und Liste (`Alex`)
-- [ ] Nahverkehrsintegration (`Nelly`)
+- [x] Nahverkehrsintegration (`Nelly`)
 - [x] Interaktive Karte (`Lara`)
 - [x] Benachrichtigungen (`Kimia`)
 
