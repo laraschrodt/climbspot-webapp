@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import AddLocationController from "../../src/controllers/locations/add.location.controller";
 
-// Supabase-Mock
 jest.mock("../../src/lib/supabase", () => ({
   supabase: {
     from: jest.fn(() => ({
@@ -32,7 +31,10 @@ describe("AddLocationController.addLocation", () => {
     await AddLocationController.addLocation(req, res);
 
     expect(status).toHaveBeenCalledWith(201);
-    expect(json).toHaveBeenCalledWith({ ort_id: "123", name: "Kletterwald Test" });
+    expect(json).toHaveBeenCalledWith({
+      ort_id: "123",
+      name: "Kletterwald Test",
+    });
   });
 
   it("should return 400 if required field is missing", async () => {
@@ -40,7 +42,6 @@ describe("AddLocationController.addLocation", () => {
       body: {
         region: "NRW",
         difficulty: "leicht",
-        // name fehlt
       },
     } as Request;
 

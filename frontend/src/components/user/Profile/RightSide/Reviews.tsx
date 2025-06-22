@@ -6,7 +6,7 @@
  *
  * Eingebunden im rechten Bereich der `ProfilePage`.
  * Backend-Endpunkt ist noch in Planung (siehe TODO).
- */ 
+ */
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
@@ -33,7 +33,6 @@ const Reviews: React.FC = () => {
           headers: token ? { Authorization: `Bearer ${token}` } : {},
         });
 
-        // Defensive fallback für fehlerhafte Backends
         const data = Array.isArray(response?.data) ? response.data : [];
         setReviews(data);
       } catch (error) {
@@ -43,7 +42,6 @@ const Reviews: React.FC = () => {
       }
     };
 
-   
     setTimeout(fetchReviews, 0);
   }, []);
 
@@ -84,7 +82,8 @@ const Reviews: React.FC = () => {
                       ))}
                   </div>
                   <span className="text-sm text-gray-400">
-                    erstellt am {new Date(rev.erstellt_am).toLocaleDateString("de-DE")}
+                    erstellt am{" "}
+                    {new Date(rev.erstellt_am).toLocaleDateString("de-DE")}
                   </span>
                 </div>
                 <p className="text-gray-700 mt-1">{rev.kommentar}</p>

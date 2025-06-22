@@ -1,5 +1,3 @@
-// src/services/profiles/profile.service.ts
-
 import { supabase } from "../../lib/supabase";
 import { randomUUID } from "crypto";
 import { Location } from "../../types/Location";
@@ -36,7 +34,9 @@ class ProfileService {
   async getProfileDataByUserId(userId: string) {
     const { data, error } = await supabase
       .from("benutzer")
-      .select("vorname, nachname, email, benutzername, stadt, passwort_hash, profilbild_url")
+      .select(
+        "vorname, nachname, email, benutzername, stadt, passwort_hash, profilbild_url"
+      )
       .eq("benutzer_id", userId)
       .single();
 
@@ -96,7 +96,9 @@ class ProfileService {
       .eq("benutzer_id", userId);
 
     if (error) {
-      throw new Error("Fehler beim Aktualisieren des Profils: " + error.message);
+      throw new Error(
+        "Fehler beim Aktualisieren des Profils: " + error.message
+      );
     }
 
     return { success: true };
@@ -111,7 +113,10 @@ class ProfileService {
    * @returns URL des hochgeladenen Profilbilds
    * @throws Fehler bei Upload- oder Datenbankproblemen
    */
-  async uploadProfileImageToDatabase(userId: string, file: Express.Multer.File) {
+  async uploadProfileImageToDatabase(
+    userId: string,
+    file: Express.Multer.File
+  ) {
     const fileName = `profile-pictures/${userId}-${randomUUID()}.jpg`;
 
     const { error: uploadError } = await supabase.storage
@@ -125,9 +130,9 @@ class ProfileService {
       throw new Error("Bild-Upload fehlgeschlagen: " + uploadError.message);
     }
 
-    const { data: { publicUrl } } = supabase.storage
-      .from("profile-pictures")
-      .getPublicUrl(fileName);
+    const {
+      data: { publicUrl },
+    } = supabase.storage.from("profile-pictures").getPublicUrl(fileName);
 
     await supabase
       .from("benutzer")
@@ -147,7 +152,8 @@ class ProfileService {
   async getFavoriteLocationsFromDB(userId: string): Promise<Location[]> {
     const { data, error } = await supabase
       .from("favoriten")
-      .select(`
+      .select(
+        `
         o:orte (
           ort_id,
           name,
@@ -157,7 +163,8 @@ class ProfileService {
           picture_url,
           bewertungen (sterne)
         )
-      `)
+      `
+      )
       .eq("benutzer_id", userId);
 
     if (error) {
@@ -179,7 +186,8 @@ class ProfileService {
   async getReviewsByUserId(userId: string) {
     const { data, error } = await supabase
       .from("bewertungen")
-      .select(`
+      .select(
+        `
         sterne,
         kommentar,
         erstellt_am,
@@ -187,7 +195,8 @@ class ProfileService {
           name,
           picture_url
         )
-      `)
+      `
+      )
       .eq("benutzer_id", userId);
 
     if (error) {
@@ -232,12 +241,15 @@ class ProfileService {
    * @throws Fehler bei Datenbankfehlern
    */
 
-  async markNotificationAsRead(notificationId: string, userId: string): Promise<void> {
+  async markNotificationAsRead(
+    notificationId: string,
+    userId: string
+  ): Promise<void> {
     const { error } = await supabase
       .from("notifications")
       .update({ is_read: true })
       .eq("id", notificationId)
-      .eq("benutzer_id", userId); // sicherstellen, dass Nutzer nur eigene lesen kann
+      .eq("benutzer_id", userId);
 
     if (error) {
       throw new Error("Fehler beim Setzen auf 'gelesen': " + error.message);

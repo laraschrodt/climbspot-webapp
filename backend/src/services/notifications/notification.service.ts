@@ -17,7 +17,6 @@ export async function createNotificationsForAllUsers(
   ortName: string,
   pictureUrl: string
 ) {
-  // Alle Benutzer aus der Datenbank laden
   const { data: users, error } = await supabase
     .from("benutzer")
     .select("benutzer_id");
@@ -27,19 +26,15 @@ export async function createNotificationsForAllUsers(
     return;
   }
 
-  // Pro Benutzer eine Notification vorbereiten
-  const insertData = users.map(user => ({
-    id: randomUUID(), // Eindeutige ID für Notification
-    ort_id: ortId,
-    title: "Neuer Ort verfügbar!",
+  const insertData = users.map((user) => ({
+    id: randomUUID(),
     message: `🧗‍♂️ Neuer Kletterort "${ortName}" wurde hinzugefügt!`,
     picture_url: pictureUrl,
     erstellt_am: new Date().toISOString(),
     is_read: false,
-    benutzer_id: user.benutzer_id
+    benutzer_id: user.benutzer_id,
   }));
 
-  // Notifications in einem Batch einfügen
   const { error: insertError } = await supabase
     .from("notifications")
     .insert(insertData);
