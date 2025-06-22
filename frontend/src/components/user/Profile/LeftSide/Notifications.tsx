@@ -33,7 +33,7 @@ const Notifications: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const socket = io("http://localhost:3000", {
+    const socket = io(import.meta.env.VITE_SOCKET_URL!, {
       transports: ["websocket"],
     });
 
@@ -75,13 +75,11 @@ const Notifications: React.FC = () => {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
 
-      // Entferne Notification aus dem Zustand
       setNotifications((prev) => prev.filter((n) => n.id !== id));
     } catch (err) {
       console.error("Fehler beim Setzen auf 'gelesen':", err);
     }
   };
-  // ✅ keine zusätzliche Filterung nötig – Backend liefert nur ungelesene
   const unseenNotifications = notifications;
 
   return (

@@ -25,4 +25,5 @@ dist-ssr
 
 #machen das .env ignoriert wird
 .env
+.env.production
 private_todo.txt
