@@ -125,15 +125,35 @@ const NavbarEnd: FC = () => {
         </label>
         <div
           tabIndex={0}
-          className="mt-3 z-[1] p-4 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-60"
+          className="mt-3 z-[20] p-4 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-60"
         >
           <input
             type="text"
             placeholder="Suche"
             className="input input-bordered input-sm w-full"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
+          {searchTerm.trim() !== "" && suggestions.length > 0 && (
+            <ul className="mt-2 bg-white border w-full max-h-60 overflow-auto rounded shadow">
+              {suggestions.map((location) => (
+                <li
+                  key={location.ort_id}
+                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                  onClick={() => {
+                    navigate(`/details/${location.ort_id}`);
+                    setSearchTerm("");
+                    setSuggestions([]);
+                  }}
+                >
+                  {location.name}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       </div>
+
 
       {/* Profil-Menü */}
       <div className="dropdown dropdown-end">
