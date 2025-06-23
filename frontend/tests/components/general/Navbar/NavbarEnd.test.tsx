@@ -49,7 +49,6 @@ describe("NavbarEnd - Suchfunktion", () => {
       );
     });
 
-    // ✅ Hier verwenden wir getAllByText, weil mehrere Vorkommen möglich sind
     const resultsA = await screen.findAllByText("Klettergebiet A");
     const resultsB = await screen.findAllByText("Boulderhalle B");
 
