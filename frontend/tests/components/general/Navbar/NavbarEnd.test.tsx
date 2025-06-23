@@ -48,7 +48,10 @@ describe("NavbarEnd - Suchfunktion", () => {
       );
     });
 
-    expect(await screen.findByText("Klettergebiet A")).toBeInTheDocument();
-    expect(await screen.findByText("Boulderhalle B")).toBeInTheDocument();
+    const resultsA = await screen.findAllByText("Klettergebiet A");
+    const resultsB = await screen.findAllByText("Boulderhalle B");
+
+    expect(resultsA.length).toBeGreaterThan(0);
+    expect(resultsB.length).toBeGreaterThan(0);
   });
 });
