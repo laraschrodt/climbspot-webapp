@@ -28,7 +28,6 @@ describe("GET /api/locations/all – Felder für Filterfunktion", () => {
     }
   });
 
-  // Server nach dem Testlauf schließen
   afterAll((done) => {
     const server = app.get("server");
     if (server && typeof server.close === "function") {
