@@ -1,35 +1,8 @@
-/**
- * @file Notifications.test.tsx
- * @description Unit tests for the `Notifications` component, which handles displaying and managing user notifications.
- * This file uses React Testing Library to render the component and simulate user interactions.
- * It also mocks external dependencies such as Axios for API calls and Socket.IO for real-time updates.
- *
- * @dependencies
- * - @testing-library/react: For rendering and testing React components.
- * - @testing-library/jest-dom: For extended DOM matchers.
- * - axios: Mocked for simulating API requests.
- * - socket.io-client: Mocked for simulating real-time socket connections.
- *
- * @setup
- * - Mocks `axios` to simulate HTTP requests.
- * - Mocks `socket.io-client` to simulate real-time socket events.
- * - `beforeEach`: Resets mocks and sets up a fake token in localStorage.
- *
- * @mockFunctions
- * - `mockedAxios.get`: Tracks and simulates GET requests made by Axios.
- * - `mockedAxios.patch`: Tracks and simulates PATCH requests made by Axios.
- * - `socket.on`: Tracks socket event listeners.
- * - `socket.disconnect`: Tracks socket disconnection calls.
- *
- * @testCases
- * - Verifies that a loading indicator is displayed during the initial render.
- * - Simulates user interactions with the notifications component.
- */
-
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import Notifications from "../../../../../src/components/user/Profile/LeftSide/Notifications";
 import "@testing-library/jest-dom";
 import axios from "axios";
+
 
 jest.mock("axios");
 jest.mock("socket.io-client", () => ({
