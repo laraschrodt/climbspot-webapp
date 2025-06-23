@@ -39,6 +39,7 @@ describe("NavbarEnd - Suchfunktion", () => {
       </BrowserRouter>
     );
 
+    // 🔍 erstes sichtbares Inputfeld mit dem Placeholder "Suche"
     const input = screen.getAllByPlaceholderText("Suche")[0];
     fireEvent.change(input, { target: { value: "klettern" } });
 

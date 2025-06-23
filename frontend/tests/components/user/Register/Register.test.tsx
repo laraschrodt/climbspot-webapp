@@ -4,6 +4,28 @@ import Register from "../../../../src/components/user/Register/Register";
 import { BrowserRouter } from "react-router-dom";
 import "@testing-library/jest-dom";
 
+/**
+ * @file Register.test.tsx
+ * @description Unit tests for the `Register` component, which handles user registration functionality.
+ * This file uses React Testing Library to render the component and simulate user interactions.
+ * It also mocks external dependencies such as navigation and API calls.
+ *
+ * @dependencies
+ * - React
+ * - @testing-library/react: For rendering and testing React components.
+ * - react-router-dom: For mocking navigation functionality.
+ * - @testing-library/jest-dom: For extended DOM matchers.
+ * - ../../../../src/api/RegisterApi: Mocked API for user registration.
+ *
+ * @setup
+ * - `beforeAll`: Mocks the `window.alert` function to prevent actual alerts during tests.
+ * - Mocks `useNavigate` from `react-router-dom` to track navigation calls.
+ * - Mocks the `RegisterApi` class to simulate API calls for registration.
+ *
+ * @mockFunctions
+ * - `mockNavigate`: Tracks calls to the `useNavigate` function.
+ * - `mockRegister`: Tracks calls to the `register` method of the `RegisterApi` class.
+ */
 
 beforeAll(() => {
   window.alert = jest.fn();
