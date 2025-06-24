@@ -1,27 +1,3 @@
-/**
- * @file Reviews.test.tsx
- * @description Unit tests for the `Reviews` component, which handles displaying user reviews in the profile section.
- * This file uses React Testing Library to render the component and simulate user interactions.
- * It also mocks Axios for API calls to fetch review data.
- *
- * @dependencies
- * - React: For rendering the component.
- * - @testing-library/react: For rendering and testing React components.
- * - @testing-library/jest-dom: For extended DOM matchers.
- * - axios: Mocked for simulating API requests.
- *
- * @setup
- * - Mocks `axios` to simulate HTTP requests.
- * - `beforeEach`: Resets Axios mocks and sets up a fake token in localStorage.
- *
- * @mockFunctions
- * - `mockedAxios.get`: Tracks and simulates GET requests made by Axios.
- *
- * @testCases
- * - Verifies that a loading indicator is displayed during the initial render.
- * - Verifies that a message is displayed when no reviews are available.
- */
-
 import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import Reviews from "../../../../../src/components/user/Profile/RightSide/Reviews";
@@ -76,9 +52,7 @@ describe("Reviews-Komponente", () => {
       "src",
       "https://example.com/pic.jpg"
     );
-    expect(
-      screen.getByText(/erstellt am 1\.12\.2024/i)
-    ).toBeInTheDocument();
+    expect(screen.getByText(/erstellt am 1\.12\.2024/i)).toBeInTheDocument();
   });
 
   it("zeigt trotzdem was an, wenn ein Bild fehlt", async () => {
@@ -99,6 +73,6 @@ describe("Reviews-Komponente", () => {
     render(<Reviews />);
 
     expect(await screen.findByText("Berg Y")).toBeInTheDocument();
-    expect(screen.queryByRole("img")).not.toBeInTheDocument(); // kein <img>
+    expect(screen.queryByRole("img")).not.toBeInTheDocument();
   });
 });

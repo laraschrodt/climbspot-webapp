@@ -27,8 +27,8 @@ const LocationGallery: React.FC<LocationGalleryProps> = ({ locations }) => {
         {locations.map((spot) => {
           const average =
             spot.rating !== undefined
-              ? spot.rating // schon berechnet
-              : calcAverage(spot.bewertungen); // aus Einzelwerten
+              ? spot.rating
+              : calcAverage(spot.bewertungen);
 
           return (
             <Link
