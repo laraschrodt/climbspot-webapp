@@ -14,7 +14,6 @@ type Location = {
   schwierigkeit: string;
 };
 
-// Leaflet mocken
 jest.mock("leaflet", () => {
   const original = jest.requireActual("leaflet");
   return {

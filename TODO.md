@@ -4,24 +4,18 @@
 
 > **Alle Bugs und Tests fertig haben:** Dienstag Abend<br> **Meeting für Präsentation:** Dienstag 18 Uhr <br> **Präsentation durchsprechen:** Mittwoch 20 Uhr
 
-## Präsentation
-
-- Lessions learned
--
-
 ## Bugs
 
 - [ ] `Nelly`: Favoriten fixen
 
 - [ ] `Lara`: nur für admins (ProtectedComponent): Buttom neben jedem Kommentar in LocationDetails um das Kommentar zu löschen
-- [ ] `Alex`: Suchfunktion klappt nicht auf Handy-Ansicht im Browser
+- [x] `Alex`: Suchfunktion klappt nicht auf Handy-Ansicht im Browser
 - [ ] `Kimia`: /profile sieht in der Handy-Ansicht falsch aus
-- [x] ÖPNV Routen Button gone ???
 - [ ] Tests funktionieren nicht mehr alle
 
 ## Erledigen vor Abgabe
 
-- [ ] ``: CI Test Pipeline
+- [ ] `Kimia`: CI Test Pipeline
 - [ ] `Alex`: Datenbank mit mehr Daten befüllen
 - [x] Deployment mit Render.com
 - [ ] Alle Funktionen nochmal durchgehen und testen
@@ -29,6 +23,7 @@
   - .env Datein
   - Admin Zugangsdaten
   - Link zu render.com
+  - Docker Erklärung
 
 ## 🧪 Testen
 

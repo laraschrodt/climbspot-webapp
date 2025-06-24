@@ -30,7 +30,6 @@ interface Props {
 const ProfileDetails: React.FC<Props> = ({ favorites, reviews }) => {
   return (
     <div className="space-y-8">
-      {/* FIXME: favorites und reviews */}
       <Favorites favorites={favorites} />
 
       <Review reviews={reviews} />

@@ -3,7 +3,6 @@ import Notifications from "../../../../../src/components/user/Profile/LeftSide/N
 import "@testing-library/jest-dom";
 import axios from "axios";
 
-
 jest.mock("axios");
 jest.mock("socket.io-client", () => ({
   __esModule: true,
@@ -28,12 +27,12 @@ describe("Notifications-Komponente", () => {
     render(<Notifications />);
     fireEvent.click(screen.getByText(/benachrichtigungen/i));
 
-    // Ladeanzeige sichtbar
     expect(screen.getByText(/lade/i)).toBeInTheDocument();
 
-    // Kein Resultat vorhanden
     await waitFor(() => {
-      expect(screen.getByText(/keine neuen benachrichtigungen/i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/keine neuen benachrichtigungen/i)
+      ).toBeInTheDocument();
     });
   });
 
@@ -77,7 +76,9 @@ describe("Notifications-Komponente", () => {
     fireEvent.click(btn);
 
     await waitFor(() => {
-      expect(screen.getByText(/keine neuen benachrichtigungen/i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/keine neuen benachrichtigungen/i)
+      ).toBeInTheDocument();
     });
   });
 });
