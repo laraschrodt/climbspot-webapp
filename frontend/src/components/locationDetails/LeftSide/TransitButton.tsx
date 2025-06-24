@@ -27,10 +27,11 @@ export const TransitButton: React.FC<TransitButtonProps> = ({ lat, long }) => {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="text-sm text-blue-600 hover:underline"
+      className="w-full btn btn-primary text-black no-underline flex items-center justify-center"
     >
       ÖPNV Route
     </a>
   );
 };
+
 

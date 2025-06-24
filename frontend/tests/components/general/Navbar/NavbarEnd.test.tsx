@@ -39,7 +39,6 @@ describe("NavbarEnd - Suchfunktion", () => {
       </BrowserRouter>
     );
 
-    // 🔍 erstes sichtbares Inputfeld mit dem Placeholder "Suche"
     const input = screen.getAllByPlaceholderText("Suche")[0];
     fireEvent.change(input, { target: { value: "klettern" } });
 
@@ -49,7 +48,6 @@ describe("NavbarEnd - Suchfunktion", () => {
       );
     });
 
-    // ✅ Hier verwenden wir getAllByText, weil mehrere Vorkommen möglich sind
     const resultsA = await screen.findAllByText("Klettergebiet A");
     const resultsB = await screen.findAllByText("Boulderhalle B");
 
