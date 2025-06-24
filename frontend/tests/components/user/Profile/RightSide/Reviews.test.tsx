@@ -52,9 +52,7 @@ describe("Reviews-Komponente", () => {
       "src",
       "https://example.com/pic.jpg"
     );
-    expect(
-      screen.getByText(/erstellt am 1\.12\.2024/i)
-    ).toBeInTheDocument();
+    expect(screen.getByText(/erstellt am 1\.12\.2024/i)).toBeInTheDocument();
   });
 
   it("zeigt trotzdem was an, wenn ein Bild fehlt", async () => {
@@ -75,6 +73,6 @@ describe("Reviews-Komponente", () => {
     render(<Reviews />);
 
     expect(await screen.findByText("Berg Y")).toBeInTheDocument();
-    expect(screen.queryByRole("img")).not.toBeInTheDocument(); // kein <img>
+    expect(screen.queryByRole("img")).not.toBeInTheDocument();
   });
 });

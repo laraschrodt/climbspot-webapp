@@ -1,7 +1,6 @@
 import { LocationsService } from "../../src/services/locations/location.service";
 import { supabase } from "../../src/lib/supabase";
 
-// Supabase mocken
 jest.mock("../../src/lib/supabase");
 
 const mockedSupabase = supabase as jest.Mocked<typeof supabase>;
@@ -22,7 +21,6 @@ describe("LocationsService.searchLocations", () => {
       },
     ];
 
-    // Supabase-Kette mocken
     mockedSupabase.from.mockReturnValue({
       select: jest.fn().mockReturnValue({
         ilike: jest.fn().mockResolvedValue({
@@ -48,6 +46,8 @@ describe("LocationsService.searchLocations", () => {
       }),
     } as any);
 
-    await expect(service.searchLocations("Fehler")).rejects.toThrow("DB-Fehler");
+    await expect(service.searchLocations("Fehler")).rejects.toThrow(
+      "DB-Fehler"
+    );
   });
 });

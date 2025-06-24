@@ -64,7 +64,6 @@ const Map: React.FC<MapProps> = ({ filter }) => {
   const mapRef = useRef<L.Map | null>(null);
   const markersRef = useRef<L.MarkerClusterGroup | null>(null);
 
-  // Initialisiere die Karte (einmalig)
   useEffect(() => {
     if (mapRef.current) return;
 
