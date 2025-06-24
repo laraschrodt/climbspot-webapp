@@ -19,11 +19,20 @@ class FavoritesLocationService {
     userId: string,
     locationId: string
   ): Promise<void> {
+    if (!userId || !locationId) {
+      throw new Error("Benutzer-ID oder Ort-ID fehlt");
+    }
+
     const { error } = await supabase
       .from("favoriten")
       .insert([{ benutzer_id: userId, ort_id: locationId }]);
 
     if (error) {
+      if (error.code === "23505") {
+        console.warn("Favorit bereits vorhanden – wird ignoriert.");
+        return;
+      }
+      
       throw new Error(`Fehler beim Hinzufügen des Favoriten: ${error.message}`);
     }
   }

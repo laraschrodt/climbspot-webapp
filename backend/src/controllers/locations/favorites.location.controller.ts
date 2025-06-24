@@ -19,13 +19,16 @@ class FavoritesLocationController {
       const userId = (req.user as { userId: string })?.userId;
       const locationId = req.params.locationId;
 
+      if (!userId || !locationId) {
+        res.status(400).json({ error: "Benutzer oder Ort fehlt" });
+        return;
+      }
+
       await FavoritesLocationService.addFavoriteToDb(userId, locationId);
       res.status(200).json({ message: "Favorit hinzugefügt" });
-    } catch (err) {
-      console.error("Fehler beim Hinzufügen des Favoriten:", err);
-      res
-        .status(500)
-        .json({ error: "Serverfehler beim Hinzufügen des Favoriten" });
+    } catch (error: any) {
+      console.error("Fehler beim Hinzufügen des Favoriten:", error);
+      res.status(500).json({ error: error.message || "Unbekannter Serverfehler" });
     }
   }
   /**

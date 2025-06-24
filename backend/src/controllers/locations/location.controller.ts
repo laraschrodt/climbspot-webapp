@@ -26,20 +26,20 @@ class LocationController {
    */
   async getLocationById(req: Request, res: Response): Promise<void> {
     const { locationId } = req.params;
-    console.log("Angeforderte Location-ID:", locationId);
     const userId = req.header("x-user-id") || null;
 
     try {
       const location = await LocationsService.getLocationByIdFromDB(locationId);
       if (!location) {
-        console.log("Keine Location mit dieser ID gefunden.");
         res.status(404).json({ error: "Standort nicht gefunden" });
         return;
       }
 
       let isOwner = false;
+      let isFavorited = false; // ✅ Neu: Favoritenstatus initialisieren
 
       if (userId) {
+        // Eigentümer prüfen
         const { data: user, error: roleError } = await supabase
           .from("benutzer")
           .select("rolle")
@@ -60,13 +60,20 @@ class LocationController {
           if (countError) throw new Error(countError.message);
           isOwner = (count ?? 0) > 0;
         }
+
+        // ✅ NEU: Favoritenstatus prüfen
+        isFavorited = await LocationsService.isLocationFavoritedByUser(locationId, userId);
       }
 
-      const reviews = await ReviewLocationService.getUserReviewsFromDB(
-        locationId
-      );
+      const reviews = await ReviewLocationService.getUserReviewsFromDB(locationId);
 
-      res.status(200).json({ ...location, isOwner, bewertungen: reviews });
+      // ✅ `isFavorited` wird mitgeliefert
+      res.status(200).json({
+        ...location,
+        isOwner,
+        bewertungen: reviews,
+        isFavorited,
+      });
     } catch (err) {
       console.error(err);
       res.status(500).json({ error: "Serverfehler" });
