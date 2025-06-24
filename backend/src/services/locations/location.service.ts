@@ -64,9 +64,7 @@ export class LocationsService {
    * @returns Promise mit Array der populären Orte inklusive Bewertung
    * @throws Fehler bei Datenbankfehlern
    */
-  async getPopularLocationsFromDB(): Promise<
-    (Location & { rating: number })[]
-  > {
+  async getPopularLocationsFromDB(): Promise<(Location & { rating: number })[]> {
     const { data, error } = await supabase.from("orte").select(`
         *,
         bewertungen ( sterne )
@@ -83,8 +81,7 @@ export class LocationsService {
 
       const avg =
         sterneArr.length > 0
-          ? sterneArr.reduce((sum: number, sterne: number) => sum + sterne, 0) /
-            sterneArr.length
+          ? sterneArr.reduce((sum: number, sterne: number) => sum + sterne, 0) / sterneArr.length
           : 0;
 
       return {
@@ -171,6 +168,24 @@ export class LocationsService {
 
     if (error) throw error;
     return updated;
+  }
+
+  /**
+   * ✅ NEU: Prüft, ob der Ort vom Nutzer als Favorit markiert ist.
+   *
+   * @param locationId ID des Ortes
+   * @param userId ID des Benutzers
+   * @returns Promise mit true/false je nach Favoritenstatus
+   */
+  async isLocationFavoritedByUser(locationId: string, userId: string): Promise<boolean> {
+    const { count, error } = await supabase
+      .from("favoriten")
+      .select("*", { head: true, count: "exact" })
+      .eq("ort_id", locationId)
+      .eq("benutzer_id", userId);
+
+    if (error) throw new Error(error.message);
+    return (count ?? 0) > 0;
   }
 }
 

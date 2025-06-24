@@ -1,4 +1,4 @@
-import axios from "axios";
+import axiosInstance from "./axiosInstance";
 import { FormDataType } from "../components/user/Profile/LeftSide/types";
 
 /**
@@ -22,15 +22,12 @@ class ProfileApi {
     const formData = new FormData();
     formData.append("file", file);
 
-    const token = localStorage.getItem("token");
-
-    const response = await axios.post(
+    const response = await axiosInstance.post(
       "/api/profile/upload-profile-pic",
       formData,
       {
         headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
+          "Content-Type": "multipart/form-data", 
         },
       }
     );
@@ -46,13 +43,7 @@ class ProfileApi {
   static async saveProfile(
     data: Omit<FormDataType, "password">
   ): Promise<void> {
-    const token = localStorage.getItem("token");
-
-    await axios.put("/api/profile", data, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    await axiosInstance.put("/api/profile", data);
   }
 
   /**
@@ -65,17 +56,10 @@ class ProfileApi {
     oldPassword: string,
     newPassword: string
   ): Promise<void> {
-    const token = localStorage.getItem("token");
-
-    await axios.put(
-      "/api/profile/password",
-      { oldPassword, newPassword },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    await axiosInstance.put("/api/profile/password", {
+      oldPassword,
+      newPassword,
+    });
   }
 
   /**
@@ -84,14 +68,7 @@ class ProfileApi {
    */
 
   static async fetchUserProfile(): Promise<FormDataType> {
-    const token = localStorage.getItem("token");
-
-    const response = await axios.get("/api/profile", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
+    const response = await axiosInstance.get("/api/profile");
     return response.data;
   }
 }

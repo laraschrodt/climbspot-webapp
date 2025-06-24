@@ -6,6 +6,7 @@ import { Banner } from "./Banner";
 import { LeftSidebar } from "./LeftSide/LeftSide";
 import { RightSidebar } from "./RightSide/RightSide";
 import { Review } from "../../types/Review";
+import axiosInstance from "../../api/axiosInstance";
 
 /**
  * Detailseite für eine einzelne Kletterlocation.
@@ -43,21 +44,17 @@ const LocationDetails: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const headers: Record<string, string> = {};
-        if (user) {
-          headers["x-user-id"] = user.userId;
-        }
-
-        const res = await fetch(`/api/locations/details/${locationId}`, {
-          headers,
+        const res = await axiosInstance.get(`/api/locations/details/${locationId}`, {
+          headers: user ? { "x-user-id": user.userId } : {},
         });
 
-        if (!res.ok) throw new Error("Standort nicht gefunden");
-
-        const data = await res.json();
+        const data = res.data;
         setLocation(data);
         setAllReviews(data.bewertungen || []);
         setIsOwner(data.isOwner ?? false);
+        setIsFavorited(data.isFavorited ?? false);
+      } catch (error) {
+        console.error("Standort nicht gefunden", error);
       } finally {
         setLoading(false);
       }
@@ -67,65 +64,48 @@ const LocationDetails: React.FC = () => {
   }, [locationId, user]);
 
   const handleReviewSubmit = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      alert("Bitte einloggen, um eine Bewertung abzugeben.");
-      return;
-    }
+    if (!locationId) return;
 
     try {
-      const res = await fetch(`/api/locations/reviews/${locationId}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ sterne: reviewStars, kommentar: reviewText }),
-      });
+      const res = await axiosInstance.post(
+        `/api/locations/reviews/${locationId}`,
+        {
+          sterne: reviewStars,
+          kommentar: reviewText,
+        }
+      );
 
-      if (res.ok) {
-        const updated = await res.json();
-        setUserReview(updated);
-        setReviewText(updated.kommentar);
-        setReviewStars(updated.sterne);
+      const updated = res.data;
+      setUserReview(updated);
+      setReviewText(updated.kommentar);
+      setReviewStars(updated.sterne);
 
-        const updatedLocation = await fetch(
-          `/api/locations/details/${locationId}`
-        ).then((r) => r.json());
-        setAllReviews(updatedLocation.bewertungen || []);
-      } else {
-        const msg = await res.text();
-        console.error("Bewertung nicht gespeichert:", msg);
-      }
-    } catch (err) {
-      console.error("Fehler beim Speichern der Bewertung:", err);
+      const updatedLocation = await axiosInstance.get(`/api/locations/details/${locationId}`);
+      setAllReviews(updatedLocation.data.bewertungen || []);
+    } catch (err: any) {
+      console.error("Fehler beim Speichern der Bewertung:", err.response?.data || err.message);
     }
   };
 
-  const handleFavoriteToggle = async () => {
-    const token = localStorage.getItem("token");
-    if (!token || !locationId) {
-      console.warn("Nicht eingeloggt oder Location fehlt");
+    const handleFavoriteToggle = async () => {
+    if (!locationId) {
+      console.warn("Location-ID fehlt");
       return;
     }
 
     try {
-      const res = await fetch(`/api/locations/favorite/${locationId}`, {
+      const res = await axiosInstance({
         method: isFavorited ? "DELETE" : "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+        url: `/api/locations/favorite/${locationId}`,
       });
 
-      if (res.ok) {
+      if (res.status === 200) {
         setIsFavorited(!isFavorited);
       } else {
-        const text = await res.text();
-        console.error("Fehler beim Aktualisieren des Favoritenstatus:", text);
+        console.error("Unerwarteter Status:", res.status);
       }
-    } catch (error) {
-      console.error("Fehler:", error);
+    } catch (error: any) {
+      console.error("Fehler beim Aktualisieren des Favoritenstatus:", error.response?.data || error.message);
     }
   };
 

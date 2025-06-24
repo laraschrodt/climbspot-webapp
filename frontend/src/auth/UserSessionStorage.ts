@@ -66,4 +66,8 @@ export class UserSessionStorage {
       ? { username, role, userId }
       : null;
   }
+
+  static getToken(): string | null {
+    return localStorage.getItem(TOKEN_KEY);
+  }
 }
