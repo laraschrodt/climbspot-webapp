@@ -2,20 +2,20 @@ name: CI - Test Frontend & Backend
 
 on:
   push:
-    branches: [ main ] # nur bei Pushes auf den main-Branch
+    branches: [main]
   pull_request:
-    branches: [ main ] # auch bei PRs gegen main
+    branches: [main]
 
 jobs:
   frontend:
-    name: 🖥️ Frontend Tests
+    name: Frontend Tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "20"
       - name: Install Frontend Dependencies
         working-directory: ./frontend
         run: npm install
@@ -24,15 +24,15 @@ jobs:
         run: npm test -- --ci --watchAll=false
 
   backend:
-    name: 🗄️ Backend Tests
-    needs: frontend # Nur ausführen, falls Frontend erfolgreich war
+    name: Backend Tests
+    needs: frontend
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "20"
       - name: Install Backend Dependencies
         working-directory: ./backend
         run: npm install
