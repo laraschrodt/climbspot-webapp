@@ -9,7 +9,7 @@
 - [ ] `Nelly`: Favoriten fixen
 
 - [ ] `Lara`: nur für admins (ProtectedComponent): Buttom neben jedem Kommentar in LocationDetails um das Kommentar zu löschen
-- [X] `Alex`: Suchfunktion klappt nicht auf Handy-Ansicht im Browser
+- [x] `Alex`: Suchfunktion klappt nicht auf Handy-Ansicht im Browser
 - [ ] `Kimia`: /profile sieht in der Handy-Ansicht falsch aus
 - [ ] Tests funktionieren nicht mehr alle
 

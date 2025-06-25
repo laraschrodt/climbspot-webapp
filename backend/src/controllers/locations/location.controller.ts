@@ -36,10 +36,9 @@ class LocationController {
       }
 
       let isOwner = false;
-      let isFavorited = false; // ✅ Neu: Favoritenstatus initialisieren
+      let isFavorited = false;
 
       if (userId) {
-        // Eigentümer prüfen
         const { data: user, error: roleError } = await supabase
           .from("benutzer")
           .select("rolle")
@@ -61,13 +60,16 @@ class LocationController {
           isOwner = (count ?? 0) > 0;
         }
 
-        // ✅ NEU: Favoritenstatus prüfen
-        isFavorited = await LocationsService.isLocationFavoritedByUser(locationId, userId);
+        isFavorited = await LocationsService.isLocationFavoritedByUser(
+          locationId,
+          userId
+        );
       }
 
-      const reviews = await ReviewLocationService.getUserReviewsFromDB(locationId);
+      const reviews = await ReviewLocationService.getUserReviewsFromDB(
+        locationId
+      );
 
-      // ✅ `isFavorited` wird mitgeliefert
       res.status(200).json({
         ...location,
         isOwner,
