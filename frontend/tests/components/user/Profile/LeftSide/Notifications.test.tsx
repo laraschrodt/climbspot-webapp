@@ -1,3 +1,17 @@
+jest.mock("../../../../../src/config/socketUrl.ts", () => ({
+  SOCKET_URL: "http://localhost:3000",
+}));
+
+// Falls erforderlich:
+jest.mock("socket.io-client", () => {
+  return jest.fn(() => {
+    return {
+      on: jest.fn(),
+      disconnect: jest.fn(),
+    };
+  });
+});
+
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import Notifications from "../../../../../src/components/user/Profile/LeftSide/Notifications";
 import "@testing-library/jest-dom";

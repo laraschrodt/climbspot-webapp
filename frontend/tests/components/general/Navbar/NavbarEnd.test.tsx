@@ -5,6 +5,24 @@ jest.mock("../../../../src/auth/UseUserSession", () => ({
   }),
 }));
 
+jest.mock('../../../../src/api/axiosInstance', () => {
+  return {
+    interceptors: {
+      request: {
+        use: jest.fn(),
+      },
+      response: {
+        use: jest.fn(),
+      },
+    },
+    get: jest.fn(),
+    post: jest.fn(),
+    patch: jest.fn(),
+    delete: jest.fn(),
+  };
+});
+
+
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import NavbarEnd from "../../../../src/components/general/Navbar/NavbarEnd";
 import { BrowserRouter } from "react-router-dom";

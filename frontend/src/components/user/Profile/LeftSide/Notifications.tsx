@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Bell } from "react-feather";
 import io from "socket.io-client";
 import axios from "axios";
+import { SOCKET_URL } from "../../../../config/socketUrl";
 
 interface Notification {
   erstellt_am: string;
@@ -33,7 +34,7 @@ const Notifications: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const socket = io(import.meta.env.VITE_SOCKET_URL!, {
+    const socket = io(SOCKET_URL, {
       transports: ["websocket"],
     });
 
