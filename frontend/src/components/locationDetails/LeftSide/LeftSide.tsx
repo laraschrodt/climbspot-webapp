@@ -61,9 +61,7 @@ export const LeftSidebar: React.FC<LeftSideProps> = ({
         try {
           const parsed = JSON.parse(storedUser);
           userId = parsed?.userId || parsed?.id || userId;
-        } catch {
-          /* ignore JSON parse error */
-        }
+        } catch {}
       }
 
       const headers: Record<string, string> = {};

@@ -1,8 +1,14 @@
 # 🧗‍♂️ ClimbSpot – Die Webanwendung für Kletterfans
 
-> ☁️ https://climbspot-webapp.onrender.com ☁️
-
 **ClimbSpot** ist eine plattformunabhängige Web-App, mit der du die besten Kletterspots in deiner Umgebung finden, bewerten und teilen kannst. Zusätzlich zeigt dir die App, wie du diese Orte bequem mit öffentlichen Verkehrsmitteln erreichst.
+
+## Deployment
+
+```bash
+docker-compose up --build
+```
+
+> ☁️ Oder Cloud-Deployment auf render.com: https://climbspot-webapp.onrender.com ☁️
 
 ## ✨ Features
 
