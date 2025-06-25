@@ -23,10 +23,13 @@ jobs:
         working-directory: ./frontend
         run: npm test -- --ci --watchAll=false
 
-  backend:
+    backend:
     name: Backend Tests
     needs: frontend
     runs-on: ubuntu-latest
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
     steps:
       - uses: actions/checkout@v4
       - name: Install Node.js
@@ -39,3 +42,4 @@ jobs:
       - name: Run Backend Tests
         working-directory: ./backend
         run: npm test
+
