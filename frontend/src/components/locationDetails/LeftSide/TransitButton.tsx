@@ -20,7 +20,7 @@ interface TransitButtonProps {
 }
 
 export const TransitButton: React.FC<TransitButtonProps> = ({ lat, long }) => {
-  const url = `https://www.google.com/maps/dir/?api=1&travelmode=transit&destination=${lat},${long}`;
+  const url = `https://www.google.com/maps/dir/?api=1&travelmode=driving&destination=${lat},${long}`;
 
   return (
     <a
@@ -33,5 +33,3 @@ export const TransitButton: React.FC<TransitButtonProps> = ({ lat, long }) => {
     </a>
   );
 };
-
-
