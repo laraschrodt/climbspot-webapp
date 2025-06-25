@@ -17,7 +17,7 @@ describe("TransitButton", () => {
     render(<TransitButton lat={lat} long={long} />);
 
     const link = screen.getByRole("link", { name: /ÖPNV Route/i });
-    const expectedHref = `https://www.google.com/maps/dir/?api=1&travelmode=transit&destination=${lat},${long}`;
+    const expectedHref = `https://www.google.com/maps/dir/?api=1&travelmode=driving&destination=${lat},${long}`;
 
     expect(link).toBeInTheDocument();
     expect(link).toHaveAttribute("href", expectedHref);
