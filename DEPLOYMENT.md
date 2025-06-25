@@ -16,7 +16,7 @@ Wenn Sie die Admin-Funktionen testen möchten, gibt es im Moment einen Admin-Acc
 
 ### 1. .env Dateien konfigurieren
 
-In `/frontend` und `/backend` gibt es jeweils .env.example Dateien, die durch folgendes ergänzt werden müssen:
+In `/frontend` und `/backend` gibt es jeweils .env.example Dateien, die durch folgendes ergänzt und zu `.env` umbenannt werden müssen:
 
 **Frontend:**
 
