@@ -8,6 +8,8 @@
 docker-compose up --build
 ```
 
+Erreichbar unter `http://localhost:8080/`
+
 > ☁️ Oder Cloud-Deployment auf render.com: https://climbspot-webapp.onrender.com ☁️
 
 ## ✨ Features

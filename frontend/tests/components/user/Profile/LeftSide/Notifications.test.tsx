@@ -2,7 +2,6 @@ jest.mock("../../../../../src/config/socketUrl.ts", () => ({
   SOCKET_URL: "http://localhost:3000",
 }));
 
-// Falls erforderlich:
 jest.mock("socket.io-client", () => {
   return jest.fn(() => {
     return {

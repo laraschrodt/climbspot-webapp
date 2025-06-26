@@ -3,8 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { useUserSession } from "../../../auth/UseUserSession";
 import { LoginApi } from "../../../api/LoginApi";
 
-
-
 /**
  * Login-Komponente für die Authentifizierung.
  *
@@ -57,7 +55,6 @@ const Login: React.FC = () => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 min-h-screen">
-      {/* --- Formular & UI unverändert --- */}
       <div className="flex items-center justify-center bg-base-100 p-10">
         <div className="w-full max-w-md">
           <h1 className="text-xl font-bold mb-2">Willkommen bei Climbspot!</h1>
