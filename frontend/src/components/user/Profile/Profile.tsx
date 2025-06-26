@@ -66,7 +66,7 @@ const Profile: React.FC = () => {
 
   return (
     <div>
-      {/* Begrüßungsbereich */}
+      
       <section
         className="h-64 md:h-[32rem] bg-cover bg-center flex items-center justify-center relative"
         style={{ backgroundImage: `url(${backgroundImage})` }}

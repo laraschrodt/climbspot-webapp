@@ -32,16 +32,12 @@ const CreateAdmin: React.FC = () => {
   };
 
   return (
-    <section className="container mx-auto max-w-5xl p-4">
-      <div className="bg-white w-full max-w-4xl ml-0 my-4 p-6 rounded-xl shadow-md">
-        <h2 className="text-xl font-semibold mb-4">
-          Erstelle einen neuen Admin
-        </h2>
+    <section className="w-full flex justify-center p-4">
+      <div className="bg-white w-full max-w-xl p-4 sm:p-6 rounded-xl shadow-md">
+        <h2 className="text-xl font-semibold mb-4">Erstelle einen neuen Admin</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block mb-1 text-sm font-medium">
-              Benutzername
-            </label>
+            <label className="block mb-1 text-sm font-medium">Benutzername</label>
             <input
               type="text"
               value={username}
@@ -51,7 +47,7 @@ const CreateAdmin: React.FC = () => {
             />
           </div>
           <div>
-            <label className="block mb-1 text-sm font-medium">E-Mail</label>
+            <label className="block mb-1 text-sm font-medium">E‑Mail</label>
             <input
               type="email"
               value={email}
@@ -76,12 +72,13 @@ const CreateAdmin: React.FC = () => {
             disabled={loading}
             className="w-full bg-green-800 text-white py-2 rounded hover:bg-green-700 disabled:opacity-50"
           >
-            {loading ? "Erselle..." : "Erstelle Admin"}
+            {loading ? "Erstelle…" : "Erstelle Admin"}
           </button>
         </form>
       </div>
     </section>
   );
+  
 };
 
 export default CreateAdmin;

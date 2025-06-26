@@ -17,6 +17,7 @@ interface User {
  * direkt an den AdminController geschickt, der die DB-Operationen
  * via AdminService in Supabase ausführt.
  */
+
 const UserAdministration: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -35,10 +36,11 @@ const UserAdministration: React.FC = () => {
       .finally(() => setIsLoading(false));
   }, []);
 
-  /**
+    /**
    * Starte den Bearbeitungsmodus für einen Nutzer und fülle die Eingabefelder.
    * @param user - Der anzupassende Nutzer
    */
+
   const handleStartEdits = (user: User) => {
     setEditingId(user.id);
     setEditValues({
@@ -49,16 +51,16 @@ const UserAdministration: React.FC = () => {
       benutzername: user.benutzername || "",
     });
   };
-
   const cancelEdit = () => {
     setEditingId(null);
     setEditValues({});
   };
 
-  /**
+    /**
    * Speichere die bearbeiteten Nutzerdaten per PATCH-Request und aktualisiere den State.
    * @param userId - ID des zu aktualisierenden Nutzers
    */
+
   const handleSaveEdits = async (userId: string) => {
     try {
       const token = localStorage.getItem("token");
@@ -85,13 +87,15 @@ const UserAdministration: React.FC = () => {
     }
   };
 
-  /**
+    /**
    * Lösche einen Nutzer nach Bestätigung und aktualisiere die Tabelle.
    * @param userId - ID des zu löschenden Nutzers
    */
+  
   const handleDeleteUser = async (userId: string) => {
     if (!window.confirm("Möchtest du diesen Benutzer wirklich löschen?"))
       return;
+
     try {
       const token = localStorage.getItem("token");
       const headers: Record<string, string> = {};
@@ -102,140 +106,193 @@ const UserAdministration: React.FC = () => {
       console.error("Delete failed", err);
     }
   };
-
+  
   return (
-    <section className="container mx-auto max-w-5xl p-4">
-      <div className="bg-white w-full max-w-4xl ml-0 my-4 p-6 rounded-xl shadow-md overflow-x-auto">
+    <section className="w-full flex justify-center p-4">
+      <div className="bg-white w-full max-w-3xl rounded-xl shadow-md p-4 sm:p-6">
         <h2 className="text-xl font-semibold mb-4">Benutzeradministration</h2>
-
         {isLoading ? (
           <div className="text-center py-8">Lädt...</div>
         ) : users.length === 0 ? (
           <div className="italic text-gray-500">Keine Benutzer vorhanden.</div>
         ) : (
-          <table className="table-auto w-full min-w-[600px] border-collapse">
-            <thead>
-              <tr className="bg-gray-100">
-                <th className="px-4 py-2 text-left">E-Mail</th>
-                <th className="px-4 py-2 text-left">Vorname</th>
-                <th className="px-4 py-2 text-left">Nachname</th>
-                <th className="px-4 py-2 text-left">Stadt</th>
-                <th className="px-4 py-2 text-left">Benutzername</th>
-                <th className="px-4 py-2 text-left">Aktionen</th>
-              </tr>
-            </thead>
-            <tbody>
+          <>
+            {/* Table für Desktop */}
+            <div className="hidden sm:block">
+              <div className="overflow-x-auto">
+                <table className="table-auto w-full border-collapse">
+                  <thead>
+                    <tr className="bg-gray-100">
+                      <th className="px-4 py-2 text-left">E‑Mail</th>
+                      <th className="px-4 py-2 text-left">Vorname</th>
+                      <th className="px-4 py-2 text-left">Nachname</th>
+                      <th className="px-4 py-2 text-left">Stadt</th>
+                      <th className="px-4 py-2 text-left">Benutzername</th>
+                      <th className="px-4 py-2 text-left">Aktionen</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {users.map((user) =>
+                      editingId === user.id ? (
+                        <tr key={user.id} className="hover:bg-gray-50">
+                          <td className="px-4 py-2">
+                            <input
+                              value={editValues.email || ""}
+                              onChange={(e) =>
+                                setEditValues((v) => ({ ...v, email: e.target.value }))
+                              }
+                              className="w-full border rounded px-2 py-1"
+                              placeholder="-"
+                            />
+                          </td>
+                          <td className="px-4 py-2">
+                            <input
+                              value={editValues.vorname || ""}
+                              onChange={(e) =>
+                                setEditValues((v) => ({ ...v, vorname: e.target.value }))
+                              }
+                              className="w-full border rounded px-2 py-1"
+                              placeholder="-"
+                            />
+                          </td>
+                          <td className="px-4 py-2">
+                            <input
+                              value={editValues.nachname || ""}
+                              onChange={(e) =>
+                                setEditValues((v) => ({ ...v, nachname: e.target.value }))
+                              }
+                              className="w-full border rounded px-2 py-1"
+                              placeholder="-"
+                            />
+                          </td>
+                          <td className="px-4 py-2">
+                            <input
+                              value={editValues.stadt || ""}
+                              onChange={(e) =>
+                                setEditValues((v) => ({ ...v, stadt: e.target.value }))
+                              }
+                              className="w-full border rounded px-2 py-1"
+                              placeholder="-"
+                            />
+                          </td>
+                          <td className="px-4 py-2">
+                            <input
+                              value={editValues.benutzername || ""}
+                              onChange={(e) =>
+                                setEditValues((v) => ({ ...v, benutzername: e.target.value }))
+                              }
+                              className="w-full border rounded px-2 py-1"
+                              placeholder="-"
+                            />
+                          </td>
+                          <td className="px-4 py-2 flex space-x-2">
+                            <button
+                              onClick={() => handleSaveEdits(user.id)}
+                              className="p-1 hover:bg-gray-200 rounded"
+                            >
+                              <Check size={18} />
+                            </button>
+                            <button
+                              onClick={cancelEdit}
+                              className="p-1 hover:bg-gray-200 rounded"
+                            >
+                              <X size={18} />
+                            </button>
+                          </td>
+                        </tr>
+                      ) : (
+                        <tr key={user.id} className="hover:bg-gray-50">
+                          <td className="px-4 py-2">{user.email || "-"}</td>
+                          <td className="px-4 py-2">{user.vorname || "-"}</td>
+                          <td className="px-4 py-2">{user.nachname || "-"}</td>
+                          <td className="px-4 py-2">{user.stadt || "-"}</td>
+                          <td className="px-4 py-2">{user.benutzername || "-"}</td>
+                          <td className="px-4 py-2 flex space-x-2">
+                            <button
+                              onClick={() => handleStartEdits(user)}
+                              className="p-1 hover:bg-gray-200 rounded"
+                            >
+                              <Edit2 size={18} />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteUser(user.id)}
+                              className="p-1 hover:bg-gray-200 rounded"
+                            >
+                              <Trash2 size={18} />
+                            </button>
+                          </td>
+                        </tr>
+                      )
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Karten für Mobilgeräte */}
+            <div className="sm:hidden space-y-4">
               {users.map((user) => (
-                <tr key={user.id} className="hover:bg-gray-50">
+                <div
+                  key={user.id}
+                  className="bg-gray-50 rounded-lg p-4 border border-gray-200"
+                >
                   {editingId === user.id ? (
-                    <React.Fragment>
-                      <td className="px-4 py-2">
-                        <input
-                          value={editValues.email || ""}
-                          onChange={(e) =>
-                            setEditValues((v) => ({
-                              ...v,
-                              email: e.target.value,
-                            }))
-                          }
-                          className="w-full border rounded px-2 py-1"
-                          placeholder="-"
-                        />
-                      </td>
-                      <td className="px-4 py-2">
-                        <input
-                          value={editValues.vorname || ""}
-                          onChange={(e) =>
-                            setEditValues((v) => ({
-                              ...v,
-                              vorname: e.target.value,
-                            }))
-                          }
-                          className="w-full border rounded px-2 py-1"
-                          placeholder="-"
-                        />
-                      </td>
-                      <td className="px-4 py-2">
-                        <input
-                          value={editValues.nachname || ""}
-                          onChange={(e) =>
-                            setEditValues((v) => ({
-                              ...v,
-                              nachname: e.target.value,
-                            }))
-                          }
-                          className="w-full border rounded px-2 py-1"
-                          placeholder="-"
-                        />
-                      </td>
-                      <td className="px-4 py-2">
-                        <input
-                          value={editValues.stadt || ""}
-                          onChange={(e) =>
-                            setEditValues((v) => ({
-                              ...v,
-                              stadt: e.target.value,
-                            }))
-                          }
-                          className="w-full border rounded px-2 py-1"
-                          placeholder="-"
-                        />
-                      </td>
-                      <td className="px-4 py-2">
-                        <input
-                          value={editValues.benutzername || ""}
-                          onChange={(e) =>
-                            setEditValues((v) => ({
-                              ...v,
-                              benutzername: e.target.value,
-                            }))
-                          }
-                          className="w-full border rounded px-2 py-1"
-                          placeholder="-"
-                        />
-                      </td>
-                      <td className="px-4 py-2 flex space-x-2">
+                    <>
+                      {(["email", "vorname", "nachname", "stadt", "benutzername"] as (keyof User)[]).map((field) => (
+                        <div key={field} className="mb-2">
+                          <label className="text-gray-600 text-sm">{field}</label>
+                          <input
+                            value={editValues[field] || ""}
+                            onChange={(e) =>
+                              setEditValues((v) => ({ ...v, [field]: e.target.value }))
+                            }
+                            className="w-full border rounded px-2 py-1 mt-1"
+                          />
+                        </div>
+                      ))}
+
+                      <div className="flex space-x-2 mt-2">
                         <button
                           onClick={() => handleSaveEdits(user.id)}
-                          className="p-1 hover:bg-gray-200 rounded"
+                          className="p-2 bg-green-100 rounded"
                         >
                           <Check size={18} />
                         </button>
                         <button
                           onClick={cancelEdit}
-                          className="p-1 hover:bg-gray-200 rounded"
+                          className="p-2 bg-gray-100 rounded"
                         >
                           <X size={18} />
                         </button>
-                      </td>
-                    </React.Fragment>
+                      </div>
+                    </>
                   ) : (
-                    <React.Fragment>
-                      <td className="px-4 py-2">{user.email || "-"}</td>
-                      <td className="px-4 py-2">{user.vorname || "-"}</td>
-                      <td className="px-4 py-2">{user.nachname || "-"}</td>
-                      <td className="px-4 py-2">{user.stadt || "-"}</td>
-                      <td className="px-4 py-2">{user.benutzername || "-"}</td>
-                      <td className="px-4 py-2 flex space-x-2">
+                    <>
+                      <div className="mb-1"><strong>Email:</strong> {user.email}</div>
+                      <div className="mb-1"><strong>Vorname:</strong> {user.vorname}</div>
+                      <div className="mb-1"><strong>Nachname:</strong> {user.nachname}</div>
+                      <div className="mb-1"><strong>Stadt:</strong> {user.stadt}</div>
+                      <div className="mb-1"><strong>Benutzername:</strong> {user.benutzername}</div>
+                      <div className="flex space-x-2 mt-2">
                         <button
                           onClick={() => handleStartEdits(user)}
-                          className="p-1 hover:bg-gray-200 rounded"
+                          className="p-2 bg-blue-100 rounded"
                         >
                           <Edit2 size={18} />
                         </button>
                         <button
                           onClick={() => handleDeleteUser(user.id)}
-                          className="p-1 hover:bg-gray-200 rounded"
+                          className="p-2 bg-red-100 rounded"
                         >
                           <Trash2 size={18} />
                         </button>
-                      </td>
-                    </React.Fragment>
+                      </div>
+                    </>
                   )}
-                </tr>
+                </div>
               ))}
-            </tbody>
-          </table>
+            </div>
+          </>
         )}
       </div>
     </section>
